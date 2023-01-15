@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import { NotFound } from "./NotFound";
+import { Profile } from "./Profile";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCurrentUser({ name: "Test User" });
+    }, 2500);
+  });
 
   return (
     <div className="App">
@@ -14,6 +21,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home user={currentUser} />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
@@ -28,7 +36,7 @@ const Header = ({ user }) => (
       <div className="container">
         <div className="row d-flex header-area">
           <nav className="navbar navbar-expand-lg navbar-light">
-            <Link className="navbar-brand" to="index.html">
+            <Link className="navbar-brand" to="/home">
               <img src="/assets/logo.png" className="logo" alt="logo" />
             </Link>
             <button
@@ -48,7 +56,7 @@ const Header = ({ user }) => (
                   <Link
                     className="nav-link active"
                     aria-current="page"
-                    to="index.html"
+                    to="/home"
                   >
                     Home
                   </Link>
@@ -250,14 +258,11 @@ const Header = ({ user }) => (
 
               {user ? (
                 <div className="right-area header-action d-flex align-items-center max-un">
-                  <button
-                    type="button"
-                    className="cmn-btn reg"
-                    data-bs-toggle="modal"
-                    data-bs-target="#loginMod"
-                  >
-                    {user.name}'s Profile
-                  </button>
+                  <Link to="/profile">
+                    <button type="button" className="cmn-btn reg">
+                      Your Profile
+                    </button>
+                  </Link>
                 </div>
               ) : (
                 <div className="right-area header-action d-flex align-items-center max-un">
@@ -305,7 +310,7 @@ const Footer = () => (
               <div className="form-group d-flex align-items-center">
                 <input type="text" placeholder="Enter your email Address" />
                 <button>
-                  <img src="assets/images/icon/arrow-right-2.png" alt="icon" />
+                  <img src="/assets/images/icon/arrow-right-2.png" alt="icon" />
                 </button>
               </div>
             </form>
@@ -316,8 +321,8 @@ const Footer = () => (
         <div className="row">
           <div className="col-xl-12">
             <div className="menu-item">
-              <Link to="index.html" className="logo">
-                <img src="assets/logo.png" alt="logo" />
+              <Link to="/home" className="logo">
+                <img src="/assets/logo.png" alt="logo" />
               </Link>
               {/*<ul className="footer-link">*/}
               {/*    <li><Link to="contact.html">Contact</Link></li>*/}
@@ -549,7 +554,7 @@ const LoginModal = () => (
                           </form>
                           <div className="bottom-area text-center">
                             <p>
-                              Already have an member?{" "}
+                              Already have an account?{" "}
                               <a href="javascript:void(0)" className="log-btn">
                                 Login
                               </a>
