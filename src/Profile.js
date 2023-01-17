@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const Profile = () => {
+export const Profile = ({ user }) => {
+  let navigate = useNavigate();
+
+  /**
+   * Send user home if they are not logged in.
+   */
+  useEffect(() => {
+    if (!user) {
+      navigate("/home");
+    }
+  }, [navigate, user]);
+
   return (
     <section className="dashboard-content pt-120">
       <div className="overlay">

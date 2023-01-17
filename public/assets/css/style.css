@@ -1615,31 +1615,31 @@ p {
   font-weight: inherit;
 }
 
-.about-bitbetio .overlay {
+.about-bytebracket .overlay {
   position: relative;
 }
 
-.about-bitbetio .overlay .shape-area img {
+.about-bytebracket .overlay .shape-area img {
   position: absolute;
 }
 
-.about-bitbetio .overlay .shape-area .obj-1 {
+.about-bytebracket .overlay .shape-area .obj-1 {
   right: 4%;
   top: calc(15%);
   animation: rippleAni 5s linear infinite;
 }
 
-.about-bitbetio .overlay .shape-area .obj-2 {
+.about-bytebracket .overlay .shape-area .obj-2 {
   right: 8%;
   bottom: calc(30%);
   animation: ripple2Ani 5s linear infinite;
 }
 
-.about-bitbetio .cus-mar {
+.about-bytebracket .cus-mar {
   margin-bottom: -20px;
 }
 
-.about-bitbetio .single-item {
+.about-bytebracket .single-item {
   text-align: center;
   margin-bottom: 20px;
   padding: 40px 0 35px;
@@ -1647,7 +1647,7 @@ p {
   border-radius: 20px;
 }
 
-.about-bitbetio .single-item h5 {
+.about-bytebracket .single-item h5 {
   margin-top: 40px;
 }
 
@@ -4425,7 +4425,7 @@ p {
 }
 
 @media screen and (min-width: 1499px) and (max-width: 1750px) {
-  .about-bitbetio .overlay .shape-area .obj-1 {
+  .about-bytebracket .overlay .shape-area .obj-1 {
     right: 0;
     width: 6%;
   }
@@ -4469,7 +4469,7 @@ p {
 }
 
 @media (max-width: 1499px) {
-  .about-bitbetio .overlay .shape-area {
+  .about-bytebracket .overlay .shape-area {
     display: none;
   }
   .banner-section.soccer-bets .overlay {
@@ -4771,7 +4771,7 @@ p {
   .banner-section.soccer-bets .overlay {
     background-size: 0;
   }
-  .about-bitbetio .left-side {
+  .about-bytebracket .left-side {
     display: none;
   }
   .how-it-works .main-content ul {
@@ -4933,10 +4933,10 @@ p {
     width: 20%;
   }
   .amazing-features .single-slide .slide-content img,
-  .about-bitbetio .single-item img {
+  .about-bytebracket .single-item img {
     width: 40%;
   }
-  .about-bitbetio .single-item h5 {
+  .about-bytebracket .single-item h5 {
     margin-top: 30px;
   }
   .amazing-features .single-slide .slide-content h5 {
@@ -5394,7 +5394,7 @@ p {
 }
 
 @media (max-width: 375px) {
-  .about-bitbetio .col-6 {
+  .about-bytebracket .col-6 {
     width: 100% !important;
   }
   .banner-section.inner-banner .banner-content .main-content .breadcrumb-area .breadcrumb .breadcrumb-item + .breadcrumb-item::before {
