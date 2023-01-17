@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./Home";
 import { NotFound } from "./NotFound";
 import { Profile } from "./Profile";
+import { Create } from "./Create";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -14,19 +22,18 @@ export default function App() {
   });
 
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Header user={currentUser} />
-        <LoginModal />
-        <Routes>
-          <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home user={currentUser} />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Header user={currentUser} />
+      <LoginModal />
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/home" element={<Home user={currentUser} />} />
+        <Route path="/profile" element={<Profile user={currentUser} />} />
+        <Route path="/new" element={<Create user={currentUser} />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
@@ -37,7 +44,13 @@ const Header = ({ user }) => (
         <div className="row d-flex header-area">
           <nav className="navbar navbar-expand-lg navbar-light">
             <Link className="navbar-brand" to="/home">
-              <img src="/assets/logo.png" className="logo" alt="logo" />
+              <img
+                src="/assets/logo.png"
+                className="logo"
+                alt="logo"
+                width="300"
+                height="50"
+              />
             </Link>
             <button
               className="navbar-toggler collapsed"
@@ -59,6 +72,11 @@ const Header = ({ user }) => (
                     to="/home"
                   >
                     Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/new">
+                    Create Bracket
                   </Link>
                 </li>
                 <li className="nav-item dropdown main-navbar">
@@ -103,65 +121,6 @@ const Header = ({ user }) => (
                           </Link>
                         </li>
                       </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li className="nav-item dropdown main-navbar">
-                  <Link
-                    className="nav-link dropdown-toggle"
-                    to="javascript:void(0)"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                  >
-                    Sports
-                  </Link>
-                  <ul className="dropdown-menu main-menu shadow">
-                    <li>
-                      <Link className="nav-link" to="soccer-bets-2.html">
-                        Tennis
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="nav-link" to="soccer-bets-1.html">
-                        Soccer
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="nav-link" to="soccer-bets-2.html">
-                        NBA
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-                <li className="nav-item dropdown main-navbar">
-                  <Link
-                    className="nav-link dropdown-toggle"
-                    to="javascript:void(0)"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
-                  >
-                    Currency
-                  </Link>
-                  <ul className="dropdown-menu main-menu shadow">
-                    <li>
-                      <Link className="nav-link" to="escrow-bets-fee.html">
-                        Escrow Bets Fee
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="nav-link" to="currency-bet.html">
-                        Currency Bet
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="nav-link" to="betting-details.html">
-                        Betting Details
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="nav-link" to="create-new-currency.html">
-                        Create Currency
-                      </Link>
                     </li>
                   </ul>
                 </li>
@@ -251,7 +210,7 @@ const Header = ({ user }) => (
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="contact.html">
-                    Contact
+                    About
                   </Link>
                 </li>
               </ul>
@@ -322,13 +281,13 @@ const Footer = () => (
           <div className="col-xl-12">
             <div className="menu-item">
               <Link to="/home" className="logo">
-                <img src="/assets/logo.png" alt="logo" />
+                <img
+                  src="/assets/logo-cropped.png"
+                  alt="logo"
+                  width="240"
+                  height="40"
+                />
               </Link>
-              {/*<ul className="footer-link">*/}
-              {/*    <li><Link to="contact.html">Contact</Link></li>*/}
-              {/*    <li><Link to="terms-conditions.html">Terms of Services</Link></li>*/}
-              {/*    <li><Link to="privacy-policy.html">Privacy</Link></li>*/}
-              {/*</ul>*/}
             </div>
           </div>
           <div className="col-12">
@@ -339,12 +298,6 @@ const Footer = () => (
                   Copyright © <Link to="/">ByteBracket</Link>
                 </p>
               </div>
-              {/*<div className="social-link d-flex align-items-center">*/}
-              {/*    <Link to="javascript:void(0)"><i className="fab fa-facebook-f"></i></Link>*/}
-              {/*    <Link to="javascript:void(0)"><i className="fab fa-twitter"></i></Link>*/}
-              {/*    <Link to="javascript:void(0)"><i className="fab fa-linkedin-in"></i></Link>*/}
-              {/*    <Link to="javascript:void(0)"><i className="fab fa-instagram"></i></Link>*/}
-              {/*</div>*/}
             </div>
           </div>
         </div>
