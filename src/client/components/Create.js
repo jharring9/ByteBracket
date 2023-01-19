@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Create = ({ user }) => {
   let navigate = useNavigate();
@@ -69,7 +69,7 @@ export const Create = ({ user }) => {
                             <Link to="/home">Home</Link>
                           </li>
                           <li className="breadcrumb-item">
-                            <Link to="/profile">Your Portal</Link>
+                            <Link to="/profile">{user?.name}'s Portal</Link>
                           </li>
                           <li
                             className="breadcrumb-item active"
@@ -102,9 +102,7 @@ export const Create = ({ user }) => {
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="single-input">
-                          <label for="nickname">
-                            Bracket Nickname
-                          </label>
+                          <label for="nickname">Bracket Nickname</label>
                           <input
                             type="text"
                             id="nickname"

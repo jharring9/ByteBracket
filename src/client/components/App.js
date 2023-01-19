@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter,
-  Link,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import { NotFound } from "./NotFound";
 import { Profile } from "./Profile";
@@ -75,64 +68,73 @@ const Header = ({ user }) => (
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/new">
-                    Create Bracket
+                  <Link className="nav-link" to="/about">
+                    About
                   </Link>
                 </li>
+                {user && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/new">
+                      Create Bracket
+                    </Link>
+                  </li>
+                )}
+                {user && (
+                  <li className="nav-item dropdown main-navbar">
+                    <div
+                      className="nav-link dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      data-bs-auto-close="outside"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Dashboard
+                    </div>
+                    <ul className="dropdown-menu main-menu shadow">
+                      <li>
+                        <Link className="nav-link" to="dashboard.html">
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li className="dropend sub-navbar">
+                        <Link
+                          to="javascript:void(0)"
+                          className="dropdown-item dropdown-toggle"
+                          data-bs-toggle="dropdown"
+                          data-bs-auto-close="outside"
+                        >
+                          Setting
+                        </Link>
+                        <ul className="dropdown-menu sub-menu shadow">
+                          <li>
+                            <Link
+                              className="nav-link"
+                              to="personal-details-setting.html"
+                            >
+                              Personal Details
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="nav-link"
+                              to="modify-login-password.html"
+                            >
+                              Change Password
+                            </Link>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                )}
                 <li className="nav-item dropdown main-navbar">
-                  <Link
+                  <div
                     className="nav-link dropdown-toggle"
-                    to="javascript:void(0)"
                     data-bs-toggle="dropdown"
                     data-bs-auto-close="outside"
-                  >
-                    Dashboard
-                  </Link>
-                  <ul className="dropdown-menu main-menu shadow">
-                    <li>
-                      <Link className="nav-link" to="dashboard.html">
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li className="dropend sub-navbar">
-                      <Link
-                        to="javascript:void(0)"
-                        className="dropdown-item dropdown-toggle"
-                        data-bs-toggle="dropdown"
-                        data-bs-auto-close="outside"
-                      >
-                        Setting
-                      </Link>
-                      <ul className="dropdown-menu sub-menu shadow">
-                        <li>
-                          <Link
-                            className="nav-link"
-                            to="personal-details-setting.html"
-                          >
-                            Personal Details
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            className="nav-link"
-                            to="modify-login-password.html"
-                          >
-                            Change Password
-                          </Link>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li className="nav-item dropdown main-navbar">
-                  <Link
-                    className="nav-link dropdown-toggle"
-                    to="javascript:void(0)"
-                    data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside"
+                    style={{ cursor: "pointer" }}
                   >
                     Pages
-                  </Link>
+                  </div>
                   <ul className="dropdown-menu main-menu shadow">
                     <li className="dropend sub-navbar">
                       <Link
@@ -207,11 +209,6 @@ const Header = ({ user }) => (
                       </Link>
                     </li>
                   </ul>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="contact.html">
-                    About
-                  </Link>
                 </li>
               </ul>
 
