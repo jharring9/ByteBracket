@@ -20,7 +20,7 @@ const setupServer = async () => {
   // Setup pipeline session support
   app.store = session({
     name: "session",
-    secret: "grahamcardrules",
+    secret: "bytebracketsessionsecret",
     resave: false,
     saveUninitialized: false,
     cookie: {

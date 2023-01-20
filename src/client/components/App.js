@@ -9,9 +9,8 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      setCurrentUser({ name: "Test User" });
-    }, 2500);
+    //todo -- redux session management - https://bernabe9.github.io/redux-react-session/
+    setCurrentUser({ name: "Test User" });
   });
 
   return (
@@ -97,7 +96,7 @@ const Header = ({ user }) => (
                       </li>
                       <li className="dropend sub-navbar">
                         <Link
-                          to="javascript:void(0)"
+                          to="/home"
                           className="dropdown-item dropdown-toggle"
                           data-bs-toggle="dropdown"
                           data-bs-auto-close="outside"
@@ -138,7 +137,7 @@ const Header = ({ user }) => (
                   <ul className="dropdown-menu main-menu shadow">
                     <li className="dropend sub-navbar">
                       <Link
-                        to="javascript:void(0)"
+                        to="/home"
                         className="dropdown-item dropdown-toggle"
                         data-bs-toggle="dropdown"
                         data-bs-auto-close="outside"
@@ -163,7 +162,7 @@ const Header = ({ user }) => (
                     </li>
                     <li className="dropend sub-navbar">
                       <Link
-                        to="javascript:void(0)"
+                        to="/home"
                         className="dropdown-item dropdown-toggle"
                         data-bs-toggle="dropdown"
                         data-bs-auto-close="outside"
@@ -211,7 +210,6 @@ const Header = ({ user }) => (
                   </ul>
                 </li>
               </ul>
-
               {user ? (
                 <div className="right-area header-action d-flex align-items-center max-un">
                   <Link to="/profile">
@@ -361,18 +359,18 @@ const LoginModal = () => (
                         <div className="head-area">
                           <h6 className="title">Login With</h6>
                           <div className="social-link d-flex align-items-center">
-                            <a href="javascript:void(0)" className="active">
+                            <Link to="/home" className="active">
                               <i className="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="javascript:void(0)">
+                            </Link>
+                            <Link to="/home">
                               <i className="fab fa-twitter"></i>
-                            </a>
-                            <a href="javascript:void(0)">
+                            </Link>
+                            <Link to="/home">
                               <i className="fab fa-linkedin-in"></i>
-                            </a>
-                            <a href="javascript:void(0)">
+                            </Link>
+                            <Link to="/home">
                               <i className="fab fa-google"></i>
-                            </a>
+                            </Link>
                           </div>
                         </div>
                         <div className="form-area">
@@ -412,9 +410,7 @@ const LoginModal = () => (
                                       </span>
                                     </span>
                                   </label>
-                                  <a href="javascript:void(0)">
-                                    Forgot Password
-                                  </a>
+                                  <Link to="/home">Forgot Password</Link>
                                 </div>
                               </div>
                               <span className="btn-border w-100">
@@ -425,9 +421,9 @@ const LoginModal = () => (
                           <div className="bottom-area text-center">
                             <p>
                               Not a member?{" "}
-                              <a href="javascript:void(0)" className="reg-btn">
+                              <Link to="/home" className="reg-btn">
                                 Register
-                              </a>
+                              </Link>
                             </p>
                           </div>
                         </div>
@@ -445,18 +441,18 @@ const LoginModal = () => (
                         <div className="head-area">
                           <h6 className="title">Register With</h6>
                           <div className="social-link d-flex align-items-center">
-                            <a href="javascript:void(0)" className="active">
+                            <Link to="/home" className="active">
                               <i className="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="javascript:void(0)">
+                            </Link>
+                            <Link to="/home">
                               <i className="fab fa-twitter"></i>
-                            </a>
-                            <a href="javascript:void(0)">
+                            </Link>
+                            <Link to="/home">
                               <i className="fab fa-linkedin-in"></i>
-                            </a>
-                            <a href="javascript:void(0)">
+                            </Link>
+                            <Link to="/home">
                               <i className="fab fa-google"></i>
-                            </a>
+                            </Link>
                           </div>
                         </div>
                         <div className="form-area">
@@ -490,9 +486,7 @@ const LoginModal = () => (
                               </div>
                               <div className="col-12">
                                 <div className="remember-me">
-                                  <a href="javascript:void(0)">
-                                    Have a referral code?
-                                  </a>
+                                  <Link to="/home">Have a referral code?</Link>
                                 </div>
                               </div>
                               <span className="btn-border w-100">
@@ -505,9 +499,9 @@ const LoginModal = () => (
                           <div className="bottom-area text-center">
                             <p>
                               Already have an account?{" "}
-                              <a href="javascript:void(0)" className="log-btn">
+                              <Link to="/home" className="log-btn">
                                 Login
-                              </a>
+                              </Link>
                             </p>
                           </div>
                         </div>
