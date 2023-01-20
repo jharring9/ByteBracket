@@ -1,6 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export const Top25 = ({ response, setStage }) => {
+  useEffect(() => {
+    window.scrollTo({top: 250, behavior: 'smooth'});
+  }, [])
+
+  const mockTableData = [
+    {
+      team: "Team 1",
+      rank: 1,
+      apRank: 25,
+      diff: +24,
+      color: "#00ff00",
+    },
+    {
+      team: "Team 2",
+      rank: 2,
+      apRank: 2,
+      diff: 0,
+      color: "rgba(0,255,0,0)",
+    },
+    {
+      team: "Team 3",
+      rank: 3,
+      apRank: 1,
+      diff: -2,
+      color: "rgba(255,0,0,0.2)",
+    },
+    {
+      team: "Team 4",
+      rank: 4,
+      apRank: 8,
+      diff: +4,
+      color: "rgba(0,255,0,0.37)",
+    },
+    {
+      team: "Team 5",
+      rank: 25,
+      apRank: 1,
+      diff: -24,
+      color: "rgb(255,0,0)",
+    },
+  ];
+
   return (
     <section className="create-future-currency">
       <div className="overlay">
@@ -16,11 +58,19 @@ export const Top25 = ({ response, setStage }) => {
                   </p>
                 </div>
                 <div className="row">
-                  <div className="col-lg-12">
-                    <div className="row justify-content-center">{response}</div>
+                  <div className="col-lg-8">
+                    <div className="section-text text-center">
+                      <h5>Your Top 25</h5>
+                    </div>
+                    <Top25Table data={mockTableData} />
+                  </div>
+                  <div className="col-lg-4">
+                    <div className="section-text text-center">
+                      <h5>Biggest Movers</h5>
+                    </div>
                   </div>
                   <div className="col-lg-12">
-                    <span className="btn-border">
+                    <span className="btn-border m-2">
                       <div
                         className="cmn-btn"
                         onClick={() => setStage(1)}
@@ -29,10 +79,11 @@ export const Top25 = ({ response, setStage }) => {
                         Go Back
                       </div>
                     </span>
-                    <span className="btn-border">
+                    <span className="btn-border m-2">
                       <div
                         className="cmn-btn"
                         style={{ cursor: "pointer" }}
+                        onClick={() => setStage(3)}
                       >
                         Next Step
                       </div>
@@ -45,5 +96,31 @@ export const Top25 = ({ response, setStage }) => {
         </div>
       </div>
     </section>
+  );
+};
+
+const Top25Table = ({ data }) => {
+  return (
+    <table className="table" style={{ color: "white" }}>
+      <thead>
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">Team</th>
+          <th scope="col">AP Rank</th>
+          <th scope="col">Difference</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((team) => (
+          <tr>
+            <th scope="row">{team.rank}</th>
+            <td>{team.team}</td>
+            <td>{team.apRank}</td>
+            <td>{team.diff}</td>
+            {/*<td style={{ backgroundColor: team.color }}>{team.diff}</td>*/}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };

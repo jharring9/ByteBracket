@@ -4,24 +4,23 @@ import { Drawer, Slider } from "rsuite";
 
 export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
   const chartData = [
-    { title: "Win-Loss %", value: stats.wl, color: "#E38627" },
-    { title: "Schedule Strength", value: stats.sos, color: "#C13C37" },
-    { title: "Points per Game", value: stats.ppg, color: "#6A2135" },
-    { title: "Opponent PPG", value: stats.oppg, color: "#4d195c" },
-    { title: "Field Goal %", value: stats.fg, color: "#2e216a" },
-    { title: "Free Throw Makes", value: stats.ft, color: "#253c91" },
-    { title: "3-Point Makes", value: stats.tpm, color: "#003afa" },
-    { title: "Total Rebounds", value: stats.trb, color: "#2d9b9d" },
-    { title: "Assists", value: stats.ast, color: "#14bd82" },
-    { title: "Steals & Blocks", value: stats.stlblk, color: "#14bd2b" },
-    { title: "Turnovers", value: stats.to, color: "#8dbd14" },
-    { title: "Personal Fouls", value: stats.pf, color: "#bd9b14" },
+    { title: "WL%", value: stats.wl, color: "#E38627" },
+    { title: "SOS", value: stats.sos, color: "#C13C37" },
+    { title: "PPG", value: stats.ppg, color: "#6A2135" },
+    { title: "OPPG", value: stats.oppg, color: "#4d195c" },
+    { title: "FG%", value: stats.fg, color: "#2e216a" },
+    { title: "FTM", value: stats.ft, color: "#253c91" },
+    { title: "3PM", value: stats.tpm, color: "#003afa" },
+    { title: "TR", value: stats.trb, color: "#2d9b9d" },
+    { title: "AST", value: stats.ast, color: "#14bd82" },
+    { title: "STL/BLK", value: stats.stlblk, color: "#14bd2b" },
+    { title: "TO", value: stats.to, color: "#8dbd14" },
+    { title: "PF", value: stats.pf, color: "#bd9b14" },
   ];
 
   const handleSubmit = async () => {
     let res = await fetch("/v1/lambda", {
       body: JSON.stringify({
-        name: stats.name,
         wl: stats.wl,
         sos: stats.sos,
         ppg: stats.ppg,
@@ -60,95 +59,45 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
                 </div>
                 <form action="#">
                   <div className="row">
-                    <div className="col-lg-12">
-                      <div className="single-input">
-                        <label>Bracket Nickname</label>
-                        <input
-                          type="text"
-                          id="nickname"
-                          placeholder="Please create a name for the bracket"
-                          value={stats.name}
-                          onChange={(e) => setStats({ ...stats,  name: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6">
+                    <div className="col-lg-3">
                       <InfoModal
                         name="Win-Loss %"
                         details="Details"
                         value={stats.wl}
-                        setValue={(val) => setStats({ ...stats,  wl: val })}
+                        setValue={(val) => setStats({ ...stats, wl: val })}
                       />
                       <InfoModal
                         name="Strength of Schedule"
                         details="Details"
                         value={stats.sos}
-                        setValue={(val) => setStats({ ...stats,  sos: val })}
+                        setValue={(val) => setStats({ ...stats, sos: val })}
                       />
                       <InfoModal
                         name="Points per Game"
                         details="Details"
                         value={stats.ppg}
-                        setValue={(val) => setStats({ ...stats,  ppg: val })}
+                        setValue={(val) => setStats({ ...stats, ppg: val })}
                       />
                       <InfoModal
                         name="Opponent Points per Game"
                         details="Details"
                         value={stats.oppg}
-                        setValue={(val) => setStats({ ...stats,  oppg: val })}
+                        setValue={(val) => setStats({ ...stats, oppg: val })}
                       />
                       <InfoModal
                         name="Field Goal %"
                         details="Details"
                         value={stats.fg}
-                        setValue={(val) => setStats({ ...stats,  fg: val })}
+                        setValue={(val) => setStats({ ...stats, fg: val })}
                       />
                       <InfoModal
                         name="3-Point Makes"
                         details="Details"
                         value={stats.tpm}
-                        setValue={(val) => setStats({ ...stats,  tpm: val })}
+                        setValue={(val) => setStats({ ...stats, tpm: val })}
                       />
                     </div>
-                    <div className="col-lg-6">
-                      <InfoModal
-                        name="Free Throw Makes"
-                        details="Details"
-                        value={stats.ft}
-                        setValue={(val) => setStats({ ...stats,  ft: val })}
-                      />
-                      <InfoModal
-                        name="Total Rebounds"
-                        details="Details"
-                        value={stats.trb}
-                        setValue={(val) => setStats({ ...stats,  trb: val })}
-                      />
-                      <InfoModal
-                        name="Assists"
-                        details="Details"
-                        value={stats.ast}
-                        setValue={(val) => setStats({ ...stats,  ast: val })}
-                      />
-                      <InfoModal
-                        name="Steals & Blocks"
-                        details="Details"
-                        value={stats.stlblk}
-                        setValue={(val) => setStats({ ...stats,  stlblk: val })}
-                      />
-                      <InfoModal
-                        name="Turnovers"
-                        details="Details"
-                        value={stats.to}
-                        setValue={(val) => setStats({ ...stats,  to: val })}
-                      />
-                      <InfoModal
-                        name="Personal Fouls"
-                        details="Details"
-                        value={stats.pf}
-                        setValue={(val) => setStats({ ...stats,  pf: val })}
-                      />
-                    </div>
-                    <div className="col-lg-6 mt-5 mb-5">
+                    <div className="col-lg-6 mt-1">
                       <PieChart
                         style={{ height: "400px" }}
                         data={chartData}
@@ -156,22 +105,51 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
                         labelStyle={() => ({
                           fill: "white",
                           fontSize: "3px",
-                          fontFamily: "sans-serif",
                         })}
                         radius={42}
                         labelPosition={112}
                       />
                     </div>
-                    <div className="col-lg-6 mt-5 mb-5 d-flex align-items-center">
-                      <div className="more-info">
-                        <ul>
-                          <li>Your most significant stats are [...]</li>
-                          <li>Your least significant stats are [...]</li>
-                        </ul>
-                      </div>
+                    <div className="col-lg-3">
+                      <InfoModal
+                        name="Free Throw Makes"
+                        details="Details"
+                        value={stats.ft}
+                        setValue={(val) => setStats({ ...stats, ft: val })}
+                      />
+                      <InfoModal
+                        name="Total Rebounds"
+                        details="Details"
+                        value={stats.trb}
+                        setValue={(val) => setStats({ ...stats, trb: val })}
+                      />
+                      <InfoModal
+                        name="Assists"
+                        details="Details"
+                        value={stats.ast}
+                        setValue={(val) => setStats({ ...stats, ast: val })}
+                      />
+                      <InfoModal
+                        name="Steals & Blocks"
+                        details="Details"
+                        value={stats.stlblk}
+                        setValue={(val) => setStats({ ...stats, stlblk: val })}
+                      />
+                      <InfoModal
+                        name="Turnovers"
+                        details="Details"
+                        value={stats.to}
+                        setValue={(val) => setStats({ ...stats, to: val })}
+                      />
+                      <InfoModal
+                        name="Personal Fouls"
+                        details="Details"
+                        value={stats.pf}
+                        setValue={(val) => setStats({ ...stats, pf: val })}
+                      />
                     </div>
                     <div className="col-lg-12">
-                      <div className="row justify-content-center">
+                      <div className="row justify-content-center mt-1">
                         <span className="btn-border">
                           <div
                             className="cmn-btn"
@@ -199,7 +177,7 @@ const InfoModal = ({ name, value, setValue, details }) => {
 
   return (
     <>
-      <div className="single-input">
+      <div className="single-input mt-4 mb-4">
         <label style={{ cursor: "pointer" }} onClick={() => setOpen(true)}>
           {name}
         </label>

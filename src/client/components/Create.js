@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SelectStats } from "./create-bracket/SelectStats";
 import { Top25 } from "./create-bracket/Top25";
+import { MakePicks } from "./create-bracket/MakePicks";
 
 export const Create = ({ user }) => {
   const navigate = useNavigate();
   const [stage, setStage] = useState(1);
   const [response, setResponse] = useState(null);
   const [state, setState] = useState({
-    name: "",
     wl: 5,
     sos: 5,
     ppg: 5,
@@ -86,11 +86,31 @@ export const Create = ({ user }) => {
                         <ol className="breadcrumb d-flex align-items-center">
                           <li className="breadcrumb-item">Build Bracket</li>
                           <li
-                            className="breadcrumb-item active"
+                            className={`breadcrumb-item ${
+                              stage === 1 && "active"
+                            }`}
                             aria-current="page"
                           >
                             Select Statistics
                           </li>
+                          {stage >= 2 && (
+                            <li
+                              className={`breadcrumb-item ${
+                                stage === 2 && "active"
+                              }`}
+                              aria-current="page"
+                            >
+                              Your Top 25
+                            </li>
+                          )}
+                          {stage === 3 && (
+                            <li
+                              className={"breadcrumb-item active"}
+                              aria-current="page"
+                            >
+                              Make Your Picks
+                            </li>
+                          )}
                         </ol>
                       </nav>
                     </div>
@@ -114,6 +134,12 @@ export const Create = ({ user }) => {
       {stage === 2 && (
         <Top25 stats={state} setStage={setStage} response={response} />
       )}
+
+      {stage === 3 && <MakePicks setStage={setStage} matchups={[]} />}
     </React.Fragment>
   );
 };
+
+// const ErrorModal = ({ errorMsg, show, setShow }) => (
+//   //todo
+// );
