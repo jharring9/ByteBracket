@@ -1,8 +1,10 @@
 import { PieChart } from "react-minimal-pie-chart";
-import React from "react";
+import React, { useState } from "react";
 import { ContinueButton } from "../icons";
 
 export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
+  const [loading, setLoading] = useState(false);
+
   const chartData = [
     { title: "WL%", value: stats.wl, color: "#E38627" },
     { title: "SOS", value: stats.sos, color: "#C13C37" },
@@ -19,6 +21,7 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
   ];
 
   const handleSubmit = async () => {
+    setLoading(true);
     let res = await fetch("/v1/lambda", {
       body: JSON.stringify(stats),
       method: "POST",
@@ -28,8 +31,7 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
       },
     });
     const data = await res.json();
-    console.log(data);
-    setResponse(JSON.stringify(data));
+    setResponse(data);
     setStage(2);
   };
 
@@ -111,9 +113,9 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
           setValue={(val) => setStats({ ...stats, pf: val })}
         />
       </div>
-      <div className="md:order-3 lg:order-2">
+      <div className="align-middle md:order-3 lg:order-2">
         <PieChart
-          style={{ height: "400px" }}
+          style={{ height: "380px" }}
           data={chartData}
           label={({ dataEntry }) => dataEntry.title}
           labelStyle={() => ({
@@ -126,7 +128,7 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
       </div>
       <div className="order-last">
         <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
-          <ContinueButton onClick={handleSubmit} />
+          <ContinueButton onClick={handleSubmit} loading={loading} />
         </div>
       </div>
     </div>
@@ -138,7 +140,6 @@ const InfoModal = ({ name, value, setValue, details }) => {
     <div className="m-3">
       <label
         htmlFor="minmax-range"
-        data-tooltip-target="tooltip-default"
         className="mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
         {name}
@@ -150,7 +151,7 @@ const InfoModal = ({ name, value, setValue, details }) => {
         max={10}
         value={value}
         onChange={(val) => setValue(parseInt(val.target.value))}
-        className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
+        className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-300"
       />
     </div>
   );

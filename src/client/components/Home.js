@@ -37,7 +37,7 @@ export const Home = () => {
           <svg
             className="absolute top-0 left-1/2 origin-top -translate-x-1/2 -translate-y-8 scale-75 transform sm:scale-100 lg:hidden"
             width={640}
-            height={784}
+            height={580}
             fill="none"
             viewBox="0 0 640 784"
             aria-hidden="true"
@@ -56,18 +56,11 @@ export const Home = () => {
                   y={0}
                   width={4}
                   height={4}
-                  className="text-gray-200"
+                  className="text-gray-300"
                   fill="currentColor"
                 />
               </pattern>
             </defs>
-            <rect
-              y={72}
-              width={640}
-              height={640}
-              className="text-gray-50"
-              fill="currentColor"
-            />
             <rect
               x={118}
               width={404}

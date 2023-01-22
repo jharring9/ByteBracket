@@ -16,7 +16,7 @@ for (let i = 0; i < 25; i++) {
 export let biggestMovers = [...mockTableData].sort((a, b) => {
   return Math.abs(a.diff) - Math.abs(b.diff);
 });
-biggestMovers = biggestMovers.slice(-5);
+biggestMovers = biggestMovers.slice(-5).reverse();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

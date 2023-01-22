@@ -1,126 +1,151 @@
-import { Popover, Transition } from "@headlessui/react";
+import React, {  useEffect } from "react";
+import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Logo } from "./icons";
+import { Link, useLocation } from "react-router-dom";
 
-const navigation = [
-  { name: "Home", href: "/home" },
-  { name: "Create Bracket", href: "/create" },
-  { name: "About", href: "/about" },
-  { name: "Social", href: "/social" },
+const userNavigation = [
+  { name: "Your Profile", href: "/profile" },
+  { name: "Sign out", href: "/logout" },
 ];
 
-export const Header = ({ user }) => {
-  return (
-    <Popover className="pb-2">
-      <nav
-        className="relative mx-auto flex max-w-7xl items-center justify-between px-6"
-        aria-label="Global"
-      >
-        <div className="flex flex-1 items-center">
-          <div className="flex w-full items-center justify-between md:w-auto">
-            <Link to="/home">
-              <span className="text-3xl" style={{ fontFamily: "loveloBold" }}>
-                Byte<span className="text-indigo-600">Bracket</span>
-              </span>
-            </Link>
-            <div className="-mr-2 flex items-center md:hidden">
-              <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              </Popover.Button>
-            </div>
-          </div>
-          <div className="hidden md:ml-10 md:block md:space-x-10">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="font-medium text-gray-500 hover:text-gray-900"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div className="hidden text-right md:block">
-          <span className="inline-flex rounded-md shadow-md ring-1 ring-black ring-opacity-5">
-            {
-              user ?
-                <Link
-                  to="/account"
-                  className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
-                >
-                  My Account
-                </Link>
-                :
-                <Link
-                  to="/login"
-                  className="inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-base font-medium text-indigo-600 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
-            }
-          </span>
-        </div>
-      </nav>
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
-      <Transition
-        as={Fragment}
-        enter="duration-150 ease-out"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="duration-100 ease-in"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <Popover.Panel
-          focus
-          className="absolute inset-x-0 top-0 z-10 origin-top-right transform p-2 transition md:hidden"
-        >
-          <div className="overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black ring-opacity-5">
-            <div className="flex items-center justify-between px-5 pt-4">
-              <div>
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
-                />
+export const Header = ({ user }) => {
+  let location = useLocation();
+  const [navigation, setNavigation] = React.useState([
+    { name: "Home", href: "/home", current: false },
+    { name: "Create Bracket", href: "/create", current: false },
+    { name: "About", href: "/about", current: false },
+    { name: "Social", href: "/social", current: false },
+  ]);
+
+  useEffect(() => {
+    const newNav = [...navigation].map((item) => {
+      item.current = item.href === location.pathname;
+      return item;
+    });
+    setNavigation(newNav);
+  }, [location]);
+
+  return (
+    <Disclosure as="nav" className="bg-gray-800">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 justify-between">
+              <div className="flex">
+                <div className="-ml-2 mr-2 flex items-center md:hidden">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                    {open ? (
+                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    )}
+                  </Disclosure.Button>
+                </div>
+                <Link
+                  className="flex flex-shrink-0 cursor-pointer items-center"
+                  to="/home"
+                >
+                  <Logo />
+                </Link>
+                <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "rounded-md px-3 py-2 text-sm font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
-              <div className="-mr-2">
-                <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                </Popover.Button>
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  {user ? (
+                    <Link
+                      to="/profile"
+                      type="button"
+                      className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      My Account
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                    >
+                      Log in
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="space-y-1 px-2 pt-2 pb-3">
+          </div>
+
+          <Disclosure.Panel className="md:hidden">
+            <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
               {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                >
-                  {item.name}
-                </a>
+                <Link to={item.href}>
+                  <Disclosure.Button
+                    key={item.name}
+                    className={classNames(
+                      item.current
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "block rounded-md px-3 py-2 text-base font-medium"
+                    )}
+                    aria-current={item.current ? "page" : undefined}
+                  >
+                    {item.name}
+                  </Disclosure.Button>
+                </Link>
               ))}
             </div>
-            {user ? (
-              <Link
-                to="/account"
-                className="block w-full bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
-              >
-                My Account
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="block w-full bg-gray-50 px-5 py-3 text-center font-medium text-indigo-600 hover:bg-gray-100"
-              >
-                Log in
-              </Link>
-            )}
-          </div>
-        </Popover.Panel>
-      </Transition>
-    </Popover>
+            <div className="border-t border-gray-700 pt-4 pb-3">
+              <div className="flex items-center px-5 sm:px-6">
+                <div className="flex-shrink-0">
+                  <img
+                    className="h-10 w-10 rounded-full"
+                    src={user.imageUrl}
+                    alt=""
+                  />
+                </div>
+                <div className="ml-3">
+                  <div className="text-base font-medium text-white">
+                    {user.name}
+                  </div>
+                  <div className="text-sm font-medium text-gray-400">
+                    {user.email}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 space-y-1 px-2 sm:px-3">
+                {userNavigation.map((item) => (
+                  <Disclosure.Button
+                    key={item.name}
+                    as="a"
+                    href={item.href}
+                    className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                  >
+                    {item.name}
+                  </Disclosure.Button>
+                ))}
+              </div>
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
   );
 };

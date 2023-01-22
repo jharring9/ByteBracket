@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { biggestMovers, mockTableData } from "../../index";
 import { BackButton, ContinueButton, TrendingDown, TrendingUp } from "../icons";
 
 export const Top25 = ({ setStage }) => {
+  const [loading, setLoading] = useState(false);
+
   const handleBack = () => {
     setStage(1);
   };
 
   const handleNext = () => {
-    setStage(3);
+    setLoading(true);
+    setTimeout(() => {
+      setStage(3);
+    }, 1000);
   };
 
   return (
@@ -55,8 +60,8 @@ export const Top25 = ({ setStage }) => {
                     <td className="px-6 py-4">{row.apRank}</td>
                     <td className="flex px-6 py-4">
                       {row.diff}
-                      {row.diff >= 5 && <TrendingUp className="ml-2" />}
-                      {row.diff <= -5 && <TrendingDown className="ml-2" />}
+                      {row.diff >= 10 && <TrendingUp className="ml-2" />}
+                      {row.diff <= -10 && <TrendingDown className="ml-2" />}
                     </td>
                   </tr>
                 );
@@ -116,7 +121,7 @@ export const Top25 = ({ setStage }) => {
           <BackButton onClick={handleBack} />
         </div>
         <div className="flex justify-center lg:mt-2 lg:justify-start">
-          <ContinueButton onClick={handleNext} />
+          <ContinueButton onClick={handleNext} loading={loading} />
         </div>
       </div>
     </div>
