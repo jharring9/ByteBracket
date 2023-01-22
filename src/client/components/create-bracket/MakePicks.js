@@ -1,44 +1,25 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { BackButton, ContinueButton } from "../icons";
 
-export const MakePicks = ({ matchups, setStage }) => {
-  useEffect(() => {
-    window.scrollTo({top: 250, behavior: 'smooth'});
-  }, [])
+export const MakePicks = ({ setStage }) => {
+  const handleBack = () => {
+    setStage(2);
+  };
+
+  const handleNext = () => {
+    setStage(1);
+  };
 
   return (
-    <section className="create-future-currency">
-      <div className="overlay">
-        <div className="container">
-          <div className="main-content">
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="section-text text-center">
-                  <h3>Make Your Picks</h3>
-                  <p>Round of {matchups.length * 2}</p>
-                </div>
-                <div className="row">
-                  <div className="col-lg-12">
-                    <span className="btn-border m-2">
-                      <div
-                        className="cmn-btn"
-                        onClick={() => setStage(2)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        Go Back
-                      </div>
-                    </span>
-                    <span className="btn-border m-2">
-                      <div className="cmn-btn" style={{ cursor: "pointer" }}>
-                        Complete Bracket
-                      </div>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="mx-auto mt-4 max-w-7xl px-4 px-6 sm:mt-6 lg:mt-8">
+      <div className="lg:col-span-4 lg:flex">
+        <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
+          <BackButton onClick={handleBack} />
+        </div>
+        <div className="flex justify-center lg:mt-2 lg:justify-start">
+          <ContinueButton onClick={handleNext} />
         </div>
       </div>
-    </section>
+    </div>
   );
 };

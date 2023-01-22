@@ -1,37 +1,43 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const NotFound = () => {
-  let navigate = useNavigate();
-
-  const goBack = () => {
-    navigate(-1);
-  };
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
 
   return (
-    <section className="error-section pt-120 pb-120">
-      <div className="overlay pt-120 pb-120">
-        <div className="container">
-          <div className="row justify-content-between align-items-center">
-            <div className="col-lg-6">
-              <div className="img-area">
-                <img src="/assets/images/error-illus.png" alt="image" />
-              </div>
+    <div className="min-h-full bg-white py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+      <div className="mx-auto max-w-max">
+        <main className="sm:flex">
+          <p className="text-4xl font-bold tracking-tight text-indigo-600 sm:text-5xl">
+            404
+          </p>
+          <div className="sm:ml-6">
+            <div className="sm:border-l sm:border-gray-200 sm:pl-6">
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                Page not found
+              </h1>
+              <p className="mt-1 text-base text-gray-500">
+                Please check the URL in the address bar and try again.
+              </p>
             </div>
-            <div className="col-lg-5">
-              <div className="section-text">
-                <h2 className="title">Page Not Found</h2>
-                <p>Looks like you got lost...</p>
+            <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
+              <div
+                className="inline-flex cursor-pointer items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={goBack}
+              >
+                Go back
               </div>
-              <div className="btn-border" onClick={goBack} style={{cursor: "pointer"}}>
-                <div className="cmn-btn">
-                  Go back
-                </div>
-              </div>
+              <Link
+                to="/home"
+                className="inline-flex items-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Return home
+              </Link>
             </div>
           </div>
-        </div>
+        </main>
       </div>
-    </section>
+    </div>
   );
 };

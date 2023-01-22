@@ -1,139 +1,87 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function Home({ user }) {
+export const Home = () => {
+  const navigate = useNavigate();
   return (
-    <React.Fragment>
-      <section className="banner-section">
-        <div className="overlay">
-          <div className="shape-area">
-            <img
-              src="/assets/images/clip/icons8-basketball-100.png"
-              className="obj-1"
-              alt="image"
-            />
-            <img
-              src="/assets/images/winner-cup.png"
-              className="obj-2"
-              alt="image"
-            />
+    <main className="mx-auto mt-16 max-w-7xl px-4 px-6 sm:mt-24 lg:mt-32">
+      <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+        <div className="sm:text-center md:mx-auto md:max-w-2xl lg:col-span-6 lg:text-left">
+          <h1>
+            <span className="block text-base font-semibold text-gray-500 sm:text-lg lg:text-base xl:text-lg">
+              Coming soon
+            </span>
+            <span className="mt-1 block text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
+              <span className="block text-gray-900">Where sports data</span>
+              <span className="block">
+                meets <span className="text-indigo-600">intuition.</span>
+              </span>
+            </span>
+          </h1>
+          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
+            lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
+            fugiat aliqua ad ad non deserunt sunt.
+          </p>
+          <div className="mt-5 sm:mx-auto sm:max-w-lg sm:text-center lg:mx-0 lg:text-left">
+            <button
+              type="submit"
+              className="mt-3 w-full rounded-md border border-transparent bg-gray-800 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:inline-flex sm:w-auto sm:flex-shrink-0 sm:items-center"
+              onClick={() => navigate("/create")}
+            >
+              Get Started
+            </button>
           </div>
-          <div className="banner-content">
-            <div className="container">
-              <div className="content-shape">
-                <img
-                  src="/assets/images/clip/icons8-soccer-ball-90.png"
-                  className="obj-1"
-                  alt="image"
+        </div>
+        <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
+          <svg
+            className="absolute top-0 left-1/2 origin-top -translate-x-1/2 -translate-y-8 scale-75 transform sm:scale-100 lg:hidden"
+            width={640}
+            height={784}
+            fill="none"
+            viewBox="0 0 640 784"
+            aria-hidden="true"
+          >
+            <defs>
+              <pattern
+                id="4f4f415c-a0e9-44c2-9601-6ded5a34a13e"
+                x={118}
+                y={0}
+                width={20}
+                height={20}
+                patternUnits="userSpaceOnUse"
+              >
+                <rect
+                  x={0}
+                  y={0}
+                  width={4}
+                  height={4}
+                  className="text-gray-200"
+                  fill="currentColor"
                 />
-                <img
-                  src="/assets/images/clip/icons8-soccer-ball-90.png"
-                  className="obj-2"
-                  alt="image"
-                />
-                <img
-                  src="/assets/images/clip/american-football-helmet--v2.png"
-                  className="obj-3"
-                  alt="image"
-                />
-                <img
-                  src="/assets/images/clip/icons8-basketball-100.png"
-                  className="obj-4"
-                  alt="image"
-                />
-              </div>
-              <div className="row">
-                <div className="col-lg-6 col-md-10">
-                  <div className="main-content">
-                    <div className="top-area section-text">
-                      <h4 className="sub-title">Create Your Bracket Today!</h4>
-                      <h1 className="title">Data-driven sports</h1>
-                      <p className="xlr">
-                        Create a bracket for any sport. Let the data do the
-                        work.
-                      </p>
-                    </div>
-                    <div className="bottom-area">
-                      <span className="btn-border">
-                        {user ? (
-                          <Link to="/profile">
-                            <button type="button" className="cmn-btn reg">
-                              Your Portal
-                            </button>
-                          </Link>
-                        ) : (
-                          <button
-                            type="button"
-                            className="cmn-btn reg"
-                            data-bs-toggle="modal"
-                            data-bs-target="#loginMod"
-                          >
-                            Get Started Now
-                          </button>
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </pattern>
+            </defs>
+            <rect
+              y={72}
+              width={640}
+              height={640}
+              className="text-gray-50"
+              fill="currentColor"
+            />
+            <rect
+              x={118}
+              width={404}
+              height={784}
+              fill="url(#4f4f415c-a0e9-44c2-9601-6ded5a34a13e)"
+            />
+          </svg>
+          <div className="relative mx-auto w-full lg:max-w-md">
+            <div className="relative block w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <img className="w-full" src="/assets/bracket.png" alt="" />
             </div>
           </div>
         </div>
-        <div className="counter-section">
-          <div className="container">
-            <div className="row cus-mar">
-              <div className="col-xl-4 col-md-6">
-                <div className="single-area d-flex align-items-center">
-                  <div className="img-area">
-                    <img
-                      src="/assets/images/icon/more-features-icon-1.png"
-                      alt="image"
-                    />
-                  </div>
-                  <div className="text-area">
-                    <h3 className="m-none">
-                      <span className="counter">4321</span>
-                    </h3>
-                    <p>Brackets Created</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-md-6">
-                <div className="single-area d-flex align-items-center">
-                  <div className="img-area">
-                    <img
-                      src="/assets/images/icon/counter-icon-2.png"
-                      alt="image"
-                    />
-                  </div>
-                  <div className="text-area">
-                    <h3 className="m-none">
-                      <span className="counter">81</span>%
-                    </h3>
-                    <p>Cumulative Win %</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-4 col-md-6">
-                <div className="single-area d-flex align-items-center">
-                  <div className="img-area">
-                    <img
-                      src="/assets/images/icon/counter-icon-3.png"
-                      alt="image"
-                    />
-                  </div>
-                  <div className="text-area">
-                    <h3 className="m-none">
-                      <span className="counter">1234</span>
-                    </h3>
-                    <p>Users Registered</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </React.Fragment>
+      </div>
+    </main>
   );
-}
+};

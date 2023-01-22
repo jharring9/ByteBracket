@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { SelectStats } from "./create-bracket/SelectStats";
 import { Top25 } from "./create-bracket/Top25";
 import { MakePicks } from "./create-bracket/MakePicks";
+import { Carrot } from "./icons";
 
-export const Create = ({ user }) => {
-  const navigate = useNavigate();
+export const Create = () => {
   const [stage, setStage] = useState(1);
   const [response, setResponse] = useState(null);
   const [state, setState] = useState({
@@ -23,123 +22,80 @@ export const Create = ({ user }) => {
     pf: 5,
   });
 
-  /**
-   * Send user home if they are not logged in.
-   */
-  useEffect(() => {
-    if (!user) {
-      navigate("/home");
-    }
-  }, [navigate, user]);
-
   return (
-    <React.Fragment>
-      <section className="banner-section inner-banner soccer-bets currency-bet create-currency">
-        <div className="overlay">
-          <div className="shape-area">
-            <img
-              src="/assets/images/winner-cup.png"
-              className="obj-1"
-              alt="image"
-            />
-            <img
-              src="/assets/images/coin-5.png"
-              className="obj-2"
-              alt="image"
-            />
-            <img
-              src="/assets/images/coin-3.png"
-              className="obj-3"
-              alt="image"
-            />
-            <img
-              src="/assets/images/coin-6.png"
-              className="obj-4"
-              alt="image"
-            />
-            <img
-              src="/assets/images/bracket.png"
-              className="chart-illu"
-              alt="image"
-            />
-          </div>
-          <div className="banner-content">
-            <div className="container">
-              <div className="content-shape">
-                <img
-                  src="/assets/images/coin-1.png"
-                  className="obj-8"
-                  alt="image"
-                />
-                <img
-                  src="/assets/images/time-circle.png"
-                  className="obj-9"
-                  alt="image"
-                />
-              </div>
-              <div className="row">
-                <div className="col-lg-9 col-md-10">
-                  <div className="main-content">
-                    <h1>Create Bracket</h1>
-                    <div className="breadcrumb-area">
-                      <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb d-flex align-items-center">
-                          <li className="breadcrumb-item">Build Bracket</li>
-                          <li
-                            className={`breadcrumb-item ${
-                              stage === 1 && "active"
-                            }`}
-                            aria-current="page"
-                          >
-                            Select Statistics
-                          </li>
-                          {stage >= 2 && (
-                            <li
-                              className={`breadcrumb-item ${
-                                stage === 2 && "active"
-                              }`}
-                              aria-current="page"
-                            >
-                              Your Top 25
-                            </li>
-                          )}
-                          {stage === 3 && (
-                            <li
-                              className={"breadcrumb-item active"}
-                              aria-current="page"
-                            >
-                              Make Your Picks
-                            </li>
-                          )}
-                        </ol>
-                      </nav>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="relative overflow-hidden bg-white py-8 pb-4">
+      <div className="relative px-6 lg:px-8">
+        <div className="mx-auto max-w-prose text-lg">
+          <h1>
+            <span className="mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
+              Build Your Bracket
+            </span>
+          </h1>
         </div>
-      </section>
 
-      {stage === 1 && (
-        <SelectStats
-          stats={state}
-          setStats={setState}
-          setStage={setStage}
-          setResponse={setResponse}
-        />
-      )}
+        <ol className="mx-auto mt-4 flex w-full max-w-7xl items-center justify-evenly space-x-2 rounded-lg border border-gray-200 bg-white p-3 px-4 px-6 text-center text-sm font-medium text-gray-500 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 sm:space-x-4 sm:p-4 sm:text-base">
+          <li className={`flex items-center text-indigo-700`}>
+            <span className="mr-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-indigo-700 text-xs dark:border-blue-500">
+              1
+            </span>
+            <span className="hidden sm:mr-1 sm:inline-flex">Select</span>Stats
+          </li>
+          <Carrot pos={1} stage={stage} />
+          <li
+            className={`flex items-center ${stage >= 2 && "text-indigo-700"}`}
+          >
+            <span
+              className={`mr-2 flex h-5 w-5 items-center justify-center border text-xs border-${
+                stage >= 2 ? "indigo-700" : "gray-700"
+              } shrink-0 rounded-full dark:border-gray-400`}
+            >
+              2
+            </span>
+            <span className="hidden sm:mr-1 sm:inline-flex">Your</span> Top 25
+          </li>
+          <Carrot pos={2} stage={stage} />
+          <li
+            className={`flex items-center ${stage >= 3 && "text-indigo-700"}`}
+          >
+            <span
+              className={`mr-2 flex h-5 w-5 items-center justify-center border text-xs border-${
+                stage >= 3 ? "indigo-700" : "gray-700"
+              } shrink-0 rounded-full dark:border-gray-400`}
+            >
+              3
+            </span>
+            <span className="hidden sm:mr-1 sm:inline-flex">Make Your</span>{" "}
+            Picks
+          </li>
+        </ol>
 
-      {stage === 2 && (
-        <Top25 stats={state} setStage={setStage} response={response} />
-      )}
+        {stage === 1 && (
+          <SelectStats
+            stats={state}
+            setStats={setState}
+            setStage={setStage}
+            setResponse={setResponse}
+          />
+        )}
 
-      {stage === 3 && <MakePicks setStage={setStage} matchups={[]} />}
-    </React.Fragment>
+        {stage === 2 && (
+          <Top25
+            stats={state}
+            setStats={setState}
+            setStage={setStage}
+            setResponse={setResponse}
+          />
+        )}
+
+        {stage === 3 && (
+          <MakePicks
+            stats={state}
+            setStats={setState}
+            setStage={setStage}
+            setResponse={setResponse}
+          />
+        )}
+      </div>
+    </div>
   );
 };
-
-// const ErrorModal = ({ errorMsg, show, setShow }) => (
-//   //todo
-// );
