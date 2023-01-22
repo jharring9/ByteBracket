@@ -14,8 +14,6 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState({
     name: "Test User",
     email: "tom@example.com",
-    imageUrl:
-      "https://static.vecteezy.com/system/resources/thumbnails/005/545/335/small/user-sign-icon-person-symbol-human-avatar-isolated-on-white-backogrund-vector.jpg",
   });
 
   return (

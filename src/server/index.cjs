@@ -12,14 +12,13 @@ const http = require("http");
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
 
 const setupServer = async () => {
-  console.log(env);
-
   // Setup our Express pipeline
   let app = express();
   app.set("views", __dirname);
   app.set("view engine", "html");
   app.engine("html", require("ejs").renderFile);
   app.use(express.static(path.join(__dirname, "../../public")));
+
   // Setup pipeline session support
   app.store = session({
     name: "session",
@@ -31,6 +30,7 @@ const setupServer = async () => {
     },
   });
   app.use(app.store);
+
   // Finish with the body parser
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
