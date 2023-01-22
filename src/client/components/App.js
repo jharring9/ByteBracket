@@ -9,6 +9,8 @@ import { NotFound } from "./NotFound";
 import "flowbite";
 import { Login } from "./Login";
 import { Register } from "./Register";
+import { Account } from "./Account";
+import { About } from "./About";
 
 export default function App() {
   const [navigation, setNavigation] = React.useState([
@@ -19,7 +21,34 @@ export default function App() {
   ]);
   const [currentUser, setCurrentUser] = useState({
     name: "Test User",
+    handle: "testuser",
     email: "tom@example.com",
+    brackets: [
+      {
+        id: 1,
+        name: "Test Bracket 1",
+        winner: "Team 1",
+        status: "Complete",
+      },
+      {
+        id: 2,
+        name: "Test Bracket 2",
+        winner: "Team 2",
+        status: "Complete",
+      },
+      {
+        id: 3,
+        name: "Test Bracket 3",
+        winner: "Team 3",
+        status: "Complete",
+      },
+      {
+        id: 4,
+        name: "Test Bracket 4",
+        winner: "Team 4",
+        status: "In Progress",
+      },
+    ],
   });
 
   return (
@@ -36,6 +65,8 @@ export default function App() {
           <Route path="/create" element={<Create user={currentUser} />} />
           <Route path="/login" element={<Login user={currentUser} />} />
           <Route path="/register" element={<Register user={currentUser} />} />
+          <Route path="/account" element={<Account user={currentUser} />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer navigation={navigation} />

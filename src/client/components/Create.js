@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { SelectStats } from "./create-bracket/SelectStats";
-import { Top25 } from "./create-bracket/Top25";
-import { MakePicks } from "./create-bracket/MakePicks";
+import { SelectStats } from "./create-flow/SelectStats";
+import { Top25 } from "./create-flow/Top25";
+import { MakePicks } from "./create-flow/MakePicks";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
 const steps = [
