@@ -11,6 +11,12 @@ import { Login } from "./Login";
 import { Register } from "./Register";
 
 export default function App() {
+  const [navigation, setNavigation] = React.useState([
+    { name: "Home", href: "/home", current: false },
+    { name: "Create Bracket", href: "/create", current: false },
+    { name: "About", href: "/about", current: false },
+    { name: "Social", href: "/social", current: false },
+  ]);
   const [currentUser, setCurrentUser] = useState({
     name: "Test User",
     email: "tom@example.com",
@@ -19,7 +25,11 @@ export default function App() {
   return (
     <div className="relative overflow-hidden bg-gray-100">
       <BrowserRouter>
-        <Header user={currentUser} />
+        <Header
+          user={currentUser}
+          navigation={navigation}
+          setNavigation={setNavigation}
+        />
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home user={currentUser} />} />
@@ -28,7 +38,7 @@ export default function App() {
           <Route path="/register" element={<Register user={currentUser} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Footer />
+        <Footer navigation={navigation} />
       </BrowserRouter>
     </div>
   );

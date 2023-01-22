@@ -1,4 +1,5 @@
 import React from "react";
+import { XCircleIcon } from "@heroicons/react/20/solid";
 
 export const TrendingUp = () => (
   <svg
@@ -161,4 +162,68 @@ export const Logo = () => (
   <span className="text-3xl text-white" style={{ fontFamily: "loveloBold" }}>
     Byte<span className="text-indigo-600">Bracket</span>
   </span>
+);
+
+export const ErrorAlert = ({ header, message }) => (
+  <div className="mx-auto max-w-7xl rounded-md bg-red-100 p-4 px-4 px-6">
+    <div className="flex">
+      <div className="flex-shrink-0">
+        <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+      </div>
+      <div className="ml-3">
+        <h3 className="flex-wrap break-normal text-sm font-medium text-red-800">
+          {header}
+        </h3>
+        <div className="mt-2 text-sm text-red-700">
+          <ul role="list" className="list-disc space-y-1 pl-5">
+            <li>{message}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+export const BracketArt = () => (
+  <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
+    <svg
+      className="absolute top-0 left-1/2 origin-top -translate-x-1/2 -translate-y-8 scale-90 transform md:scale-100"
+      width={640}
+      height={480}
+      fill="none"
+      viewBox="0 0 640 784"
+      aria-hidden="true"
+    >
+      <defs>
+        <pattern
+          id="4f4f415c-a0e9-44c2-9601-6ded5a34a13e"
+          x={118}
+          y={0}
+          width={20}
+          height={20}
+          patternUnits="userSpaceOnUse"
+        >
+          <rect
+            x={0}
+            y={0}
+            width={4}
+            height={4}
+            className="text-gray-300"
+            fill="currentColor"
+          />
+        </pattern>
+      </defs>
+      <rect
+        x={118}
+        width={404}
+        height={784}
+        fill="url(#4f4f415c-a0e9-44c2-9601-6ded5a34a13e)"
+      />
+    </svg>
+    <div className="relative mx-auto w-full lg:max-w-md">
+      <div className="relative block w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <img className="w-full" src="/assets/bracket.png" alt="" />
+      </div>
+    </div>
+  </div>
 );

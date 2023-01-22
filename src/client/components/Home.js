@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { BracketArt } from "./icons";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -33,47 +34,7 @@ export const Home = () => {
             </button>
           </div>
         </div>
-        <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
-          <svg
-            className="absolute top-0 left-1/2 origin-top -translate-x-1/2 -translate-y-8 scale-75 transform sm:scale-100 lg:hidden"
-            width={640}
-            height={580}
-            fill="none"
-            viewBox="0 0 640 784"
-            aria-hidden="true"
-          >
-            <defs>
-              <pattern
-                id="4f4f415c-a0e9-44c2-9601-6ded5a34a13e"
-                x={118}
-                y={0}
-                width={20}
-                height={20}
-                patternUnits="userSpaceOnUse"
-              >
-                <rect
-                  x={0}
-                  y={0}
-                  width={4}
-                  height={4}
-                  className="text-gray-300"
-                  fill="currentColor"
-                />
-              </pattern>
-            </defs>
-            <rect
-              x={118}
-              width={404}
-              height={784}
-              fill="url(#4f4f415c-a0e9-44c2-9601-6ded5a34a13e)"
-            />
-          </svg>
-          <div className="relative mx-auto w-full lg:max-w-md">
-            <div className="relative block w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-              <img className="w-full" src="/assets/bracket.png" alt="" />
-            </div>
-          </div>
-        </div>
+        <BracketArt />
       </div>
     </main>
   );

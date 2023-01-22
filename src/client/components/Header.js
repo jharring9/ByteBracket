@@ -5,7 +5,7 @@ import { Logo } from "./icons";
 import { Link, useLocation } from "react-router-dom";
 
 const userNavigation = [
-  { name: "Your Profile", href: "/profile" },
+  { name: "My Account", href: "/profile" },
   { name: "Sign out", href: "/logout" },
 ];
 
@@ -13,14 +13,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const Header = ({ user }) => {
+export const Header = ({ user, navigation, setNavigation }) => {
   let location = useLocation();
-  const [navigation, setNavigation] = React.useState([
-    { name: "Home", href: "/home", current: false },
-    { name: "Create Bracket", href: "/create", current: false },
-    { name: "About", href: "/about", current: false },
-    { name: "Social", href: "/social", current: false },
-  ]);
 
   useEffect(() => {
     const newNav = [...navigation].map((item) => {
@@ -46,12 +40,11 @@ export const Header = ({ user }) => {
                     )}
                   </Disclosure.Button>
                 </div>
-                <Link
-                  className="flex flex-shrink-0 cursor-pointer items-center"
-                  to="/home"
-                >
-                  <Logo />
-                </Link>
+                <div className="flex flex-shrink-0 items-center">
+                  <Link className="cursor-pointer " to="/home">
+                    <Logo />
+                  </Link>
+                </div>
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                   {navigation.map((item) => (
                     <Link
@@ -70,23 +63,31 @@ export const Header = ({ user }) => {
                   ))}
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="hidden items-center md:flex">
                 <div className="flex-shrink-0">
                   {user ? (
-                    <Link
-                      to="/profile"
-                      type="button"
-                      className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-                    >
-                      My Account
-                    </Link>
+                    <>
+                      <Link
+                        to="/profile"
+                        type="button"
+                        className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                      >
+                        My Account
+                      </Link>
+                      <Link
+                        to="/signout"
+                        className="ml-3 inline-flex items-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2"
+                      >
+                        Sign Out
+                      </Link>
+                    </>
                   ) : (
-                    <button
-                      type="button"
-                      className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                    <Link
+                      to="login"
+                      className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       Log in
-                    </button>
+                    </Link>
                   )}
                 </div>
               </div>
@@ -112,37 +113,44 @@ export const Header = ({ user }) => {
                 </Link>
               ))}
             </div>
-            <div className="border-t border-gray-700 pt-4 pb-3">
-              <div className="flex items-center px-5 sm:px-6">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={user.imageUrl}
-                    alt=""
-                  />
+            {user ? (
+              <div className="border-t border-gray-700 pt-4 pb-3">
+                <div className="flex items-center px-2">
+                  <div className="ml-3">
+                    <div className="text-base font-medium text-white">
+                      {user.name}
+                    </div>
+                    <div className="text-sm font-medium text-gray-400">
+                      {user.email}
+                    </div>
+                  </div>
                 </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-white">
-                    {user.name}
-                  </div>
-                  <div className="text-sm font-medium text-gray-400">
-                    {user.email}
-                  </div>
+                <div className="mt-3 space-y-1 px-2 sm:px-3">
+                  {userNavigation.map((item) => (
+                    <Disclosure.Button
+                      key={item.name}
+                      as="a"
+                      href={item.href}
+                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                    >
+                      {item.name}
+                    </Disclosure.Button>
+                  ))}
                 </div>
               </div>
-              <div className="mt-3 space-y-1 px-2 sm:px-3">
-                {userNavigation.map((item) => (
+            ) : (
+              <div className="border-t border-gray-700 pb-3">
+                <div className="mt-3 space-y-1 px-2 sm:px-3">
                   <Disclosure.Button
-                    key={item.name}
                     as="a"
-                    href={item.href}
+                    href="/login"
                     className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                   >
-                    {item.name}
+                    Log in
                   </Disclosure.Button>
-                ))}
+                </div>
               </div>
-            </div>
+            )}
           </Disclosure.Panel>
         </>
       )}
