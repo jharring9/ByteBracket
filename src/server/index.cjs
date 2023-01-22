@@ -4,7 +4,7 @@
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const session = require("express-session");
+const session = require("cookie-session");
 const fs = require("fs");
 const https = require("https");
 const http = require("http");
@@ -74,8 +74,8 @@ const setupServer = async () => {
       ),
     };
     // Listen for HTTPS requests
-    server = https.createServer(options, app).listen(8080, () => {
-      console.log(`ByteBracket listening on: ${server.address().port}`);
+    server = https.createServer(options, app).listen(443, () => {
+      console.log(`ByteBracket ${env} listening on: ${server.address().port}`);
     });
     // Redirect HTTP to HTTPS
     http
@@ -85,7 +85,7 @@ const setupServer = async () => {
         res.end();
       })
       .listen(80, () => {
-        console.log(`ByteBracket listening on 80 for HTTPS redirect`);
+        console.log(`ByteBracket ${env} listening on 80 for HTTPS redirect`);
       });
   } else {
     server = app.listen(8080, () => {
