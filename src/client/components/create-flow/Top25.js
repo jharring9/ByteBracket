@@ -42,13 +42,16 @@ export const Top25 = ({ setStage }) => {
             </thead>
             <tbody>
               {mockTableData.map((row, i) => {
-                const stylingData =
-                  i % 2 === 0 ? "bg-white border-b" : "border-b bg-gray-50";
                 return (
                   <tr
                     className={
-                      i === mockTableData.length - 1 ? "" : stylingData
+                      i === mockTableData.length - 1
+                        ? ""
+                        : i % 2 === 0
+                        ? "border-b bg-white"
+                        : "border-b bg-gray-50"
                     }
+                    key={i}
                   >
                     <th
                       scope="row"
@@ -93,6 +96,7 @@ export const Top25 = ({ setStage }) => {
                   i % 2 === 0 ? "bg-white border-b" : "border-b bg-gray-50";
                 return (
                   <tr
+                    key={i}
                     className={
                       i === biggestMovers.length - 1 ? "" : stylingData
                     }
@@ -105,8 +109,8 @@ export const Top25 = ({ setStage }) => {
                     </th>
                     <td className="flex px-6 py-4">
                       {row.diff}
-                      {row.diff >= 5 && <TrendingUp className="ml-2" />}
-                      {row.diff <= -5 && <TrendingDown className="ml-2" />}
+                      {row.diff > 0 && <TrendingUp className="ml-2" />}
+                      {row.diff < 0 && <TrendingDown className="ml-2" />}
                     </td>
                   </tr>
                 );

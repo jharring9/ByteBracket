@@ -10,7 +10,7 @@ export const Brackets = ({ brackets }) => {
       <div className="py-6 px-4 sm:p-6 lg:pb-8">
         <div>
           <h2 className="text-lg font-medium leading-6 text-gray-900">
-            Your Brackets
+            Brackets
           </h2>
           <p className="mt-1 text-sm text-gray-500">
             This information will be displayed publicly so be careful what you
@@ -70,7 +70,7 @@ export const Brackets = ({ brackets }) => {
             ))}
             <li
               key="new"
-              className="col-span-1 w-full divide-y divide-gray-200 rounded-lg bg-white shadow"
+              className="col-span-1 w-full divide-y divide-gray-200 rounded-lg bg-white"
             >
               <button
                 type="button"

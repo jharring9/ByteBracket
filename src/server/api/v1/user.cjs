@@ -1,4 +1,3 @@
-/* Copyright G. Hemingway, @2022 - All rights reserved */
 "use strict";
 
 module.exports = (app) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   UserGroupIcon,
   QueueListIcon,
@@ -9,14 +9,18 @@ import { Profile } from "./account-flow/Profile";
 import { classNames } from "./icons";
 import { Brackets } from "./account-flow/Brackets";
 
-const sidebar = [
-  { name: "Your Brackets", href: 1, icon: QueueListIcon, current: true },
-  { name: "Your Leagues", href: 2, icon: UserGroupIcon, current: false },
-  { name: "Profile", href: 3, icon: UserCircleIcon, current: false },
-  { name: "Password", href: 4, icon: KeyIcon, current: false },
-];
+let sidebar = [];
 
 export const Account = ({ user }) => {
+  useEffect(() => {
+    sidebar = [
+      { name: "Brackets", href: 1, icon: QueueListIcon, current: true },
+      { name: "Leagues", href: 2, icon: UserGroupIcon, current: false },
+      { name: "Profile", href: 3, icon: UserCircleIcon, current: false },
+      { name: "Password", href: 4, icon: KeyIcon, current: false },
+    ];
+  }, []);
+
   const updateStage = (newStage) => {
     setStage(newStage);
     switch (newStage) {
@@ -48,8 +52,15 @@ export const Account = ({ user }) => {
   };
   const [stage, setStage] = useState(1);
   return (
-    <main className="relative mt-10 lg:mt-20">
-      <div className="mx-auto max-w-screen-xl px-4 pb-6 sm:px-6 lg:px-8 lg:pb-16">
+    <main className="relative mt-8 lg:mt-14">
+      <div className="mx-auto max-w-prose text-lg">
+        <h1>
+          <span className="mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
+            My Account
+          </span>
+        </h1>
+      </div>
+      <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:px-8 lg:pb-16">
         <div className="overflow-hidden rounded-lg bg-white shadow">
           <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
             <aside className="py-6 lg:col-span-3">

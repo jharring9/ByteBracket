@@ -83,7 +83,7 @@ export const Header = ({ user, navigation, setNavigation }) => {
                     </>
                   ) : (
                     <Link
-                      to="login"
+                      to="/login"
                       className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-700 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       Log in
@@ -97,9 +97,8 @@ export const Header = ({ user, navigation, setNavigation }) => {
           <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
               {navigation.map((item) => (
-                <Link to={item.href}>
+                <Link to={item.href} key={item.name}>
                   <Disclosure.Button
-                    key={item.name}
                     className={classNames(
                       item.current
                         ? "bg-gray-900 text-white"
@@ -127,14 +126,13 @@ export const Header = ({ user, navigation, setNavigation }) => {
                 </div>
                 <div className="mt-3 space-y-1 px-2 sm:px-3">
                   {userNavigation.map((item) => (
-                    <Disclosure.Button
+                    <Link
                       key={item.name}
-                      as="a"
-                      href={item.href}
+                      to={item.href}
                       className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                     >
                       {item.name}
-                    </Disclosure.Button>
+                    </Link>
                   ))}
                 </div>
               </div>

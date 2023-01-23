@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectStats } from "./create-flow/SelectStats";
 import { Top25 } from "./create-flow/Top25";
 import { MakePicks } from "./create-flow/MakePicks";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
-const steps = [
-  { id: "01", name: "Select Stats", stage: 1, status: "current" },
-  { id: "02", name: "Your Top 25", stage: 2, status: "upcoming" },
-  { id: "03", name: "Make Your Picks", stage: 3, status: "upcoming" },
-];
+let steps = [];
 
 export const Create = () => {
   const [stage, setStage] = useState(1);
@@ -27,6 +23,14 @@ export const Create = () => {
     to: 5,
     pf: 5,
   });
+
+  useEffect(() => {
+    steps = [
+      { id: "01", name: "Select Stats", stage: 1, status: "current" },
+      { id: "02", name: "Your Top 25", stage: 2, status: "upcoming" },
+      { id: "03", name: "Make Your Picks", stage: 3, status: "upcoming" },
+    ];
+  }, []);
 
   const updateStage = (newStage) => {
     setStage(newStage);
