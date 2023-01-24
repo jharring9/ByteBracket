@@ -16,8 +16,7 @@ export const Profile = ({ user }) => {
             Profile
           </h2>
           <p className="mt-1 text-sm text-gray-500">
-            This information will be displayed publicly so be careful what you
-            share.
+            By default, this information can be viewed publicly.
           </p>
         </div>
 
@@ -39,31 +38,10 @@ export const Profile = ({ user }) => {
                   name="username"
                   id="username"
                   autoComplete="username"
-                  className="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-gray-300 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                  className="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   defaultValue={user.handle}
                 />
               </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="about"
-                className="block text-sm font-medium text-gray-700"
-              >
-                About
-              </label>
-              <div className="mt-1">
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                  defaultValue={""}
-                />
-              </div>
-              <p className="mt-2 text-sm text-gray-500">
-                Brief description for your profile. URLs are hyperlinked.
-              </p>
             </div>
           </div>
         </div>
@@ -81,7 +59,7 @@ export const Profile = ({ user }) => {
               name="first-name"
               id="first-name"
               autoComplete="given-name"
-              className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             />
           </div>
 
@@ -97,38 +75,7 @@ export const Profile = ({ user }) => {
               name="last-name"
               id="last-name"
               autoComplete="family-name"
-              className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-            />
-          </div>
-
-          <div className="col-span-12">
-            <label
-              htmlFor="url"
-              className="block text-sm font-medium text-gray-700"
-            >
-              URL
-            </label>
-            <input
-              type="text"
-              name="url"
-              id="url"
-              className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-            />
-          </div>
-
-          <div className="col-span-12 sm:col-span-6">
-            <label
-              htmlFor="company"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Company
-            </label>
-            <input
-              type="text"
-              name="company"
-              id="company"
-              autoComplete="organization"
-              className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             />
           </div>
         </div>
@@ -168,7 +115,7 @@ export const Profile = ({ user }) => {
                 onChange={setAvailableToHire}
                 className={classNames(
                   availableToHire ? "bg-indigo-500" : "bg-gray-200",
-                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 )}
               >
                 <span
@@ -202,7 +149,7 @@ export const Profile = ({ user }) => {
                 onChange={setPrivateAccount}
                 className={classNames(
                   privateAccount ? "bg-indigo-500" : "bg-gray-200",
-                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 )}
               >
                 <span
@@ -235,7 +182,7 @@ export const Profile = ({ user }) => {
                 onChange={setAllowCommenting}
                 className={classNames(
                   allowCommenting ? "bg-indigo-500" : "bg-gray-200",
-                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 )}
               >
                 <span
@@ -268,7 +215,7 @@ export const Profile = ({ user }) => {
                 onChange={setAllowMentions}
                 className={classNames(
                   allowMentions ? "bg-indigo-500" : "bg-gray-200",
-                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 )}
               >
                 <span
@@ -285,7 +232,7 @@ export const Profile = ({ user }) => {
         <div className="mt-4 flex justify-end py-4 px-4 sm:px-6">
           <button
             type="button"
-            className="inline-flex justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            className="inline-flex justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             Cancel
           </button>

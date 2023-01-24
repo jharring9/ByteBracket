@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "../../../public/output.css";
 import { Header } from "./Header";
@@ -19,37 +19,24 @@ export default function App() {
     { name: "About", href: "/about", current: false },
     { name: "Social", href: "/social", current: false },
   ]);
-  const [currentUser, setCurrentUser] = useState({
-    name: "Test User",
-    handle: "testuser",
-    email: "tom@example.com",
-    brackets: [
-      {
-        id: 1,
-        name: "Test Bracket 1",
-        winner: "Team 1",
-        status: "Complete",
-      },
-      {
-        id: 2,
-        name: "Test Bracket 2",
-        winner: "Team 2",
-        status: "Complete",
-      },
-      {
-        id: 3,
-        name: "Test Bracket 3",
-        winner: "Team 3",
-        status: "Complete",
-      },
-      {
-        id: 4,
-        name: "Test Bracket 4",
-        winner: "Team 4",
-        status: "In Progress",
-      },
-    ],
-  });
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await fetch("/v1/user", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data);
+      }
+    };
+    getUser();
+  }, []);
 
   return (
     <div className="relative overflow-hidden bg-gray-100">

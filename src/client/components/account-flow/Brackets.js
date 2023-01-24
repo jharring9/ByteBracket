@@ -1,10 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 import { classNames } from "../icons";
 
-export const Brackets = ({ brackets }) => {
+export const Brackets = ({ user }) => {
+  const [brackets, setBrackets] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const getBrackets = async () => {
+      let res = await fetch("/v1/user/brackets", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setBrackets(data);
+      } else {
+        navigate("/login");
+      }
+    };
+    getBrackets();
+  }, [user]);
+
   return (
     <div className="divide-y divide-gray-200 lg:col-span-9">
       <div className="py-6 px-4 sm:p-6 lg:pb-8">
@@ -12,10 +33,7 @@ export const Brackets = ({ brackets }) => {
           <h2 className="text-lg font-medium leading-6 text-gray-900">
             Brackets
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
-            This information will be displayed publicly so be careful what you
-            share.
-          </p>
+          <p className="mt-1 text-sm text-gray-500">See your ByteBrackets.</p>
         </div>
 
         <div className="mt-6 flex flex-col">
@@ -36,13 +54,13 @@ export const Brackets = ({ brackets }) => {
                       </h3>
                       <span
                         className={classNames(
-                          bracket.status === "Complete"
+                          bracket.complete
                             ? "bg-green-100 text-green-800"
                             : "bg-yellow-100 text-black",
                           "inline-block flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-medium"
                         )}
                       >
-                        {bracket.status}
+                        {bracket.complete ? "Complete" : "In Progress"}
                       </span>
                     </div>
                     <p className="mt-1 truncate text-sm text-gray-500">
@@ -70,7 +88,7 @@ export const Brackets = ({ brackets }) => {
             ))}
             <li
               key="new"
-              className="col-span-1 w-full divide-y divide-gray-200 rounded-lg bg-white"
+              className="h-36 w-full divide-y divide-gray-200 rounded-lg bg-white"
             >
               <button
                 type="button"

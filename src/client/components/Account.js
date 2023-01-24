@@ -92,7 +92,7 @@ export const Account = ({ user }) => {
               </nav>
             </aside>
 
-            {stage === 1 && <Brackets brackets={user.brackets} />}
+            {stage === 1 && <Brackets user={user} />}
             {stage === 3 && <Profile user={user} />}
           </div>
         </div>
