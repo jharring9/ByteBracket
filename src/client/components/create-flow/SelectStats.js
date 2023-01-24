@@ -2,7 +2,13 @@ import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
 import { ContinueButton, ErrorAlert, XIcon } from "../icons";
 
-export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
+export const SelectStats = ({
+  stats,
+  setStats,
+  setStage,
+  setBracket,
+  setTop25,
+}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -21,6 +27,9 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
     { title: "PF", value: stats.pf, color: "#bd9b14" },
   ];
 
+  /**
+   * Send stats to Lambda function. Collect top 25 teams and set bracket.
+   */
   const handleSubmit = async () => {
     setLoading(true);
     let res = await fetch("/v1/lambda", {
@@ -32,7 +41,9 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
       },
     });
     if (res.ok) {
-      setResponse(await res.json());
+      const data = await res.json();
+      setBracket(data.bracket);
+      setTop25(data.top25);
       setStage(2);
     } else {
       setError(JSON.stringify(await res.json()));
@@ -135,7 +146,8 @@ export const SelectStats = ({ stats, setStats, setStage, setResponse }) => {
               fontSize: "3px",
             })}
             radius={42}
-            labelPosition={112}
+            labelPosition={80}
+            lineWidth={40}
           />
         </div>
         <div className="order-last">

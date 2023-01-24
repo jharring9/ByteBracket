@@ -1,20 +1,46 @@
-import React, { useState } from "react";
-import { biggestMovers, mockTableData } from "../../index";
+import React, { useEffect, useState } from "react";
 import { BackButton, ContinueButton, TrendingDown, TrendingUp } from "../icons";
 
-export const Top25 = ({ setStage }) => {
+export const Top25 = ({ setStage, top25 }) => {
   const [loading, setLoading] = useState(false);
+  const [biggestMovers, setBiggestMovers] = useState([]);
 
+  /**
+   * Handle user clicking the back button (return to select stats page).
+   */
   const handleBack = () => {
     setStage(1);
   };
 
+  /**
+   * Handle user clicking the continue button (go to make picks page).
+   */
   const handleNext = () => {
     setLoading(true);
     setTimeout(() => {
       setStage(3);
-    }, 1000);
+    }, 500);
   };
+
+  /**
+   * Smooth scroll to the top of the page when loaded.
+   */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  /**
+   * Calculate the biggest movers in the top 25.
+   */
+  useEffect(() => {
+    const biggestMovers = top25
+      .sort((a, b) => {
+        return Math.abs(a.diff) - Math.abs(b.diff);
+      })
+      .slice(-5)
+      .reverse();
+    setBiggestMovers(biggestMovers);
+  }, [top25]);
 
   return (
     <div className="mt-4 sm:mt-6 md:mx-auto md:max-w-7xl md:px-4 md:px-6 lg:mt-8 lg:grid lg:grid-cols-7 lg:gap-4">
@@ -41,14 +67,17 @@ export const Top25 = ({ setStage }) => {
               </tr>
             </thead>
             <tbody>
-              {mockTableData.map((row, i) => {
-                const stylingData =
-                  i % 2 === 0 ? "bg-white border-b" : "border-b bg-gray-50";
+              {top25.map((row, i) => {
                 return (
                   <tr
                     className={
-                      i === mockTableData.length - 1 ? "" : stylingData
+                      i === top25.length - 1
+                        ? ""
+                        : i % 2 === 0
+                        ? "border-b bg-white"
+                        : "border-b bg-gray-50"
                     }
+                    key={i}
                   >
                     <th
                       scope="row"
@@ -93,6 +122,7 @@ export const Top25 = ({ setStage }) => {
                   i % 2 === 0 ? "bg-white border-b" : "border-b bg-gray-50";
                 return (
                   <tr
+                    key={i}
                     className={
                       i === biggestMovers.length - 1 ? "" : stylingData
                     }
@@ -105,8 +135,8 @@ export const Top25 = ({ setStage }) => {
                     </th>
                     <td className="flex px-6 py-4">
                       {row.diff}
-                      {row.diff >= 5 && <TrendingUp className="ml-2" />}
-                      {row.diff <= -5 && <TrendingDown className="ml-2" />}
+                      {row.diff > 0 && <TrendingUp className="ml-2" />}
+                      {row.diff < 0 && <TrendingDown className="ml-2" />}
                     </td>
                   </tr>
                 );

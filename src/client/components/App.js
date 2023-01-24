@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "../../../public/output.css";
 import { Header } from "./Header";
@@ -9,6 +9,8 @@ import { NotFound } from "./NotFound";
 import "flowbite";
 import { Login } from "./Login";
 import { Register } from "./Register";
+import { Account } from "./Account";
+import { About } from "./About";
 
 export default function App() {
   const [navigation, setNavigation] = React.useState([
@@ -17,10 +19,24 @@ export default function App() {
     { name: "About", href: "/about", current: false },
     { name: "Social", href: "/social", current: false },
   ]);
-  const [currentUser, setCurrentUser] = useState({
-    name: "Test User",
-    email: "tom@example.com",
-  });
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await fetch("/v1/user", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentUser(data);
+      }
+    };
+    getUser();
+  }, []);
 
   return (
     <div className="relative overflow-hidden bg-gray-100">
@@ -36,6 +52,8 @@ export default function App() {
           <Route path="/create" element={<Create user={currentUser} />} />
           <Route path="/login" element={<Login user={currentUser} />} />
           <Route path="/register" element={<Register user={currentUser} />} />
+          <Route path="/account" element={<Account user={currentUser} />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer navigation={navigation} />
