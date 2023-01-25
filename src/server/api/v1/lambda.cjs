@@ -11,7 +11,6 @@ module.exports = (app) => {
       };
       const result = await new AWS.Lambda().invoke(params).promise();
       let data = JSON.parse(result.Payload);
-      console.log(data);
       let top25Schools = data['Schools'].slice(0,25)
       data['top25'] = top25Schools.map((school, index) => {
         let r = Math.floor(Math.random()*25)
