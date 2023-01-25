@@ -67,13 +67,14 @@ const generateBracket = (schools) => {
   const matchups = [];
   for (let i = 0; i < 32; i++) {
     const matchup = [];
+    let p = Math.floor(Math.random() * 100)
     const higherSeed = {
       rank: `No. ${Math.ceil((i+ 1) / 4)}`,
       name: schools[i],
       record: `${Math.floor(Math.random() * 35)}-${Math.floor(
         Math.random() * 35
       )}`,
-      percentile: Math.floor(Math.random() * 100),
+      percentile: p,
       winner: false,
     }
     matchup.push(higherSeed);
@@ -83,7 +84,7 @@ const generateBracket = (schools) => {
       record: `${Math.floor(Math.random() * 35)}-${Math.floor(
           Math.random() * 35
       )}`,
-      percentile: Math.floor(Math.random() * 100),
+      percentile: 100 - p,
       winner: false,
     }
     matchup.push(lowerSeed);
