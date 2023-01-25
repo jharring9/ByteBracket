@@ -32,8 +32,10 @@ export const SelectStats = ({
    */
   const handleSubmit = async () => {
     setLoading(true);
+    const statObj = {};
+    chartData.forEach((stat) => statObj[stat.title]= stat.value);
     let res = await fetch("/v1/lambda", {
-      body: JSON.stringify(stats),
+      body: JSON.stringify(statObj),
       method: "POST",
       credentials: "include",
       headers: {
@@ -42,6 +44,7 @@ export const SelectStats = ({
     });
     if (res.ok) {
       const data = await res.json();
+      console.log(data.top25);
       setBracket(data.bracket);
       setTop25(data.top25);
       setStage(2);

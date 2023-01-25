@@ -33,7 +33,7 @@ export const Top25 = ({ setStage, top25 }) => {
    * Calculate the biggest movers in the top 25.
    */
   useEffect(() => {
-    const biggestMovers = top25
+    const biggestMovers = [...top25]
       .sort((a, b) => {
         return Math.abs(a.diff) - Math.abs(b.diff);
       })
@@ -67,6 +67,7 @@ export const Top25 = ({ setStage, top25 }) => {
               </tr>
             </thead>
             <tbody>
+
               {top25.map((row, i) => {
                 return (
                   <tr
