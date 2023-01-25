@@ -12,6 +12,7 @@ module.exports = (app) => {
       const result = await new AWS.Lambda().invoke(params).promise();
       let data = JSON.parse(result.Payload);
       let top25Schools = data['Schools'].slice(0,25)
+      data['bracket'] = generateBracket(data['Schools'].slice(0,64));
       data['top25'] = top25Schools.map((school, index) => {
         let r = Math.floor(Math.random()*25)
             return ({
@@ -62,26 +63,32 @@ const generateTop25 = () => {
 /**
  * Generates a random mocked bracket.
  */
-const generateBracket = () => {
+const generateBracket = (schools) => {
   const matchups = [];
   for (let i = 0; i < 32; i++) {
     const matchup = [];
-    const team1Seed = (i % 8) + 1;
-    for (let j = 0; j < 2; j++) {
-      const team = {
-        rank: `No. ${j === 0 ? team1Seed : 17 - team1Seed}`,
-        name: `Team ${Math.floor(Math.random() * 100)}`,
-        record: `${Math.floor(Math.random() * 35)}-${Math.floor(
-          Math.random() * 35
-        )}`,
-        percentile: Math.floor(Math.random() * 100),
-        winner: false,
-      };
-      matchup.push(team);
+    const higherSeed = {
+      rank: `No. ${Math.ceil((i+ 1) / 4)}`,
+      name: schools[i],
+      record: `${Math.floor(Math.random() * 35)}-${Math.floor(
+        Math.random() * 35
+      )}`,
+      percentile: Math.floor(Math.random() * 100),
+      winner: false,
     }
+    matchup.push(higherSeed);
+    const lowerSeed = {
+      rank: `No. ${Math.ceil((64 - (i+ 1)) / 4)}`,
+      name: schools[64-i - 1],
+      record: `${Math.floor(Math.random() * 35)}-${Math.floor(
+          Math.random() * 35
+      )}`,
+      percentile: Math.floor(Math.random() * 100),
+      winner: false,
+    }
+    matchup.push(lowerSeed);
     matchups.push(matchup);
   }
-
   // round of 64, 32, 16, 8, 4, and 2
   return [matchups, [], [], [], [], []];
 };
