@@ -1,6 +1,6 @@
 import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
-import { ContinueButton, ErrorAlert, XIcon } from "../icons";
+import { ContinueButton, ErrorAlert, DisableStat } from "../icons";
 
 export const SelectStats = ({
   stats,
@@ -161,7 +161,7 @@ export const SelectStats = ({
 };
 
 const InfoModal = ({ name, value, setValue, details }) => {
-  let [x, setX] = useState(0);
+  const [disabledValue, setDisabledValue] = useState(0);
   return (
    <div>
       <label
@@ -172,28 +172,18 @@ const InfoModal = ({ name, value, setValue, details }) => {
       </label>
       <div className="grid grid-cols-10">
         <div className="col-span-1">
-          <button type="button"
-                  onClick={() => {
-                    setX(value);
-                    return setValue(x);}}
-                  className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800">
-            <svg aria-hidden="true" className="w-3 h-3" fill="currentColor"
-                 xmlns="http://www.w3.org/2000/svg"
-                 viewBox="0 0 352 512">
-              <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
-            </svg>
-          </button>
+          <DisableStat value={value} disabledValue={disabledValue} setValue={setValue} setDisabledValue={setDisabledValue}/>
         </div>
         <div className="col-span-9 flex items-center">
           <input
             id="minmax-range"
             type="range"
-            min={0}
+            min={1}
             max={10}
             value={value}
             onChange={(val) => setValue(parseInt(val.target.value))}
             className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-300"
-            disabled={x}
+            disabled={disabledValue !== 0}
           />
          </div>
       </div>
