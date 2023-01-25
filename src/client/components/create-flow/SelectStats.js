@@ -1,6 +1,6 @@
 import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
-import { ContinueButton, ErrorAlert } from "../icons";
+import { ContinueButton, ErrorAlert, DisableStat } from "../icons";
 
 export const SelectStats = ({
   stats,
@@ -161,23 +161,32 @@ export const SelectStats = ({
 };
 
 const InfoModal = ({ name, value, setValue, details }) => {
+  const [disabledValue, setDisabledValue] = useState(0);
   return (
-    <div className="m-3">
+   <div>
       <label
         htmlFor="minmax-range"
         className="mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
         {name}
       </label>
-      <input
-        id="minmax-range"
-        type="range"
-        min={0}
-        max={10}
-        value={value}
-        onChange={(val) => setValue(parseInt(val.target.value))}
-        className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-300"
-      />
+      <div className="grid grid-cols-10">
+        <div className="col-span-1">
+          <DisableStat value={value} disabledValue={disabledValue} setValue={setValue} setDisabledValue={setDisabledValue}/>
+        </div>
+        <div className="col-span-9 flex items-center">
+          <input
+            id="minmax-range"
+            type="range"
+            min={1}
+            max={10}
+            value={value}
+            onChange={(val) => setValue(parseInt(val.target.value))}
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-300"
+            disabled={disabledValue !== 0}
+          />
+         </div>
+      </div>
     </div>
   );
 };
