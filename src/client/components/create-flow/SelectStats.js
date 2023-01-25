@@ -44,7 +44,6 @@ export const SelectStats = ({
     });
     if (res.ok) {
       const data = await res.json();
-      console.log(data.top25);
       setBracket(data.bracket);
       setTop25(data.top25);
       setStage(2);
