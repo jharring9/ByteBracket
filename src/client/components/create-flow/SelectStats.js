@@ -147,7 +147,6 @@ export const SelectStats = ({
               fill: "white",
               fontSize: "3px",
               "font-weight": "bold",
-              "font-family": "inter",
             })}
             radius={42}
             labelPosition={80}
