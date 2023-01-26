@@ -8,12 +8,13 @@ import { Create } from "./Create";
 import { NotFound } from "./NotFound";
 import "flowbite";
 import { Login } from "./Login";
+import { Logout } from "./Logout";
 import { Register } from "./Register";
 import { Account } from "./Account";
 import { About } from "./About";
 
 export default function App() {
-  const [navigation, setNavigation] = React.useState([
+  const [navigation, setNavigation] = useState([
     { name: "Home", href: "/home", current: false },
     { name: "Create Bracket", href: "/create", current: false },
     { name: "About", href: "/about", current: false },
@@ -22,20 +23,17 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      const res = await fetch("/v1/user", {
+    const checkSession = async () => {
+      const res = await fetch("/v1/session", {
         method: "GET",
         credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
       });
-      if (res.ok) {
-        const data = await res.json();
-        setCurrentUser(data);
+      if (res.status === 200) {
+        const user = await res.json();
+        setCurrentUser(user);
       }
     };
-    getUser();
+    checkSession();
   }, []);
 
   return (
@@ -50,8 +48,18 @@ export default function App() {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home user={currentUser} />} />
           <Route path="/create" element={<Create user={currentUser} />} />
-          <Route path="/login" element={<Login user={currentUser} />} />
-          <Route path="/register" element={<Register user={currentUser} />} />
+          <Route
+            path="/login"
+            element={<Login user={currentUser} setUser={setCurrentUser} />}
+          />
+          <Route
+            path="/signout"
+            element={<Logout setUser={setCurrentUser} />}
+          />
+          <Route
+            path="/register"
+            element={<Register user={currentUser} setUser={setCurrentUser} />}
+          />
           <Route path="/account" element={<Account user={currentUser} />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />

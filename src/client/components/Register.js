@@ -1,8 +1,50 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Facebook, Github, Google } from "./icons";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ErrorAlert, Facebook, Github, Google } from "./icons";
 
-export const Register = () => {
+export const Register = ({ user, setUser }) => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [first, setFirst] = useState("");
+  const [last, setLast] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      navigate("/account");
+    }
+  }, [user]);
+
+  const onRegister = async (ev) => {
+    ev.preventDefault();
+    const res = await fetch("/v1/user", {
+      method: "POST",
+      body: JSON.stringify({
+        username: username,
+        first: first,
+        last: last,
+        email: email,
+        password: password,
+      }),
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      console.log(data);
+      setUser(data);
+      navigate("/account");
+    } else if (res.status === 400) {
+      setError("Please fill out all fields.");
+    } else {
+      setError("Username or email already in use.");
+    }
+  };
+
   return (
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -28,7 +70,71 @@ export const Register = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6">
+            {error && (
+              <ErrorAlert
+                className="mb-6"
+                header="Error registering"
+                message={error}
+              />
+            )}
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Username
+              </label>
+              <div className="mt-1">
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="first"
+                className="block text-sm font-medium text-gray-700"
+              >
+                First Name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="first"
+                  name="first"
+                  type="text"
+                  required
+                  value={first}
+                  onChange={(e) => setFirst(e.target.value)}
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                htmlFor="last"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Last Name
+              </label>
+              <div className="mt-1">
+                <input
+                  id="last"
+                  name="last"
+                  type="text"
+                  required
+                  value={last}
+                  onChange={(e) => setLast(e.target.value)}
+                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
             <div>
               <label
                 htmlFor="email"
@@ -43,11 +149,12 @@ export const Register = () => {
                   type="email"
                   autoComplete="email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="password"
@@ -62,6 +169,8 @@ export const Register = () => {
                   type="password"
                   autoComplete="current-password"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -95,6 +204,7 @@ export const Register = () => {
 
             <div>
               <button
+                onClick={onRegister}
                 type="submit"
                 className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >

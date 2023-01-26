@@ -117,7 +117,7 @@ export const Header = ({ user, navigation, setNavigation }) => {
                 <div className="flex items-center px-2">
                   <div className="ml-3">
                     <div className="text-base font-medium text-white">
-                      {user.name}
+                      {user.first + " " + user.last}
                     </div>
                     <div className="text-sm font-medium text-gray-400">
                       {user.email}
