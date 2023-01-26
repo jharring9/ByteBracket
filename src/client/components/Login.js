@@ -27,14 +27,12 @@ export const Login = ({ user, setUser }) => {
         "content-type": "application/json",
       },
     });
+    const data = await res.json();
     if (res.ok) {
-      const data = await res.json();
       setUser(data);
       navigate("/account");
-    } else if (res.status === 400) {
-      setError("Please fill out both fields.");
     } else {
-      setError("Incorrect username or password.");
+      setError(data.error);
     }
   };
 

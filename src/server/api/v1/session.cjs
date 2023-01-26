@@ -1,38 +1,40 @@
-/* Copyright G. Hemingway, @2022 - All rights reserved */
 "use strict";
 
-const Joi = require("joi");
+const userDB = require("../../dynamo/user.cjs");
+const bcrypt = require("bcryptjs");
 
 module.exports = (app) => {
+  /**
+   * Create user session.
+   */
   app.post("/v1/session", async (req, res) => {
-    const schema = Joi.object({
-      username: Joi.string().lowercase().required(),
-      password: Joi.string().required(),
-    });
-    try {
-      const data = await schema.validateAsync(req.body, { stripUnknown: true });
-
-      //TODO -- sign in with Cognito, query DynamoDB for user data
-      const user = {
-        first: "Test",
-        last: "User",
-        username: "testuser",
-        email: "tom@example.com",
-      };
-
-      req.session.user = user;
-      res.status(200).send({
-        first: "Test",
-        last: "User",
-        username: "testuser",
-        email: "tom@example.com",
-      });
-    } catch (err) {
-      const message = err.details[0].message;
-      res.status(400).send({ error: message });
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).send({ error: "Both fields required." });
     }
+
+    const dynamoUser = await userDB.getUser(username);
+    if (!dynamoUser?.username) {
+      return res.status(401).send({ error: "Invalid username or password." });
+    }
+
+    if (!bcrypt.compareSync(password, dynamoUser.password)) {
+      return res.status(401).send({ error: "Invalid username or password." });
+    }
+
+    const response = {
+      first: dynamoUser.first,
+      last: dynamoUser.last,
+      username: dynamoUser.username,
+      email: dynamoUser.email,
+    };
+    req.session.user = response;
+    res.status(201).send(response);
   });
 
+  /**
+   * Check if user session is valid/active.
+   */
   app.get("/v1/session", (req, res) => {
     if (req.session.user) {
       res.status(200).send(req.session.user);
@@ -41,6 +43,9 @@ module.exports = (app) => {
     }
   });
 
+  /**
+   * End user session.
+   */
   app.delete("/v1/session", (req, res) => {
     req.session = null;
     res.status(200).end();
