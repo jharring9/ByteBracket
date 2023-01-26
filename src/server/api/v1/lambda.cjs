@@ -41,7 +41,6 @@ const generateBracket = (schools) => {
       const matchup = [];
       let p = Math.floor(Math.random() * 100);
       let index = i + (j * 4);
-      // let seed = Math.floor(index / 4) + 1;
       let seed = j + 1;
       const higherSeed = {
         rank: `No. ${seed}`,
