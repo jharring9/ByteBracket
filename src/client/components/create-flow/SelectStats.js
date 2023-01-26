@@ -13,18 +13,18 @@ export const SelectStats = ({
   const [error, setError] = useState(null);
 
   const chartData = [
-    { title: "WL%", value: stats.wl, color: "#E38627" },
-    { title: "SOS", value: stats.sos, color: "#C13C37" },
-    { title: "PPG", value: stats.ppg, color: "#6A2135" },
-    { title: "OPPG", value: stats.oppg, color: "#4d195c" },
-    { title: "FG%", value: stats.fg, color: "#2e216a" },
-    { title: "FTM", value: stats.ft, color: "#253c91" },
-    { title: "3PM", value: stats.tpm, color: "#003afa" },
-    { title: "TR", value: stats.trb, color: "#2d9b9d" },
-    { title: "AST", value: stats.ast, color: "#14bd82" },
-    { title: "STL/BLK", value: stats.stlblk, color: "#14bd2b" },
-    { title: "TO", value: stats.to, color: "#8dbd14" },
-    { title: "PF", value: stats.pf, color: "#bd9b14" },
+    { title: "WL%", value: stats.wl, color: "#ffc300" },
+    { title: "SOS", value: stats.sos, color: "#FDDA0D" },
+    { title: "PPG", value: stats.ppg, color: "#add45c" },
+    { title: "OPPG", value: stats.oppg, color: "#56c785" },
+    { title: "FG%", value: stats.fg, color: "#00baad" },
+    { title: "FTM", value: stats.ft, color: "#2b7b9b" },
+    { title: "3PM", value: stats.tpm, color: "#3e3d6b" },
+    { title: "TR", value: stats.trb, color: "#501749" },
+    { title: "AST", value: stats.ast, color: "#900d3f" },
+    { title: "STL/BLK", value: stats.stlblk, color: "#c70039" },
+    { title: "TO", value: stats.to, color: "#ff5833" },
+    { title: "PF", value: stats.pf, color: "#ff8c19" },
   ];
 
   /**
@@ -144,8 +144,10 @@ export const SelectStats = ({
             data={chartData}
             label={({ dataEntry }) => dataEntry.title}
             labelStyle={() => ({
-              fill: "black",
+              fill: "white",
               fontSize: "3px",
+              "font-weight": "bold",
+              "font-family": "inter",
             })}
             radius={42}
             labelPosition={80}
