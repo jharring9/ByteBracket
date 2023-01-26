@@ -24,10 +24,8 @@ const setupServer = async () => {
     name: "session",
     secret: "bytebracketsessionsecret",
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-      path: "/",
-    },
+    saveUninitialized: true,
+    cookie: { secure: true }
   });
   app.use(app.store);
 
