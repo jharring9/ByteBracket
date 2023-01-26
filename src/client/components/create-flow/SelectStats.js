@@ -33,7 +33,7 @@ export const SelectStats = ({
   const handleSubmit = async () => {
     setLoading(true);
     const statObj = {};
-    chartData.forEach((stat) => statObj[stat.title]= stat.value);
+    chartData.forEach((stat) => (statObj[stat.title] = stat.value));
     let res = await fetch("/v1/lambda", {
       body: JSON.stringify(statObj),
       method: "POST",
@@ -165,7 +165,7 @@ export const SelectStats = ({
 const InfoModal = ({ name, value, setValue, details }) => {
   const [disabledValue, setDisabledValue] = useState(0);
   return (
-   <div>
+    <div>
       <label
         htmlFor="minmax-range"
         className="mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -174,7 +174,12 @@ const InfoModal = ({ name, value, setValue, details }) => {
       </label>
       <div className="grid grid-cols-10">
         <div className="col-span-1">
-          <DisableStat value={value} disabledValue={disabledValue} setValue={setValue} setDisabledValue={setDisabledValue}/>
+          <DisableStat
+            value={value}
+            disabledValue={disabledValue}
+            setValue={setValue}
+            setDisabledValue={setDisabledValue}
+          />
         </div>
         <div className="col-span-9 flex items-center">
           <input
@@ -187,7 +192,7 @@ const InfoModal = ({ name, value, setValue, details }) => {
             className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-300"
             disabled={disabledValue !== 0}
           />
-         </div>
+        </div>
       </div>
     </div>
   );
