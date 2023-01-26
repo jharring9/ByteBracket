@@ -9,7 +9,7 @@ export const Brackets = ({ user }) => {
 
   useEffect(() => {
     const getBrackets = async () => {
-      let res = await fetch("/v1/user/brackets", {
+      let res = await fetch(`/v1/${user.username}/brackets`, {
         method: "GET",
         credentials: "include",
         headers: {

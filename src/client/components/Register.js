@@ -33,15 +33,12 @@ export const Register = ({ user, setUser }) => {
         "content-type": "application/json",
       },
     });
+    const data = await res.json();
     if (res.ok) {
-      const data = await res.json();
-      console.log(data);
       setUser(data);
       navigate("/account");
-    } else if (res.status === 400) {
-      setError("Please fill out all fields.");
     } else {
-      setError("Username or email already in use.");
+      setError(data.error);
     }
   };
 

@@ -1,78 +1,63 @@
 "use strict";
 
-const Joi = require("joi");
+const userDB = require("../../dynamo/user.cjs");
+const bcrypt = require("bcryptjs");
 
 module.exports = (app) => {
-  app.get("/v1/user", async (req, res) => {
-    const user = {
-      first: "Test",
-      last: "User",
-      username: "testuser",
-      email: "test@user.com",
-    };
-    res.send(user);
+  /**
+   * Get user account.
+   */
+  app.get("/v1/user/:username", async (req, res) => {
+    if (!req.session.user)
+      return res.status(401).send({ error: "Unauthorized." });
+
+    const dynamoUser = await userDB.getUser(req.params.username);
+    if (dynamoUser?.username) {
+      const response = {
+        first: dynamoUser.first,
+        last: dynamoUser.last,
+        username: dynamoUser.username,
+        email: dynamoUser.email,
+      };
+      return res.send(response);
+    }
+    return res.status(404).send({ error: "User not found." });
   });
 
-  app.get("/v1/user/brackets", async (req, res) => {
-    const brackets = [
-      {
-        id: 1,
-        name: "Test Bracket 1",
-        winner: "Team 1",
-        complete: true,
-      },
-      {
-        id: 2,
-        name: "Test Bracket 2",
-        winner: "Team 2",
-        complete: true,
-      },
-      {
-        id: 3,
-        name: "Test Bracket 3",
-        winner: "Team 3",
-        complete: true,
-      },
-      {
-        id: 4,
-        name: "Test Bracket 4",
-        winner: "None",
-        complete: false,
-      },
-    ];
-
-    res.send(brackets);
-  });
-
-  const schema = Joi.object({
-    username: Joi.string().lowercase().alphanum().max(32).required(),
-    email: Joi.string().lowercase().email().required(),
-    first: Joi.string().required(),
-    last: Joi.string().required(),
-    password: Joi.string().required(),
-  });
-
+  /**
+   * Create user account.
+   */
   app.post("/v1/user", async (req, res) => {
-    let data;
-    try {
-      data = await schema.validateAsync(req.body, { stripUnknown: true });
-    } catch (err) {
-      const message = err.details[0].message;
-      return res.status(400).send({ error: message });
+    const { username, first, last, email, password } = req.body;
+    if (!username || !password || !first || !last || !email) {
+      return res.status(400).send({ error: "All fields required." });
     }
 
-    //TODO -- create account with Cognito, post data to DynamoDB
-    req.session.user = {
-      first: data.first,
-      last: data.last,
-      username: data.username,
-      email: data.email,
+    const dynamoUser = await userDB.getUser(username);
+    if (dynamoUser?.username) {
+      return res.status(400).send({ error: "Username already in use." });
+    }
+
+    const encryptedPassword = bcrypt.hashSync(password.trim(), 10);
+    const user = {
+      username: username.toLowerCase(),
+      first: first.trim(),
+      last: last.trim(),
+      email: email.toLowerCase(),
+      password: encryptedPassword,
     };
-    res.status(201).send({
-      first: data.first,
-      last: data.last,
-      username: data.username,
-      email: data.email,
-    });
+
+    if (!(await userDB.saveUser(user))) {
+      return res.status(503).send({ error: "Server error. Please try again." });
+    }
+
+    const response = {
+      first: user.first,
+      last: user.last,
+      username: user.username,
+      email: user.email,
+    };
+    req.session.user = response;
+    res.status(201).send(response);
   });
 };
