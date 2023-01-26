@@ -25,7 +25,8 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
    */
   const handleNext = () => {
     if (roundNum === bracket.length - 1) {
-      setStage(4);
+      if (bracket[roundNum].every((m) => m[0].winner || m[1].winner))
+        setStage(4);
       return;
     }
 
