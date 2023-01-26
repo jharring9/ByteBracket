@@ -146,7 +146,8 @@ export const SelectStats = ({
             labelStyle={() => ({
               fill: "white",
               fontSize: "3px",
-              "font-weight": "bold",
+              fontWeight: "bold",
+              fontfamily: "inter"
             })}
             radius={42}
             labelPosition={80}
