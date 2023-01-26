@@ -34,22 +34,26 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
       const matchup = [];
       for (let j = 0; j < 2; j++) {
         if (bracket[roundNum][i * 2 + j][0].winner) {
-          let winner = bracket[roundNum][i * 2 + j][0];
+          let winner = JSON.parse(
+            JSON.stringify(bracket[roundNum][i * 2 + j][0])
+          );
           winner.winner = false;
           matchup.push(winner);
+        } else if (!bracket[roundNum][i * 2 + j][1].winner) {
+          setError("Please select a winner for each matchup");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
         } else {
-          if (!bracket[roundNum][i * 2 + j][1].winner) {
-            setError("Please select a winner for each matchup");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            return;
-          }
-          let winner = bracket[roundNum][i * 2 + j][1];
+          let winner = JSON.parse(
+            JSON.stringify(bracket[roundNum][i * 2 + j][1])
+          );
           winner.winner = false;
           matchup.push(winner);
         }
       }
       nextRound.push(matchup);
     }
+
     setError(null);
     const bracketCopy = [...bracket];
     bracketCopy[roundNum + 1] = nextRound;
@@ -209,7 +213,7 @@ const MakePick = ({ matchup, setMatchup }) => {
           className={classNames(
             matchup[1].winner
               ? "bg-green-200 hover:bg-green-300"
-              : "hover:bg-indigo-100",
+              : "hover:bg-green-100",
             "cursor-pointer px-4 py-5 sm:p-6"
           )}
           onClick={() => {

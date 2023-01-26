@@ -53,10 +53,10 @@ export const Top25 = ({ setStage, top25 }) => {
             <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  Team
+                  #
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Your Rank
+                  Team
                 </th>
                 <th scope="col" className="px-6 py-3">
                   AP Rank
@@ -67,7 +67,6 @@ export const Top25 = ({ setStage, top25 }) => {
               </tr>
             </thead>
             <tbody>
-
               {top25.map((row, i) => {
                 return (
                   <tr
@@ -84,15 +83,15 @@ export const Top25 = ({ setStage, top25 }) => {
                       scope="row"
                       className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                     >
-                      {row.team}
+                      {row.rank}
                     </th>
-                    <td className="px-6 py-4">{row.rank}</td>
-                    <td className="px-6 py-4">{row.apRank}</td>
                     <td className="flex px-6 py-4">
-                      {row.diff}
+                      {row.team}
                       {row.diff >= 10 && <TrendingUp className="ml-2" />}
                       {row.diff <= -10 && <TrendingDown className="ml-2" />}
                     </td>
+                    <td className="px-6 py-4">{row.apRank}</td>
+                    <td className="px-6 py-4">{row.diff}</td>
                   </tr>
                 );
               })}
@@ -130,15 +129,13 @@ export const Top25 = ({ setStage, top25 }) => {
                   >
                     <th
                       scope="row"
-                      className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                      className="flex whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                     >
                       {row.team}
-                    </th>
-                    <td className="flex px-6 py-4">
-                      {row.diff}
                       {row.diff > 0 && <TrendingUp className="ml-2" />}
                       {row.diff < 0 && <TrendingDown className="ml-2" />}
-                    </td>
+                    </th>
+                    <td className="px-6 py-4">{row.diff}</td>
                   </tr>
                 );
               })}
