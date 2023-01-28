@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorAlert, Facebook, Github, Google } from "./icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../store/userSlice";
 
-export const Login = ({ user, setUser }) => {
+export const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,7 +33,7 @@ export const Login = ({ user, setUser }) => {
     });
     const data = await res.json();
     if (res.ok) {
-      setUser(data);
+      dispatch(setUser(data));
       navigate("/account");
     } else {
       setError(data.error);

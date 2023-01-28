@@ -1,4 +1,9 @@
-const { GetCommand, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const {
+  GetCommand,
+  PutCommand,
+  DeleteCommand,
+  QueryCommand,
+} = require("@aws-sdk/lib-dynamodb");
 const { ddbDocClient } = require("./ddbDocumentClient.cjs");
 
 const bracketTable = "brackets";
@@ -22,31 +27,49 @@ exports.getBracket = async (username, id) => {
 exports.getUserBrackets = async (username) => {
   const params = {
     TableName: bracketTable,
-    Key: {
-      username: username,
+    KeyConditionExpression: "username = :a",
+    ExpressionAttributeValues: {
+      ":a": username,
     },
   };
   try {
-    const { Item } = await ddbDocClient.send(new GetCommand(params));
-    return Item;
+    const { Items } = await ddbDocClient.send(new QueryCommand(params));
+    return Items;
   } catch (err) {
     return null;
   }
 };
 
-exports.saveBracket = async (username, id, bracket) => {
+exports.saveBracket = async (username, id, bracket, complete, name, winner) => {
   const params = {
     TableName: bracketTable,
     Item: {
       bracket: bracket,
       username: username,
       id: id,
+      complete: complete,
+      name: name,
+      winner: winner,
     },
   };
   try {
     return await ddbDocClient.send(new PutCommand(params));
   } catch (err) {
-    console.log(err);
+    return null;
+  }
+};
+
+exports.deleteBracket = async (username, id) => {
+  const params = {
+    TableName: bracketTable,
+    Key: {
+      username: username,
+      id: id,
+    },
+  };
+  try {
+    return await ddbDocClient.send(new DeleteCommand(params));
+  } catch (err) {
     return null;
   }
 };

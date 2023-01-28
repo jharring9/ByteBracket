@@ -12,15 +12,17 @@ import { Logout } from "./Logout";
 import { Register } from "./Register";
 import { Account } from "./Account";
 import { About } from "./About";
+import { setUser } from "../store/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function App() {
+  const dispatch = useDispatch();
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/home", current: false },
     { name: "Create Bracket", href: "/create", current: false },
     { name: "About", href: "/about", current: false },
     { name: "Social", href: "/social", current: false },
   ]);
-  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const checkSession = async () => {
@@ -28,9 +30,9 @@ export default function App() {
         method: "GET",
         credentials: "include",
       });
-      if (res.status === 200) {
+      if (res.ok) {
         const user = await res.json();
-        setCurrentUser(user);
+        dispatch(setUser(user));
       }
     };
     checkSession();
@@ -39,28 +41,15 @@ export default function App() {
   return (
     <div className="relative overflow-hidden bg-gray-100">
       <BrowserRouter>
-        <Header
-          user={currentUser}
-          navigation={navigation}
-          setNavigation={setNavigation}
-        />
+        <Header navigation={navigation} setNavigation={setNavigation} />
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" element={<Home user={currentUser} />} />
-          <Route path="/create" element={<Create user={currentUser} />} />
-          <Route
-            path="/login"
-            element={<Login user={currentUser} setUser={setCurrentUser} />}
-          />
-          <Route
-            path="/signout"
-            element={<Logout setUser={setCurrentUser} />}
-          />
-          <Route
-            path="/register"
-            element={<Register user={currentUser} setUser={setCurrentUser} />}
-          />
-          <Route path="/account" element={<Account user={currentUser} />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/create" element={<Create />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signout" element={<Logout />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -3,18 +3,20 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Logo } from "./icons";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const userNavigation = [
   { name: "My Account", href: "/account" },
-  { name: "Sign out", href: "/logout" },
+  { name: "Sign out", href: "/signout" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const Header = ({ user, navigation, setNavigation }) => {
-  let location = useLocation();
+export const Header = ({ navigation, setNavigation }) => {
+  const location = useLocation();
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     const newNav = [...navigation].map((item) => {

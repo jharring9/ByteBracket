@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { BackButton, ContinueButton, TrendingDown, TrendingUp } from "../icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setCreateStage } from "../../store/createStageSlice";
 
-export const Top25 = ({ setStage, top25 }) => {
+export const Top25 = () => {
+  const dispatch = useDispatch();
+  const { top25 } = useSelector((state) => state.lambda);
   const [loading, setLoading] = useState(false);
   const [biggestMovers, setBiggestMovers] = useState([]);
 
@@ -9,7 +13,7 @@ export const Top25 = ({ setStage, top25 }) => {
    * Handle user clicking the back button (return to select stats page).
    */
   const handleBack = () => {
-    setStage(1);
+    dispatch(setCreateStage(1));
   };
 
   /**
@@ -18,7 +22,7 @@ export const Top25 = ({ setStage, top25 }) => {
   const handleNext = () => {
     setLoading(true);
     setTimeout(() => {
-      setStage(3);
+      dispatch(setCreateStage(3));
     }, 500);
   };
 

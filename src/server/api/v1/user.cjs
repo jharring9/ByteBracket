@@ -60,4 +60,21 @@ module.exports = (app) => {
     req.session.user = response;
     res.status(201).send(response);
   });
+
+  /**
+   * Delete a user account.
+   */
+  app.delete("/v1/user/:user", async (req, res) => {
+    const { user } = req.params;
+    const sessionUser = req.session.user?.username;
+    if (sessionUser !== user) {
+      return res.status(401).send({ error: "unauthorized" });
+    }
+
+    const result = await userDB.deleteUser(user);
+    if (result) {
+      return res.status(204).send();
+    }
+    return res.status(404).send({ error: "Bracket not found" });
+  });
 };

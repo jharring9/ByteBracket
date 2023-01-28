@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorAlert, Facebook, Github, Google } from "./icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../store/userSlice";
 
-export const Register = ({ user, setUser }) => {
+export const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
@@ -35,7 +39,7 @@ export const Register = ({ user, setUser }) => {
     });
     const data = await res.json();
     if (res.ok) {
-      setUser(data);
+      dispatch(setUser(data));
       navigate("/account");
     } else {
       setError(data.error);
@@ -170,32 +174,6 @@ export const Register = ({ user, setUser }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot your password?
-                </a>
               </div>
             </div>
 

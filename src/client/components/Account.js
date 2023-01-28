@@ -8,11 +8,18 @@ import {
 import { Profile } from "./account-flow/Profile";
 import { classNames } from "./icons";
 import { Brackets } from "./account-flow/Brackets";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 let sidebar = [];
 
-export const Account = ({ user }) => {
+export const Account = () => {
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
+    if (!user) navigate("/login");
+
     sidebar = [
       { name: "Brackets", href: 1, icon: QueueListIcon, current: true },
       { name: "Leagues", href: 2, icon: UserGroupIcon, current: false },
