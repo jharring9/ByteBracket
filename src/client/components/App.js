@@ -14,6 +14,7 @@ import { Account } from "./Account";
 import { About } from "./About";
 import { setUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
+import { ViewBracket } from "./ViewBracket";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
+          <Route path="/bracket/:user/:id" element={<ViewBracket />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer navigation={navigation} />

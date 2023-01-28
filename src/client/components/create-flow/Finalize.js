@@ -5,8 +5,6 @@ import { clearBracket, clearTop25 } from "../../store/lambdaSlice";
 import { resetStats } from "../../store/statsSlice";
 
 export const Finalize = () => {
-  // TODO -- clear bracket, top25, and stats on success
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
