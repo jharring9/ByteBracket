@@ -37,11 +37,16 @@ exports.getUserBrackets = async (username) => {
 exports.saveBracket = async (username, id, bracket) => {
   const params = {
     TableName: bracketTable,
-    Item: bracket,
+    Item: {
+      bracket: bracket,
+      username: username,
+      id: id,
+    },
   };
   try {
     return await ddbDocClient.send(new PutCommand(params));
   } catch (err) {
+    console.log(err);
     return null;
   }
 };

@@ -1,6 +1,7 @@
 "use strict";
 
 const bracketDB = require("../../dynamo/bracket.cjs");
+const {v4: uuidv4} = require("uuid");
 
 module.exports = (app) => {
   /**
@@ -13,9 +14,18 @@ module.exports = (app) => {
       res.status(401).send({ error: "unauthorized" });
     }
 
+    //generate random id
+    const id = uuidv4();
 
+    //grab bracket from response
+    const bracket = req.body;
 
-    //TODO -- use bracketDB.saveBracket(user, id, bracket)
+    if (!(await bracketDB.saveBracket(sessionUser, id, bracket))) {
+      return res.status(503).send({ error: "Server error. Please try again." });
+    }
+
+    res.status(201).send();
+
   });
 
   /**
@@ -23,7 +33,21 @@ module.exports = (app) => {
    */
   app.get("/v1/:user/bracket/:id", async (req, res) => {
     const { user, id } = req.params;
-    //TODO -- use bracketDB.getBracket(user, id)
+
+    const sessionUser = req.session.user.username;
+    const queryUser = req.params.user;
+    if (sessionUser !== queryUser) {
+      res.status(401).send({ error: "unauthorized" });
+    }
+
+    //get specific bracket
+    const bracket = await bracketDB.getBracket(user, id);
+
+    if (!bracket) {
+      return res.status(404).send({ error: "Bracket not found" });
+    }
+
+    res.status(200).send(bracket.bracket);
   });
 
   /**
@@ -31,35 +55,20 @@ module.exports = (app) => {
    */
   app.get("/v1/:user/brackets", async (req, res) => {
     const { user } = req.params;
-    //TODO -- use bracketDB.getUserBrackets(user)
-    const brackets = [
-      {
-        id: 1,
-        name: "Test Bracket 1",
-        winner: "Team 1",
-        complete: true,
-      },
-      {
-        id: 2,
-        name: "Test Bracket 2",
-        winner: "Team 2",
-        complete: true,
-      },
-      {
-        id: 3,
-        name: "Test Bracket 3",
-        winner: "Team 3",
-        complete: true,
-      },
-      {
-        id: 4,
-        name: "Test Bracket 4",
-        winner: "None",
-        complete: false,
-      },
-    ];
 
-    res.send(brackets);
+    const sessionUser = req.session.user.username;
+    if (sessionUser !== user) {
+      res.status(401).send({ error: "unauthorized" });
+    }
+
+    //get all brackets
+    const brackets = await bracketDB.getUserBrackets(user);
+
+    if (!brackets) {
+      return res.status(404).send({ error: "Brackets not found" });
+    }
+
+    res.status(200).send(brackets);
   });
 
   /**
