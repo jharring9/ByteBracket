@@ -6,10 +6,13 @@ import {
   ErrorAlert,
   SpeedDial,
 } from "../icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setBracket } from "../../store/lambdaSlice";
+import { setCreateStage } from "../../store/createStageSlice";
 
-
-
-export const MakePicks = ({ setStage, bracket, setBracket }) => {
+export const MakePicks = () => {
+  const dispatch = useDispatch();
+  const bracket = useSelector((state) => state.lambda.bracket);
   const [roundNum, setRoundNum] = useState(0);
   const [error, setError] = useState(null);
 
@@ -19,7 +22,7 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
   const handleBack = () => {
     if (roundNum > 0) {
       setRoundNum(roundNum - 1);
-    } else setStage(2);
+    } else dispatch(setCreateStage(2));
   };
 
   /**
@@ -28,7 +31,7 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
   const handleNext = () => {
     if (roundNum === bracket.length - 1) {
       if (bracket[roundNum].every((m) => m[0].winner || m[1].winner))
-        setStage(4);
+        dispatch(setCreateStage(4));
       return;
     }
 
@@ -60,7 +63,7 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
     setError(null);
     const bracketCopy = [...bracket];
     bracketCopy[roundNum + 1] = nextRound;
-    setBracket(bracketCopy);
+    dispatch(setBracket(bracketCopy));
     setRoundNum(roundNum + 1);
   };
 
@@ -68,7 +71,7 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
    * Select all favorites in current round.
    */
   const autoComplete = () => {
-    const roundCopy = [...bracket[roundNum]];
+    const roundCopy = JSON.parse(JSON.stringify(bracket[roundNum]));
     for (let i = 0; i < roundCopy.length; i++) {
       if (roundCopy[i][0].percentile > roundCopy[i][1].percentile) {
         roundCopy[i][0].winner = true;
@@ -80,7 +83,7 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
     }
     const bracketCopy = [...bracket];
     bracketCopy[roundNum] = roundCopy;
-    setBracket(bracketCopy);
+    dispatch(setBracket(bracketCopy));
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   };
 
@@ -131,7 +134,7 @@ export const MakePicks = ({ setStage, bracket, setBracket }) => {
                   setRound={(data) => {
                     const dataCopy = [...bracket];
                     dataCopy[index] = data;
-                    setBracket(dataCopy);
+                    dispatch(setBracket(dataCopy));
                   }}
                 />
               </div>
@@ -188,7 +191,7 @@ const MakePick = ({ matchup, setMatchup }) => {
             "cursor-pointer px-4 py-5 sm:p-6"
           )}
           onClick={() => {
-            const data = [...matchup];
+            const data = JSON.parse(JSON.stringify(matchup));
             data[0].winner = true;
             data[1].winner = false;
             setMatchup(data);
@@ -226,9 +229,9 @@ const MakePick = ({ matchup, setMatchup }) => {
             "cursor-pointer px-4 py-5 sm:p-6"
           )}
           onClick={() => {
-            const data = [...matchup];
-            data[1].winner = true;
+            const data = JSON.parse(JSON.stringify(matchup));
             data[0].winner = false;
+            data[1].winner = true;
             setMatchup(data);
           }}
         >

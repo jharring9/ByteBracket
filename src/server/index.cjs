@@ -25,7 +25,7 @@ const setupServer = async () => {
     secret: "bytebracketsessionsecret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    cookie: { secure: true },
   });
   app.use(app.store);
 
@@ -38,21 +38,7 @@ const setupServer = async () => {
 
   // Give them the SPA base page
   app.get("*", (req, res) => {
-    const user = req.session.user;
-    let preloadedState = user
-      ? {
-          username: user.username,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          primary_email: user.primary_email,
-          city: user.city,
-          games: user.games,
-        }
-      : {};
-    preloadedState = JSON.stringify(preloadedState).replace(/</g, "\\u003c");
-    res.render("../../public/index.html", {
-      state: preloadedState,
-    });
+    res.render("../../public/index.html");
   });
 
   let server;
