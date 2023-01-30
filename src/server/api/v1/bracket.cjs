@@ -57,7 +57,7 @@ module.exports = (app) => {
     const { user } = req.params;
     const sessionUser = req.session.user?.username;
     if (sessionUser !== user) {
-      res.status(401).send({ error: "unauthorized" });
+      return res.status(401).send({ error: "unauthorized" });
     }
 
     const result = await bracketDB.getUserBrackets(user);
@@ -74,7 +74,7 @@ module.exports = (app) => {
     const { user, id } = req.params;
     const sessionUser = req.session.user?.username;
     if (sessionUser !== user) {
-      res.status(401).send({ error: "unauthorized" });
+      return res.status(401).send({ error: "unauthorized" });
     }
 
     const result = await bracketDB.deleteBracket(user, id);

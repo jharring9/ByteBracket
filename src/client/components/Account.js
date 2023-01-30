@@ -18,7 +18,7 @@ export const Account = () => {
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!user) navigate("/login");
+    if (!user.username) navigate("/login");
 
     sidebar = [
       { name: "Brackets", href: 1, icon: QueueListIcon, current: true },

@@ -67,7 +67,7 @@ export const Header = ({ navigation, setNavigation }) => {
               </div>
               <div className="hidden items-center md:flex">
                 <div className="flex-shrink-0">
-                  {user ? (
+                  {user.username ? (
                     <>
                       <Link
                         to="/account"
@@ -114,7 +114,7 @@ export const Header = ({ navigation, setNavigation }) => {
                 </Link>
               ))}
             </div>
-            {user ? (
+            {user.username ? (
               <div className="border-t border-gray-700 pt-4 pb-3">
                 <div className="flex items-center px-2">
                   <div className="ml-3">

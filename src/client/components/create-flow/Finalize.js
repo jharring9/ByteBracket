@@ -38,7 +38,7 @@ export const Finalize = () => {
 
   return (
     <>
-      {user ? (
+      {user.username ? (
         <div className="relative mx-auto mt-8 lg:mt-14">
           <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:px-8">
             <form>

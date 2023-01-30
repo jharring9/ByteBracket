@@ -16,7 +16,7 @@ export const Register = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (user) {
+    if (user.username) {
       navigate("/account");
     }
   }, [user]);
