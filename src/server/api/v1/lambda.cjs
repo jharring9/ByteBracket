@@ -34,13 +34,15 @@ module.exports = (app) => {
     AWS.config.update({ region: "us-east-1" });
     const invokeLambda = async () => {
       const params = {
-        FunctionName: "ByteBracket",
+        FunctionName: "ComputeRankings",
         Payload: JSON.stringify(req.body),
       };
       const result = await new AWS.Lambda().invoke(params).promise();
       let data = JSON.parse(result.Payload);
       let top25Schools = data["Schools"].slice(0, 25);
-      data["bracket"] = generateBracket(data["Schools"].slice(0, 64));
+      let schools = data["Schools"].slice(0, 64);
+      let percentiles = data["percentiles"].slice(0, 64);
+      data["bracket"] = generateBracket(schools, percentiles);
       data["top25"] = top25Schools.map((school, index) => {
         let r = school in AP_RANKINGS ? AP_RANKINGS[school] : 26;
         return {
@@ -62,12 +64,11 @@ module.exports = (app) => {
 /**
  * Generates a bracket from a list of schools.
  */
-const generateBracket = (schools) => {
+const generateBracket = (schools, percentiles) => {
   const matchups = [];
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 8; j++) {
       const matchup = [];
-      let p = Math.floor(Math.random() * 100);
       let index = i + (j * 4);
       let seed = j + 1;
       const higherSeed = {
@@ -76,7 +77,7 @@ const generateBracket = (schools) => {
         record: `${Math.floor(Math.random() * 35)}-${Math.floor(
             Math.random() * 35
         )}`,
-        percentile: p,
+        percentile: percentiles[index],
         winner: false,
       };
       matchup.push(higherSeed);
@@ -86,7 +87,7 @@ const generateBracket = (schools) => {
         record: `${Math.floor(Math.random() * 35)}-${Math.floor(
             Math.random() * 35
         )}`,
-        percentile: 100 - p,
+        percentile: percentiles[63 - index],
         winner: false,
       };
       matchup.push(lowerSeed);
