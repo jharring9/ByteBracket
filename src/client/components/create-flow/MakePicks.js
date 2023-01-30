@@ -173,6 +173,12 @@ const DisplayRound = ({ round, setRound }) => {
 };
 
 const MakePick = ({ matchup, setMatchup }) => {
+  const winningPercentage = (p1, p2) => (
+      (100*(1/(10**(-(p1 - p2))+1)).toFixed(2)).toFixed(0)
+  );
+
+  let chance = winningPercentage(matchup[0].percentile, matchup[1].percentile)
+
   return (
     <div className="m-2 w-full md:w-2/3">
       <dl className="mt-1 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-2 md:divide-y-0 md:divide-x">
@@ -204,13 +210,13 @@ const MakePick = ({ matchup, setMatchup }) => {
 
             <div
               className={classNames(
-                matchup[0].percentile >= 50
+                chance >= 50
                   ? "bg-green-100 text-green-800"
                   : "bg-red-100 text-red-800",
                 "inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0"
               )}
             >
-              {matchup[0].percentile}%
+              {chance}%
             </div>
           </dd>
         </div>
@@ -242,13 +248,13 @@ const MakePick = ({ matchup, setMatchup }) => {
 
             <div
               className={classNames(
-                matchup[1].percentile >= 50
+                chance < 50
                   ? "bg-green-100 text-green-800"
                   : "bg-red-100 text-red-800",
                 "inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0"
               )}
             >
-              {matchup[1].percentile}%
+              {(100 - chance).toFixed(0)}%
             </div>
           </dd>
         </div>
