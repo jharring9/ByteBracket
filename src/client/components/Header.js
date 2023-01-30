@@ -3,18 +3,20 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Logo } from "./icons";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const userNavigation = [
   { name: "My Account", href: "/account" },
-  { name: "Sign out", href: "/logout" },
+  { name: "Sign out", href: "/signout" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const Header = ({ user, navigation, setNavigation }) => {
-  let location = useLocation();
+export const Header = ({ navigation, setNavigation }) => {
+  const location = useLocation();
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
     const newNav = [...navigation].map((item) => {
@@ -65,7 +67,7 @@ export const Header = ({ user, navigation, setNavigation }) => {
               </div>
               <div className="hidden items-center md:flex">
                 <div className="flex-shrink-0">
-                  {user ? (
+                  {user.username ? (
                     <>
                       <Link
                         to="/account"
@@ -112,7 +114,7 @@ export const Header = ({ user, navigation, setNavigation }) => {
                 </Link>
               ))}
             </div>
-            {user ? (
+            {user.username ? (
               <div className="border-t border-gray-700 pt-4 pb-3">
                 <div className="flex items-center px-2">
                   <div className="ml-3">

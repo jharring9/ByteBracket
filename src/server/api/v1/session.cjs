@@ -39,7 +39,7 @@ module.exports = (app) => {
     if (req.session.user) {
       res.status(200).send(req.session.user);
     } else {
-      res.status(204).end();
+      res.status(404).end({ error: "No session found." });
     }
   });
 

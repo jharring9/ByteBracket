@@ -1,4 +1,4 @@
-const { GetCommand, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { GetCommand, PutCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 const { ddbDocClient } = require("./ddbDocumentClient.cjs");
 
 const userTable = "users";
@@ -25,6 +25,20 @@ exports.saveUser = async (user) => {
   };
   try {
     return await ddbDocClient.send(new PutCommand(params));
+  } catch (err) {
+    return null;
+  }
+};
+
+exports.deleteUser = async (username) => {
+  const params = {
+    TableName: userTable,
+    Key: {
+      username: username,
+    },
+  };
+  try {
+    return await ddbDocClient.send(new DeleteCommand(params));
   } catch (err) {
     return null;
   }
