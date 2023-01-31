@@ -2,7 +2,8 @@ import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
 import { ContinueButton, ErrorAlert, DisableStat } from "../icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setBracket, setTop25 } from "../../store/lambdaSlice";
+import { setField, setTop25 } from "../../store/lambdaSlice";
+import { resetBracket } from "../../store/bracketSlice";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setStats } from "../../store/statsSlice";
 
@@ -44,8 +45,9 @@ export const SelectStats = () => {
     });
     if (res.ok) {
       const data = await res.json();
-      dispatch(setBracket(data.bracket));
+      dispatch(setField(data.field));
       dispatch(setTop25(data.top25));
+      dispatch(resetBracket());
       dispatch(setCreateStage(2));
     } else {
       setError(JSON.stringify(await res.json()));

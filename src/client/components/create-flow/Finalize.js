@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearBracket, clearTop25 } from "../../store/lambdaSlice";
+import { clearTop25 } from "../../store/lambdaSlice";
+import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
 
 export const Finalize = () => {
@@ -29,9 +30,9 @@ export const Finalize = () => {
       }),
     });
     if (res.ok) {
-      dispatch(clearBracket);
-      dispatch(clearTop25);
       dispatch(resetStats);
+      dispatch(clearTop25);
+      dispatch(resetBracket);
       navigate("/account");
     }
   };

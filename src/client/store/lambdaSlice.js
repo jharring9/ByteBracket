@@ -3,15 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 export const lambdaSlice = createSlice({
   name: "lambda",
   initialState: {
-    bracket: [],
+    field: [],
     top25: [],
   },
   reducers: {
-    clearBracket: (state) => {
-      state.bracket = [];
+    clearField: (state) => {
+      state.field = [];
     },
-    setBracket: (state, action) => {
-      state.bracket = action.payload;
+    setField: (state, action) => {
+      state.field = action.payload;
     },
     clearTop25: (state) => {
       state.top25 = [];
@@ -22,6 +22,6 @@ export const lambdaSlice = createSlice({
   },
 });
 
-export const { clearBracket, setBracket, clearTop25, setTop25 } =
+export const { clearField, setField, clearTop25, setTop25 } =
   lambdaSlice.actions;
 export default lambdaSlice.reducer;

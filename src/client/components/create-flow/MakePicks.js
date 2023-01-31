@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from "react";
-import {
-  BackButton,
-  classNames,
-  ContinueButton,
-  ErrorAlert,
-  SpeedDial,
-} from "../icons";
+import { BackButton, ContinueButton, ErrorAlert, SpeedDial } from "../icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setBracket } from "../../store/lambdaSlice";
 import { setCreateStage } from "../../store/createStageSlice";
+import { RegionBracket } from "../bracket-components/RegionBracket";
+import { setRegion } from "../../store/bracketSlice";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
-  const bracket = useSelector((state) => state.lambda.bracket);
-  const [roundNum, setRoundNum] = useState(0);
+  const bracket = useSelector((state) => state.bracket.bracket);
+  const region = useSelector((state) => state.bracket.region);
+  const finalFour = useSelector((state) => state.bracket.finalFour);
   const [error, setError] = useState(null);
 
   /**
    * Handle user clicking back button.
    */
   const handleBack = () => {
-    if (roundNum > 0) {
-      setRoundNum(roundNum - 1);
+    if (region > 0) {
+      dispatch(setRegion(region - 1));
     } else dispatch(setCreateStage(2));
   };
 
@@ -29,117 +25,67 @@ export const MakePicks = () => {
    * Handle user clicking continue button.
    */
   const handleNext = () => {
-    if (roundNum === bracket.length - 1) {
-      if (bracket[roundNum].every((m) => m[0].winner || m[1].winner))
-        dispatch(setCreateStage(4));
+    // Validate that all matchups have been selected.
+    for (let i = 0; i < bracket[region].rounds.length; i++) {
+      for (let j = 0; j < bracket[region].rounds[i].seeds.length; j++) {
+        if (
+          bracket[region].rounds[i].seeds[j][0] === -1 ||
+          bracket[region].rounds[i].seeds[j][1] === -1
+        ) {
+          setError("You must select a winner for each matchup.");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+      }
+    }
+
+    // Validate that a team has been selected to the final four.
+    if (finalFour[0][Math.floor(region / 2)][region % 2] === -1) {
+      setError("You must select a team to advance to the final four.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    const nextRound = [];
-    for (let i = 0; i < bracket[roundNum].length / 2; i++) {
-      const matchup = [];
-      for (let j = 0; j < 2; j++) {
-        if (bracket[roundNum][i * 2 + j][0].winner) {
-          let winner = JSON.parse(
-            JSON.stringify(bracket[roundNum][i * 2 + j][0])
-          );
-          winner.winner = false;
-          matchup.push(winner);
-        } else if (!bracket[roundNum][i * 2 + j][1].winner) {
-          setError("Please select a winner for each matchup");
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          return;
-        } else {
-          let winner = JSON.parse(
-            JSON.stringify(bracket[roundNum][i * 2 + j][1])
-          );
-          winner.winner = false;
-          matchup.push(winner);
-        }
-      }
-      nextRound.push(matchup);
+    // If we're on the last region, advance to the next stage.
+    if (region === 3) {
+      dispatch(setCreateStage(4));
+      return;
     }
-
     setError(null);
-    const bracketCopy = [...bracket];
-    bracketCopy[roundNum + 1] = nextRound;
-    dispatch(setBracket(bracketCopy));
-    setRoundNum(roundNum + 1);
+    dispatch(setRegion(region + 1));
   };
 
   /**
-   * Select all favorites in current round.
+   * Select all favorites in current region.
    */
   const autoComplete = () => {
-    const roundCopy = JSON.parse(JSON.stringify(bracket[roundNum]));
-    for (let i = 0; i < roundCopy.length; i++) {
-      if (roundCopy[i][0].percentile > roundCopy[i][1].percentile) {
-        roundCopy[i][0].winner = true;
-        roundCopy[i][1].winner = false;
-      } else {
-        roundCopy[i][0].winner = false;
-        roundCopy[i][1].winner = true;
-      }
-    }
-    const bracketCopy = [...bracket];
-    bracketCopy[roundNum] = roundCopy;
-    dispatch(setBracket(bracketCopy));
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    // TODO
   };
 
   /**
-   * Smooth scroll to top of page when user advances to next round.
+   * Smooth scroll to top of page when user advances to next region.
    */
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [roundNum]);
-
-  const roundName = (length) => {
-    switch (length) {
-      case 8:
-        return "Make Your Picks: Sweet Sixteen";
-      case 4:
-        return "Make Your Picks: Elite Eight";
-      case 2:
-        return "Make Your Picks: Final Four";
-      case 1:
-        return "Choose Your Winner";
-      default:
-        return "Make Your Picks: Round of " + length * 2;
-    }
-  };
+  }, [region]);
 
   return (
     <>
       <div className="mx-auto mt-4 max-w-7xl px-4 px-6 sm:mt-6 lg:mt-8">
-        {bracket.map(
-          (round, index) =>
-            roundNum === index && (
-              <div key={index}>
-                <h1 className="text-center text-3xl text-gray-900">
-                  {roundName(round.length)}
-                </h1>
-                {error && (
-                  <div className="flex flex-col items-center justify-center">
-                    <div className=" mt-3 w-full md:w-2/3 lg:m-4">
-                      <ErrorAlert
-                        header="There was a problem with your picks"
-                        message={error}
-                      />
-                    </div>
-                  </div>
-                )}
-                <DisplayRound
-                  round={round}
-                  setRound={(data) => {
-                    const dataCopy = [...bracket];
-                    dataCopy[index] = data;
-                    dispatch(setBracket(dataCopy));
-                  }}
-                />
-              </div>
-            )
+        <h1 className="text-center text-3xl text-gray-900">
+          Make Your Picks: {bracket[region].name} Region
+        </h1>
+        {error && (
+          <div className="flex flex-col items-center justify-center">
+            <div className=" mt-3 w-full md:w-2/3 lg:m-4">
+              <ErrorAlert
+                header="There was a problem with your picks"
+                message={error}
+              />
+            </div>
+          </div>
         )}
+        <RegionBracket rounds={bracket[region].rounds} />
         <div className="justify-center lg:col-span-4 lg:flex ">
           <div className="mt-4 flex justify-center lg:mt-2">
             <BackButton onClick={handleBack} />
@@ -151,114 +97,5 @@ export const MakePicks = () => {
       </div>
       <SpeedDial action={autoComplete} />
     </>
-  );
-};
-
-const DisplayRound = ({ round, setRound }) => {
-  return (
-    <div className="flex flex-col items-center justify-center">
-      {round.map((matchup, index) => (
-        <MakePick
-          key={index}
-          matchup={matchup}
-          setMatchup={(data) => {
-            const dataCopy = [...round];
-            dataCopy[index] = data;
-            setRound(dataCopy);
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-const MakePick = ({ matchup, setMatchup }) => {
-  const winningPercentage = (p1, p2) => (
-      (100*(1/(10**(-(p1 - p2))+1)).toFixed(2)).toFixed(0)
-  );
-
-  let chance = winningPercentage(matchup[0].percentile, matchup[1].percentile)
-
-  return (
-    <div className="m-2 w-full md:w-2/3">
-      <dl className="mt-1 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-2 md:divide-y-0 md:divide-x">
-        <div
-          key={matchup[0].rank}
-          className={classNames(
-            matchup[0].winner
-              ? "bg-green-200 hover:bg-green-300"
-              : "hover:bg-green-100",
-            "cursor-pointer px-4 py-5 sm:p-6"
-          )}
-          onClick={() => {
-            const data = JSON.parse(JSON.stringify(matchup));
-            data[0].winner = true;
-            data[1].winner = false;
-            setMatchup(data);
-          }}
-        >
-          <dt className="text-base font-normal text-gray-900">
-            {matchup[0].rank}
-          </dt>
-          <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
-            <div className="flex items-baseline text-2xl font-semibold text-indigo-600">
-              {matchup[0].name}
-              <span className="ml-2 text-sm font-medium text-gray-500">
-                {matchup[0].record}
-              </span>
-            </div>
-
-            <div
-              className={classNames(
-                chance >= 50
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800",
-                "inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0"
-              )}
-            >
-              {chance}%
-            </div>
-          </dd>
-        </div>
-        <div
-          key={matchup[1].rank}
-          className={classNames(
-            matchup[1].winner
-              ? "bg-green-200 hover:bg-green-300"
-              : "hover:bg-green-100",
-            "cursor-pointer px-4 py-5 sm:p-6"
-          )}
-          onClick={() => {
-            const data = JSON.parse(JSON.stringify(matchup));
-            data[0].winner = false;
-            data[1].winner = true;
-            setMatchup(data);
-          }}
-        >
-          <dt className="text-base font-normal text-gray-900">
-            {matchup[1].rank}
-          </dt>
-          <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
-            <div className="flex items-baseline text-2xl font-semibold text-indigo-600">
-              {matchup[1].name}
-              <span className="ml-2 text-sm font-medium text-gray-500">
-                {matchup[1].record}
-              </span>
-            </div>
-
-            <div
-              className={classNames(
-                chance < 50
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800",
-                "inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium md:mt-2 lg:mt-0"
-              )}
-            >
-              {(100 - chance).toFixed(0)}%
-            </div>
-          </dd>
-        </div>
-      </dl>
-    </div>
   );
 };
