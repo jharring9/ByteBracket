@@ -1,6 +1,7 @@
 import React from "react";
 import { BoltIcon, XCircleIcon } from "@heroicons/react/20/solid";
 import { CheckIcon } from "@heroicons/react/24/solid";
+import { useSelector } from "react-redux";
 
 export const TrendingUp = () => (
   <svg
@@ -229,7 +230,8 @@ export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const ProgressBar = ({ steps }) => {
+export const ProgressBar = () => {
+  const { progressBar } = useSelector((state) => state.createStage);
   return (
     <div
       aria-label="Progress"
@@ -239,7 +241,7 @@ export const ProgressBar = ({ steps }) => {
         role="list"
         className="divide-y divide-gray-300 rounded-md border border-gray-300 md:flex md:divide-y-0"
       >
-        {steps.map((step, stepIdx) => (
+        {progressBar.map((step, stepIdx) => (
           <li key={step.name} className="relative md:flex md:flex-1">
             {step.status === "complete" ? (
               <div className="group flex w-full items-center">
@@ -281,7 +283,7 @@ export const ProgressBar = ({ steps }) => {
                 </span>
               </div>
             )}
-            {stepIdx !== steps.length - 1 ? (
+            {stepIdx !== progressBar.length - 1 ? (
               <>
                 <div
                   className="absolute top-0 right-0 hidden h-full w-5 md:block"
@@ -322,16 +324,31 @@ export const SpeedDial = ({ action }) => (
   </div>
 );
 
-export const DisableStat = ({value, disabledValue, setValue, setDisabledValue}) => (
-    <button type="button"
-            onClick={() => {
-              setDisabledValue(value);
-              return setValue(disabledValue);}}
-            className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800">
-      <svg aria-hidden="true" className="w-3 h-3" fill="currentColor"
-           xmlns="http://www.w3.org/2000/svg"
-           viewBox="0 0 352 512">
-        <path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
-      </svg>
-    </button>
+export const DisableStat = ({
+  value,
+  disabledValue,
+  setValue,
+  setDisabledValue,
+}) => (
+  <button
+    type="button"
+    onClick={() => {
+      setDisabledValue(value);
+      return setValue(disabledValue);
+    }}
+    className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
+  >
+    <svg
+      aria-hidden="true"
+      className="h-3 w-3"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 352 512"
+    >
+      <path
+        fill="currentColor"
+        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+      />
+    </svg>
+  </button>
 );

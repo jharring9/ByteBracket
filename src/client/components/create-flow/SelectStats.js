@@ -1,14 +1,15 @@
 import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
 import { ContinueButton, ErrorAlert, DisableStat } from "../icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setField, setTop25 } from "../../store/lambdaSlice";
+import { resetBracket } from "../../store/bracketSlice";
+import { setCreateStage } from "../../store/createStageSlice";
+import { setStats } from "../../store/statsSlice";
 
-export const SelectStats = ({
-  stats,
-  setStats,
-  setStage,
-  setBracket,
-  setTop25,
-}) => {
+export const SelectStats = () => {
+  const dispatch = useDispatch();
+  const { values: stats } = useSelector((state) => state.stats);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -44,9 +45,10 @@ export const SelectStats = ({
     });
     if (res.ok) {
       const data = await res.json();
-      setBracket(data.bracket);
-      setTop25(data.top25);
-      setStage(2);
+      dispatch(setField(data.field));
+      dispatch(setTop25(data.top25));
+      dispatch(resetBracket());
+      dispatch(setCreateStage(2));
     } else {
       setError(JSON.stringify(await res.json()));
       setLoading(false);
@@ -67,37 +69,37 @@ export const SelectStats = ({
             name="Win-Loss %"
             details="Details"
             value={stats.wl}
-            setValue={(val) => setStats({ ...stats, wl: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, wl: val }))}
           />
           <InfoModal
             name="Strength of Schedule"
             details="Details"
             value={stats.sos}
-            setValue={(val) => setStats({ ...stats, sos: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, sos: val }))}
           />
           <InfoModal
             name="Points per Game"
             details="Details"
             value={stats.ppg}
-            setValue={(val) => setStats({ ...stats, ppg: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, ppg: val }))}
           />
           <InfoModal
             name="Opponent Points per Game"
             details="Details"
             value={stats.oppg}
-            setValue={(val) => setStats({ ...stats, oppg: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, oppg: val }))}
           />
           <InfoModal
             name="Field Goal %"
             details="Details"
             value={stats.fg}
-            setValue={(val) => setStats({ ...stats, fg: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, fg: val }))}
           />
           <InfoModal
             name="3-Point Makes"
             details="Details"
             value={stats.tpm}
-            setValue={(val) => setStats({ ...stats, tpm: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, tpm: val }))}
           />
         </div>
         <div className="md:order-2 lg:order-3">
@@ -105,37 +107,37 @@ export const SelectStats = ({
             name="Free Throw Makes"
             details="Details"
             value={stats.ft}
-            setValue={(val) => setStats({ ...stats, ft: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, ft: val }))}
           />
           <InfoModal
             name="Total Rebounds"
             details="Details"
             value={stats.trb}
-            setValue={(val) => setStats({ ...stats, trb: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, trb: val }))}
           />
           <InfoModal
             name="Assists"
             details="Details"
             value={stats.ast}
-            setValue={(val) => setStats({ ...stats, ast: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, ast: val }))}
           />
           <InfoModal
             name="Steals & Blocks"
             details="Details"
             value={stats.stlblk}
-            setValue={(val) => setStats({ ...stats, stlblk: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, stlblk: val }))}
           />
           <InfoModal
             name="Turnovers"
             details="Details"
             value={stats.to}
-            setValue={(val) => setStats({ ...stats, to: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, to: val }))}
           />
           <InfoModal
             name="Personal Fouls"
             details="Details"
             value={stats.pf}
-            setValue={(val) => setStats({ ...stats, pf: val })}
+            setValue={(val) => dispatch(setStats({ ...stats, pf: val }))}
           />
         </div>
         <div className="align-middle md:order-3 lg:order-2">
@@ -143,12 +145,12 @@ export const SelectStats = ({
             style={{ height: "380px" }}
             data={chartData}
             label={({ dataEntry }) => dataEntry.title}
-            labelStyle={() => ({
+            labelStyle={{
               fill: "white",
               fontSize: "3px",
               fontWeight: "bold",
-              fontfamily: "inter"
-            })}
+              fontfamily: "inter",
+            }}
             radius={42}
             labelPosition={80}
             lineWidth={40}
