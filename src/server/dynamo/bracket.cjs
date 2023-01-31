@@ -40,16 +40,27 @@ exports.getUserBrackets = async (username) => {
   }
 };
 
-exports.saveBracket = async (username, id, bracket, complete, name, winner) => {
+exports.saveBracket = async (
+  username,
+  id,
+  bracket,
+  finalFour,
+  champion,
+  complete,
+  name,
+  winnerName
+) => {
   const params = {
     TableName: bracketTable,
     Item: {
       bracket: bracket,
+      finalFour: finalFour,
+      champion: champion,
       username: username,
       id: id,
       complete: complete,
       name: name,
-      winner: winner,
+      winnerName: winnerName,
     },
   };
   try {

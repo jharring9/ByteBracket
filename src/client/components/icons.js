@@ -96,6 +96,40 @@ export const ContinueButton = ({ onClick, loading }) => (
   </button>
 );
 
+export const SaveButton = ({ onClick, loading }) => (
+  <button
+    className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-700 px-5 text-indigo-100 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
+    onClick={onClick}
+  >
+    <div className="flex justify-center">
+      {loading ? (
+        <>
+          <Spinner className="mr-2" />
+          Loading...
+        </>
+      ) : (
+        <>
+          Save Bracket
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            />
+          </svg>
+        </>
+      )}
+    </div>
+  </button>
+);
+
 export const Spinner = () => (
   <div className="text-center">
     <div role="status">

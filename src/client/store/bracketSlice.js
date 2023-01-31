@@ -5,6 +5,7 @@ export const lambdaSlice = createSlice({
   initialState: {
     bracket: [],
     finalFour: [],
+    champion: -1,
     region: 0,
   },
   reducers: {
@@ -18,6 +19,7 @@ export const lambdaSlice = createSlice({
         [[-1, -1]],
       ];
       state.region = 0;
+      state.champion = -1;
     },
     setBracket: (state, action) => {
       state.bracket = action.payload;
@@ -74,6 +76,9 @@ export const lambdaSlice = createSlice({
       finalFourCopy[round][matchup][position] = seed;
       state.finalFour = action.payload;
     },
+    setChampion: (state, action) => {
+      state.champion = action.payload;
+    },
   },
 });
 
@@ -109,6 +114,12 @@ const generateBracket = () => {
   return regions;
 };
 
-export const { resetBracket, setBracket, setWinner, setRegion, setFinalFour } =
-  lambdaSlice.actions;
+export const {
+  resetBracket,
+  setBracket,
+  setWinner,
+  setRegion,
+  setFinalFour,
+  setChampion,
+} = lambdaSlice.actions;
 export default lambdaSlice.reducer;
