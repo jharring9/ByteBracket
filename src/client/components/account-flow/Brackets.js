@@ -64,7 +64,7 @@ export const Brackets = ({ user }) => {
                       </span>
                     </div>
                     <p className="mt-1 truncate text-sm text-gray-500">
-                      {bracket.winner}
+                      {bracket.winnerName}
                     </p>
                   </div>
                 </div>

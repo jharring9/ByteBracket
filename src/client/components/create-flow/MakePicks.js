@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { BackButton, ContinueButton, ErrorAlert, SpeedDial } from "../icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
-import { RegionBracket } from "../bracket-components/RegionBracket";
-import { setRegion } from "../../store/bracketSlice";
+import { RegionBracket, winPercent } from "../bracket-components/RegionBracket";
+import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
-  const bracket = useSelector((state) => state.bracket.bracket);
-  const region = useSelector((state) => state.bracket.region);
-  const finalFour = useSelector((state) => state.bracket.finalFour);
+  const field = useSelector((state) => state.lambda.field);
+  const { bracket, region, finalFour } = useSelector((state) => state.bracket);
   const [error, setError] = useState(null);
 
   /**
@@ -59,7 +58,39 @@ export const MakePicks = () => {
    * Select all favorites in current region.
    */
   const autoComplete = () => {
-    // TODO
+    // Autopick all favorites in the current region.
+    const copy = JSON.parse(JSON.stringify(bracket));
+    for (let i = 0; i < copy[region].rounds.length - 1; i++) {
+      for (let j = 0; j < copy[region].rounds[i].seeds.length; j++) {
+        const matchup = copy[region].rounds[i].seeds[j];
+        const p1 = field[matchup[0]].percentile;
+        const p2 = field[matchup[1]].percentile;
+        const teamOneOdds = winPercent(p1, p2);
+        copy[region].rounds[i + 1].seeds[Math.floor(j / 2)][j % 2] =
+          teamOneOdds > Math.random() * 100 ? matchup[0] : matchup[1];
+      }
+    }
+    dispatch(setBracket(copy));
+
+    // Autopick the regional champion.
+    const finalTeam1 =
+      copy[region].rounds[copy[region].rounds.length - 1].seeds[0][0];
+    const finalTeam2 =
+      copy[region].rounds[copy[region].rounds.length - 1].seeds[0][1];
+    dispatch(
+      setWinner({
+        round: copy[region].rounds.length - 1,
+        matchup: 0,
+        position: 0,
+        seed:
+          winPercent(
+            field[finalTeam1].percentile,
+            field[finalTeam2].percentile
+          ) > 50
+            ? finalTeam1
+            : finalTeam2,
+      })
+    );
   };
 
   /**

@@ -16,31 +16,53 @@ export const RegionBracket = ({ rounds }) => {
   );
 };
 
-const winPercent = (p1, p2) => {
+export const winPercent = (p1, p2) => {
   return p1 && p2
-    ? (100 * (1 / (10 ** -(p1 - p2) + 1)).toFixed(2)).toFixed(0)
+    ? (100 * (1 / (50 ** -(p1 - p2) + 1)).toFixed(2)).toFixed(0)
     : 100;
 };
 const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
   const dispatch = useDispatch();
   const field = useSelector((state) => state.lambda.field);
-  const region = useSelector((state) => state.bracket.region);
+  const { region, bracket, finalFour } = useSelector((state) => state.bracket);
   const chance = winPercent(
     field[seed[0]]?.percentile,
     field[seed[1]]?.percentile
   );
+
+  const style = (pos) => {
+    let str = "flex rounded-sm pt-1.5 pl-2";
+    if (seed[pos] !== -1) {
+      str += " cursor-pointer text-black hover:bg-green-100";
+
+      let nextPos;
+      if (roundIndex < 3) {
+        nextPos =
+          bracket[region]?.rounds[roundIndex + 1]?.seeds[
+            Math.floor(seedIndex / 2)
+          ][seedIndex % 2];
+      } else {
+        nextPos = finalFour[0][Math.floor(region / 2)][region % 2];
+      }
+
+      // Check if it's a winner
+      if (seed[pos] === nextPos) {
+        str += " bg-green-200 font-bold";
+      } else if (nextPos !== -1) {
+        str += " font-normal text-gray-400";
+      }
+    } else {
+      str += " text-gray-500";
+    }
+    return str;
+  };
 
   return (
     <Seed mobileBreakpoint={breakpoint}>
       <div className="relative w-full rounded border-2 border-indigo-700 bg-white p-0 text-center shadow-md shadow-gray-200">
         <div>
           <div
-            className={classNames(
-              seed[0] !== -1
-                ? "cursor-pointer font-bold text-black hover:bg-indigo-200"
-                : "text-gray-500",
-              "flex rounded-sm pt-1.5 pl-2"
-            )}
+            className={style(0)}
             onClick={() =>
               dispatch(
                 setWinner({
@@ -66,28 +88,25 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
                   {field[seed[0]]?.seed + ". "}
                   {field[seed[0]]?.name}
                 </span>
-                <div
-                  className={classNames(
-                    chance >= 50
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800",
-                    "absolute right-1 items-baseline rounded-full py-0.5 px-0.5 text-xs"
-                  )}
-                >
-                  {chance}%
-                </div>
+                {seed[1] !== -1 && (
+                  <div
+                    className={classNames(
+                      chance >= 50
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800",
+                      "absolute right-1 items-baseline rounded-full py-0.5 px-1 text-xs"
+                    )}
+                  >
+                    {chance}%
+                  </div>
+                )}
               </div>
             ) : (
               "-----------"
             )}
           </div>
           <div
-            className={classNames(
-              seed[1] !== -1
-                ? "cursor-pointer font-bold text-black hover:bg-indigo-200"
-                : "text-gray-500",
-              "flex rounded-sm pt-1.5 pl-2"
-            )}
+            className={style(1)}
             onClick={() =>
               dispatch(
                 setWinner({
@@ -113,16 +132,18 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
                   {field[seed[1]]?.seed + ". "}
                   {field[seed[1]]?.name}
                 </span>
-                <div
-                  className={classNames(
-                    chance < 50
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800",
-                    "absolute right-1 items-baseline rounded-full py-0.5 px-1 text-xs"
-                  )}
-                >
-                  {100 - chance}%
-                </div>
+                {seed[0] !== -1 && (
+                  <div
+                    className={classNames(
+                      chance < 50
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800",
+                      "absolute right-1 items-baseline rounded-full py-0.5 px-1 text-xs"
+                    )}
+                  >
+                    {100 - chance}%
+                  </div>
+                )}
               </>
             ) : (
               "-----------"

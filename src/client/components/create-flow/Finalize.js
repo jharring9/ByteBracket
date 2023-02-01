@@ -4,15 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
+import { BackButton, SaveButton } from "../icons";
+import { setCreateStage } from "../../store/createStageSlice";
 
 export const Finalize = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
-  const { bracket } = useSelector((state) => state.lambda);
+  const { field } = useSelector((state) => state.lambda);
+  const { bracket, finalFour, champion } = useSelector(
+    (state) => state.bracket
+  );
   const [name, setName] = useState("");
 
   const onFinalize = async (ev) => {
+    setLoading(true);
     ev.preventDefault();
     const res = await fetch(`/v1/${user.username}/bracket`, {
       method: "POST",
@@ -22,11 +29,11 @@ export const Finalize = () => {
       },
       body: JSON.stringify({
         bracket: bracket,
+        finalFour: finalFour,
+        champion: champion,
         complete: true,
         name: name,
-        winner: bracket[bracket.length - 1][0][0].winner
-          ? bracket[bracket.length - 1][0][0].name
-          : bracket[bracket.length - 1][0][1].name,
+        winner: field[champion]?.name,
       }),
     });
     if (res.ok) {
@@ -35,6 +42,11 @@ export const Finalize = () => {
       dispatch(resetBracket);
       navigate("/account");
     }
+    setLoading(false);
+  };
+
+  const handleBack = () => {
+    dispatch(setCreateStage(3));
   };
 
   return (
@@ -66,12 +78,14 @@ export const Finalize = () => {
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                  <button
-                    onClick={onFinalize}
-                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Save
-                  </button>
+                  <div className="justify-center lg:col-span-4 lg:flex ">
+                    <div className="mt-4 flex justify-center lg:mt-2">
+                      <BackButton onClick={handleBack} />
+                    </div>
+                    <div className="flex justify-center lg:mt-2">
+                      <SaveButton onClick={onFinalize} loading={loading} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
