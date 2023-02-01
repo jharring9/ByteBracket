@@ -154,7 +154,7 @@ const LOGOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Oregon_Ducks_logo.svg/2475px-Oregon_Ducks_logo.svg.png",
 };
 
-const teams = [
+const TEAMS = [
   "Kansas",
   "Alabama",
   "Tennessee",
@@ -222,7 +222,7 @@ const teams = [
 ];
 
 module.exports = (app) => {
-  app.get("/v1/preload", async (req, res) => {
+  app.get("/v1/logos", async (req, res) => {
     res.send(LOGOS);
   });
 
@@ -265,13 +265,12 @@ module.exports = (app) => {
  * Generate the field of teams for the bracket.
  */
 const generateField = (s2p) => {
-  return teams.map((team, index) => ({
+  return TEAMS.map((team, index) => ({
     name: team,
     seed: (index % 16) + 1,
     record: `${Math.floor(Math.random() * 35)}-${Math.floor(
       Math.random() * 35
     )}`,
     percentile: s2p[team],
-    logo: LOGOS[team] ? LOGOS[team] : null,
   }));
 };

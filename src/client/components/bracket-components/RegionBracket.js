@@ -22,6 +22,7 @@ export const winPercent = (p1, p2) => {
     : 100;
 };
 const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
+  const { logos } = useSelector((state) => state.lambda);
   const dispatch = useDispatch();
   const field = useSelector((state) => state.lambda.field);
   const { region, bracket, finalFour } = useSelector((state) => state.bracket);
@@ -31,7 +32,7 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
   );
 
   const style = (pos) => {
-    let str = "flex rounded-sm pt-1.5 pl-2";
+    let str = "flex pt-1.5 pl-2";
     if (seed[pos] !== -1) {
       str += " cursor-pointer text-black hover:bg-green-100";
 
@@ -59,7 +60,7 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
 
   return (
     <Seed mobileBreakpoint={breakpoint}>
-      <div className="relative w-full rounded border-2 border-indigo-700 bg-white p-0 text-center shadow-md shadow-gray-200">
+      <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
         <div>
           <div
             className={style(0)}
@@ -75,9 +76,9 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
               )
             }
           >
-            {field[seed[0]]?.logo && (
+            {logos[field[seed[0]]?.name] && (
               <img
-                src={field[seed[0]].logo}
+                src={logos[field[seed[0]]?.name]}
                 alt="team logo"
                 className="mr-2 mb-1 h-6 w-6"
               />
@@ -106,7 +107,7 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
             )}
           </div>
           <div
-            className={style(1)}
+            className={style(1) + " border-t-2 border-gray-200"}
             onClick={() =>
               dispatch(
                 setWinner({
@@ -119,9 +120,9 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
               )
             }
           >
-            {field[seed[1]]?.logo && (
+            {logos[field[seed[1]]?.name] && (
               <img
-                src={field[seed[1]].logo}
+                src={logos[field[seed[1]]?.name]}
                 alt="team logo"
                 className="mr-2 mb-1 h-6 w-6"
               />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearTop25 } from "../../store/lambdaSlice";
@@ -18,6 +18,9 @@ export const Finalize = () => {
   );
   const [name, setName] = useState("");
 
+  /**
+   * Handle submission of bracket.
+   */
   const onFinalize = async (ev) => {
     setLoading(true);
     ev.preventDefault();
@@ -45,9 +48,28 @@ export const Finalize = () => {
     setLoading(false);
   };
 
+  /**
+   * Handle user clicking the back button (return to picking matches).
+   */
   const handleBack = () => {
     dispatch(setCreateStage(3));
   };
+
+  /**
+   * Capture back button event.
+   */
+  const onBackButtonEvent = (e) => {
+    e.preventDefault();
+    handleBack();
+  };
+
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', onBackButtonEvent);
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent);
+    };
+  }, []);
 
   return (
     <>

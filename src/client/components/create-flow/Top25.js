@@ -5,7 +5,7 @@ import { setCreateStage } from "../../store/createStageSlice";
 
 export const Top25 = () => {
   const dispatch = useDispatch();
-  const { top25 } = useSelector((state) => state.lambda);
+  const { top25, logos } = useSelector((state) => state.lambda);
   const [loading, setLoading] = useState(false);
   const [biggestMovers, setBiggestMovers] = useState([]);
 
@@ -27,10 +27,23 @@ export const Top25 = () => {
   };
 
   /**
+   * Capture back button event.
+   */
+  const onBackButtonEvent = (e) => {
+    e.preventDefault();
+    handleBack();
+  };
+
+  /**
    * Smooth scroll to the top of the page when loaded.
    */
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', onBackButtonEvent);
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent);
+    };
   }, []);
 
   /**
@@ -90,6 +103,13 @@ export const Top25 = () => {
                       {row.rank}
                     </th>
                     <td className="flex px-6 py-4">
+                      {logos[row.team] && (
+                        <img
+                          src={logos[row.team]}
+                          alt="team logo"
+                          className="mr-2 mb-1 h-6 w-6"
+                        />
+                      )}
                       {row.team}
                       {row.diff >= 10 && <TrendingUp className="ml-2" />}
                       {row.diff <= -10 && <TrendingDown className="ml-2" />}
@@ -104,7 +124,7 @@ export const Top25 = () => {
         </div>
       </div>
 
-      <div className="mt-4 md:mt-0 lg:col-span-2">
+      <div className="mt-4 lg:mt-0 lg:col-span-2">
         <div className="text-center">
           <h2 className="mb-4 text-2xl sm:mb-5 lg:mb-8">Biggest Movers</h2>
         </div>
@@ -135,6 +155,13 @@ export const Top25 = () => {
                       scope="row"
                       className="flex whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                     >
+                      {logos[row.team] && (
+                        <img
+                          src={logos[row.team]}
+                          alt="team logo"
+                          className="mr-2 mb-1 h-6 w-6"
+                        />
+                      )}
                       {row.team}
                       {row.diff > 0 && <TrendingUp className="ml-2" />}
                       {row.diff < 0 && <TrendingDown className="ml-2" />}

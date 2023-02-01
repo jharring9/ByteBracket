@@ -55,6 +55,14 @@ export const MakePicks = () => {
   };
 
   /**
+   * Capture back button event.
+   */
+  const onBackButtonEvent = (e) => {
+    e.preventDefault();
+    handleBack();
+  };
+
+  /**
    * Select all favorites in current region.
    */
   const autoComplete = () => {
@@ -86,7 +94,8 @@ export const MakePicks = () => {
           winPercent(
             field[finalTeam1].percentile,
             field[finalTeam2].percentile
-          ) > 50
+          ) >
+          Math.random() * 100
             ? finalTeam1
             : finalTeam2,
       })
@@ -98,6 +107,11 @@ export const MakePicks = () => {
    */
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', onBackButtonEvent);
+    return () => {
+      window.removeEventListener('popstate', onBackButtonEvent);
+    };
   }, [region]);
 
   return (

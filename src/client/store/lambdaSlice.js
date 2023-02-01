@@ -5,23 +5,23 @@ export const lambdaSlice = createSlice({
   initialState: {
     field: [],
     top25: [],
+    logos: {},
   },
   reducers: {
-    clearField: (state) => {
-      state.field = [];
+    clearTop25: (state) => {
+      state.top25 = [];
     },
     setField: (state, action) => {
       state.field = action.payload;
     },
-    clearTop25: (state) => {
-      state.top25 = [];
-    },
     setTop25: (state, action) => {
       state.top25 = action.payload;
+    },
+    setLogos: (state, action) => {
+      state.logos = action.payload;
     },
   },
 });
 
-export const { clearField, setField, clearTop25, setTop25 } =
-  lambdaSlice.actions;
+export const { clearTop25, setField, setTop25, setLogos } = lambdaSlice.actions;
 export default lambdaSlice.reducer;
