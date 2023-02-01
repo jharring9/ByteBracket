@@ -18,7 +18,7 @@ export const RegionBracket = ({ rounds }) => {
 
 export const winPercent = (p1, p2) => {
   return p1 && p2
-    ? (100 * (1 / (10 ** -(p1 - p2) + 1)).toFixed(2)).toFixed(0)
+    ? (100 * (1 / (50 ** -(p1 - p2) + 1)).toFixed(2)).toFixed(0)
     : 100;
 };
 const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {

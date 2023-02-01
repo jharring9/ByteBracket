@@ -67,7 +67,7 @@ export const MakePicks = () => {
         const p2 = field[matchup[1]].percentile;
         const teamOneOdds = winPercent(p1, p2);
         copy[region].rounds[i + 1].seeds[Math.floor(j / 2)][j % 2] =
-          teamOneOdds > 50 ? matchup[0] : matchup[1];
+          teamOneOdds > Math.random() * 100 ? matchup[0] : matchup[1];
       }
     }
     dispatch(setBracket(copy));

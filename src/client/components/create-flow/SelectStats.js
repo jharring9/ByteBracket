@@ -144,7 +144,9 @@ export const SelectStats = () => {
           <PieChart
             style={{ height: "380px" }}
             data={chartData}
-            label={({ dataEntry }) => dataEntry.title}
+            label={({ dataEntry }) =>
+              dataEntry.value === 0 ? "" : dataEntry.title
+            }
             labelStyle={{
               fill: "white",
               fontSize: "3px",
