@@ -12,7 +12,7 @@ export const Finalize = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
-  const { field } = useSelector((state) => state.lambda);
+  const { field, logos } = useSelector((state) => state.lambda);
   const { values: stats } = useSelector((state) => state.stats);
   const { bracket, champion } = useSelector((state) => state.bracket);
   const [name, setName] = useState("");
@@ -75,16 +75,16 @@ export const Finalize = () => {
     <>
       {user.username ? (
         <div className="relative mx-auto mt-8 lg:mt-14">
-          <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:px-8">
+          <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:w-1/2 lg:px-8">
             <div className="shadow sm:overflow-hidden sm:rounded-md">
               <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                <div className="grid grid-cols-3 gap-6">
-                  <div className="col-span-3 sm:col-span-2">
+                <div className="flex gap-6">
+                  <div className="flex-auto">
                     <label
                       htmlFor="company-website"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Bracket Name
+                      Create a bracket name
                     </label>
                     <input
                       type="text"
@@ -93,8 +93,17 @@ export const Finalize = () => {
                       value={name}
                       onChange={(ev) => setName(ev.target.value)}
                       className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder="Create a bracket nickname"
+                      placeholder="Bracket name"
                     />
+                  </div>
+                  <div className="flex-initial">
+                    {logos[field[champion]?.name] && (
+                      <img
+                        src={logos[field[champion]?.name]}
+                        alt="team logo"
+                        className="mr-2 mb-1 h-20"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
