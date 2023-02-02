@@ -23,7 +23,7 @@ export const SeedsList = styled.div`
 
 export const Seed = styled.div`
   padding: 1em 1.5em;
-  min-width: 300px;
+  min-width: ${(props) => (props.isMobile ? 250 : 300)}px;
   width: 100%;
   position: relative;
   display: flex;
@@ -32,7 +32,7 @@ export const Seed = styled.div`
   flex-direction: column;
   justify-content: center;
   font-size: 13px;
-  @media (max-width: 992px) {
+  @media (max-width: 1300px) {
     width: 100%;
   }
   @media (min-width: 200px) {

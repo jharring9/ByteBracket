@@ -8,7 +8,7 @@ import "swiper/css";
 import { useWindowSize } from "./useWindowSize";
 
 export const SingleSided = ({ rounds }) => {
-  const isResponsive = useWindowSize(992);
+  const isResponsive = useWindowSize(1300);
   const [swiperRef, setSwiperRef] = useState(null);
   const { region } = useSelector((state) => state.bracket);
 
@@ -21,7 +21,35 @@ export const SingleSided = ({ rounds }) => {
   if (isResponsive) {
     return (
       <div className="flex justify-center">
-        <Swiper onSwiper={setSwiperRef}>
+        <Swiper
+          onSwiper={setSwiperRef}
+          breakpoints={{
+            375: {
+              width: 250,
+              slidesPerView: 1,
+            },
+            390: {
+              width: 265,
+              slidesPerView: 1,
+            },
+            410: {
+              width: 290,
+              slidesPerView: 1,
+            },
+            750: {
+              width: 612,
+              slidesPerView: 2,
+            },
+            810: {
+              width: 660,
+              slidesPerView: 2,
+            },
+            992: {
+              width: 940,
+              slidesPerView: 3,
+            },
+          }}
+        >
           {rounds.map((round, roundIdx) => (
             <Round key={roundIdx}>
               <SwiperSlide>
@@ -33,6 +61,7 @@ export const SingleSided = ({ rounds }) => {
                       roundIndex={roundIdx}
                       seedIndex={idx}
                       rounds={rounds}
+                      isResponsive={isResponsive}
                     />
                   ))}
                 </SeedsList>
@@ -54,7 +83,7 @@ export const SingleSided = ({ rounds }) => {
                   seed={seed}
                   roundIndex={roundIdx}
                   seedIndex={idx}
-                  rounds={rounds}
+                  isResponsive={isResponsive}
                 />
               ))}
             </SeedsList>
@@ -65,7 +94,12 @@ export const SingleSided = ({ rounds }) => {
   }
 };
 
-export const RenderSeedComponent = ({ seed, roundIndex, seedIndex }) => {
+export const RenderSeedComponent = ({
+  seed,
+  roundIndex,
+  seedIndex,
+  isResponsive,
+}) => {
   const { logos } = useSelector((state) => state.lambda);
   const dispatch = useDispatch();
   const field = useSelector((state) => state.lambda.field);
@@ -96,7 +130,7 @@ export const RenderSeedComponent = ({ seed, roundIndex, seedIndex }) => {
   };
 
   return (
-    <Seed>
+    <Seed isMobile={isResponsive}>
       <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
         <div>
           <div
