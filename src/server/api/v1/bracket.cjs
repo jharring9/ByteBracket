@@ -15,22 +15,23 @@ module.exports = (app) => {
     }
 
     const id = uuidv4();
-    const { bracket, finalFour, champion, complete, name, winner } = req.body;
+    const { bracket, champion, complete, name, winner, stats } = req.body;
 
-    if (!bracket || !finalFour || !champion || !complete || !name || !winner) {
+    if (!bracket || !champion || !complete || !name || !winner || !stats) {
       return res.status(400).send({ error: "Missing required fields" });
     }
+
 
     if (
       !(await bracketDB.saveBracket(
         sessionUser,
         id,
         bracket,
-        finalFour,
         champion,
         complete,
         name,
-        winner
+        winner,
+        stats
       ))
     ) {
       return res.status(503).send({ error: "Server error. Please try again." });

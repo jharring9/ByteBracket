@@ -4,9 +4,11 @@ import { Top25 } from "./create-flow/Top25";
 import { MakePicks } from "./create-flow/MakePicks";
 import { Finalize } from "./create-flow/Finalize";
 import { ProgressBar } from "./icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogos } from "../store/lambdaSlice";
 
 export const Create = () => {
+  const dispatch = useDispatch();
   const { value: stage } = useSelector((state) => state.createStage);
 
   /**
@@ -14,7 +16,7 @@ export const Create = () => {
    */
   useEffect(() => {
     const fetchImages = async () => {
-      const res = await fetch("/v1/preload", {
+      const res = await fetch("/v1/logos", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -23,6 +25,7 @@ export const Create = () => {
       });
       const data = await res.json();
       if (res.ok) {
+        dispatch(setLogos(data));
         for (const url in data) {
           new Image().src = data[url];
         }

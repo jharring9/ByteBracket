@@ -44,28 +44,29 @@ exports.saveBracket = async (
   username,
   id,
   bracket,
-  finalFour,
   champion,
   complete,
   name,
-  winnerName
+  winnerName,
+  stats
 ) => {
   const params = {
     TableName: bracketTable,
     Item: {
       bracket: bracket,
-      finalFour: finalFour,
       champion: champion,
       username: username,
       id: id,
       complete: complete,
       name: name,
       winnerName: winnerName,
+      stats: stats,
     },
   };
   try {
     return await ddbDocClient.send(new PutCommand(params));
   } catch (err) {
+    console.log(err);
     return null;
   }
 };

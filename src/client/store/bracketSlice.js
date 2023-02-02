@@ -4,20 +4,12 @@ export const lambdaSlice = createSlice({
   name: "bracket",
   initialState: {
     bracket: [],
-    finalFour: [],
     champion: -1,
     region: 0,
   },
   reducers: {
     resetBracket: (state) => {
       state.bracket = generateBracket();
-      state.finalFour = [
-        [
-          [-1, -1],
-          [-1, -1],
-        ],
-        [[-1, -1]],
-      ];
       state.region = 0;
       state.champion = -1;
     },
@@ -26,23 +18,30 @@ export const lambdaSlice = createSlice({
     },
     setWinner: (state, action) => {
       const { round, matchup, position, seed } = action.payload;
-      const finalFourCopy = JSON.parse(JSON.stringify(state.finalFour));
 
-      // Team is advancing to final four
-      if (action.payload.round === 3) {
-        finalFourCopy[0][Math.floor(state.region / 2)][state.region % 2] = seed;
-        finalFourCopy[1][0][Math.floor(state.region / 2)] = -1;
-        state.finalFour = finalFourCopy;
+      /* Team is bracket champion */
+      if (state.region === 4 && action.payload.round === 1) {
+        state.champion = seed;
         return;
       }
 
-      // Team is advancing within region
+      /* Team is advancing to final four */
       const bracketCopy = JSON.parse(JSON.stringify(state.bracket));
+      if (action.payload.round === 3) {
+        bracketCopy[4].rounds[0].seeds[Math.floor(state.region / 2)][
+          state.region % 2
+        ] = seed;
+        bracketCopy[4].rounds[1].seeds[0][Math.floor(state.region / 2)] = -1;
+        state.bracket = bracketCopy;
+        return;
+      }
+
+      /* Team is advancing within region */
       bracketCopy[state.region].rounds[round + 1].seeds[
         Math.floor(matchup / 2)
       ][position % 2] = seed;
 
-      // If we are changing winner, set all future seeds on path to -1
+      /* If previous winner affects future matchups, reset the path */
       const prevSeed =
         state.bracket[state.region].rounds[round + 1]?.seeds[
           Math.floor(matchup / 2)
@@ -60,21 +59,15 @@ export const lambdaSlice = createSlice({
             Math.floor(matchup / 2 ** (i - 1)) % 2
           ] = -1;
         }
-        finalFourCopy[0][Math.floor(state.region / 2)][state.region % 2] = -1;
-        finalFourCopy[1][0][Math.floor(state.region / 2)] = -1;
+        bracketCopy[4].rounds[0].seeds[Math.floor(state.region / 2)][
+          state.region % 2
+        ] = -1;
+        bracketCopy[4].rounds[1].seeds[0][Math.floor(state.region / 2)] = -1;
       }
-
       state.bracket = bracketCopy;
-      state.finalFour = finalFourCopy;
     },
     setRegion: (state, action) => {
       state.region = action.payload;
-    },
-    setFinalFour: (state, action) => {
-      const finalFourCopy = JSON.parse(JSON.stringify(state.finalFour));
-      const { round, matchup, position, seed } = action.payload;
-      finalFourCopy[round][matchup][position] = seed;
-      state.finalFour = action.payload;
     },
     setChampion: (state, action) => {
       state.champion = action.payload;
@@ -84,14 +77,31 @@ export const lambdaSlice = createSlice({
 
 const generateBracket = () => {
   const regions = [
-    { name: "East", rounds: [] },
-    { name: "West", rounds: [] },
-    { name: "South", rounds: [] },
-    { name: "Midwest", rounds: [] },
+    { name: "East Region", rounds: [] },
+    { name: "West Region", rounds: [] },
+    { name: "South Region", rounds: [] },
+    { name: "Midwest Region", rounds: [] },
+    {
+      name: "Final Four & Championship",
+      rounds: [
+        {
+          title: "finalfour",
+          seeds: [
+            [-1, -1],
+            [-1, -1],
+          ],
+        },
+        {
+          title: "championship",
+          seeds: [[-1, -1]],
+        },
+      ],
+    },
   ];
 
   regions.forEach((region, i) => {
-    const roundOf64 = { id: 64, seeds: [] };
+    if (i === 4) return;
+    const roundOf64 = { title: 64, seeds: [] };
     const m = 16 * i;
     roundOf64.seeds.push(
       [m, 15 + m],
@@ -106,7 +116,7 @@ const generateBracket = () => {
     region.rounds.push(roundOf64);
 
     for (let i = 1; i < 4; i++) {
-      const round = { id: 64 / Math.pow(2, i) };
+      const round = { title: 64 / Math.pow(2, i) };
       round.seeds = [...new Array(8 / Math.pow(2, i))].map(() => [-1, -1]);
       region.rounds.push(round);
     }
@@ -114,12 +124,6 @@ const generateBracket = () => {
   return regions;
 };
 
-export const {
-  resetBracket,
-  setBracket,
-  setWinner,
-  setRegion,
-  setFinalFour,
-  setChampion,
-} = lambdaSlice.actions;
+export const { resetBracket, setBracket, setWinner, setRegion, setChampion } =
+  lambdaSlice.actions;
 export default lambdaSlice.reducer;
