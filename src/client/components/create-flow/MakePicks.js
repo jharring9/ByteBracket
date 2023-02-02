@@ -2,14 +2,29 @@ import React, { useEffect, useState } from "react";
 import { BackButton, ContinueButton, ErrorAlert, SpeedDial } from "../icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
-import { RegionBracket, winPercent } from "../bracket-components/RegionBracket";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
+import {
+  SingleSided,
+  winPercent,
+} from "../bracket-components/SingleSidedBracket";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
   const field = useSelector((state) => state.lambda.field);
-  const { bracket, region, finalFour } = useSelector((state) => state.bracket);
+  const { bracket, region, champion } = useSelector((state) => state.bracket);
   const [error, setError] = useState(null);
+
+  /**
+   * Smooth scroll to top of page when user advances to next region.
+   */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+    };
+  }, [region]);
 
   /**
    * Handle user clicking back button.
@@ -24,7 +39,7 @@ export const MakePicks = () => {
    * Handle user clicking continue button.
    */
   const handleNext = () => {
-    // Validate that all matchups have been selected.
+    /* Validate that all matchups have been selected. */
     for (let i = 0; i < bracket[region].rounds.length; i++) {
       for (let j = 0; j < bracket[region].rounds[i].seeds.length; j++) {
         if (
@@ -38,15 +53,25 @@ export const MakePicks = () => {
       }
     }
 
-    // Validate that a team has been selected to the final four.
-    if (finalFour[0][Math.floor(region / 2)][region % 2] === -1) {
+    /* Validate that a team has been selected to the final four */
+    if (
+      region !== 4 &&
+      bracket[4].rounds[0].seeds[Math.floor(region / 2)][region % 2] === -1
+    ) {
       setError("You must select a team to advance to the final four.");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    // If we're on the last region, advance to the next stage.
-    if (region === 3) {
+    /* Validate that a champion has been selected */
+    if (region === 4 && champion === -1) {
+      setError("You must select a champion.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    /* If we're on the last region, advance to the next stage */
+    if (region === 4) {
       dispatch(setCreateStage(4));
       return;
     }
@@ -66,7 +91,7 @@ export const MakePicks = () => {
    * Select all favorites in current region.
    */
   const autoComplete = () => {
-    // Autopick all favorites in the current region.
+    /* Autopick all favorites in the current region */
     const copy = JSON.parse(JSON.stringify(bracket));
     for (let i = 0; i < copy[region].rounds.length - 1; i++) {
       for (let j = 0; j < copy[region].rounds[i].seeds.length; j++) {
@@ -80,7 +105,7 @@ export const MakePicks = () => {
     }
     dispatch(setBracket(copy));
 
-    // Autopick the regional champion.
+    /* Autopick the regional champion */
     const finalTeam1 =
       copy[region].rounds[copy[region].rounds.length - 1].seeds[0][0];
     const finalTeam2 =
@@ -102,23 +127,11 @@ export const MakePicks = () => {
     );
   };
 
-  /**
-   * Smooth scroll to top of page when user advances to next region.
-   */
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener('popstate', onBackButtonEvent);
-    return () => {
-      window.removeEventListener('popstate', onBackButtonEvent);
-    };
-  }, [region]);
-
   return (
     <>
       <div className="mx-auto mt-4 max-w-7xl px-4 px-6 sm:mt-6 lg:mt-8">
         <h1 className="text-center text-3xl text-gray-900">
-          Make Your Picks: {bracket[region].name} Region
+          Make Your Picks: {bracket[region].name}
         </h1>
         {error && (
           <div className="flex flex-col items-center justify-center">
@@ -130,7 +143,7 @@ export const MakePicks = () => {
             </div>
           </div>
         )}
-        <RegionBracket rounds={bracket[region].rounds} />
+        <SingleSided rounds={bracket[region].rounds} />
         <div className="justify-center lg:col-span-4 lg:flex ">
           <div className="mt-4 flex justify-center lg:mt-2">
             <BackButton onClick={handleBack} />

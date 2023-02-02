@@ -1,31 +1,45 @@
 import React from "react";
-import { Bracket } from "react-brackets";
-import styled from "styled-components";
+import { Bracket, Round, Seed, SeedsList } from "./Styles";
 import { useDispatch, useSelector } from "react-redux";
-import { classNames } from "../icons";
 import { setWinner } from "../../store/bracketSlice";
+import { classNames } from "../icons";
 
-export const RegionBracket = ({ rounds }) => {
+export const SingleSided = ({ rounds, mobileBreakpoint = 992 }) => {
   return (
     <Bracket
-      rounds={rounds}
-      renderSeedComponent={renderSeed}
-      bracketClassName="flex justify-center"
-      mobileBreakpoint={500}
-    />
+      className="flex justify-center"
+      mobileBreakpoint={mobileBreakpoint}
+    >
+      {rounds.map((round, roundIdx) => (
+        <Round key={roundIdx} mobileBreakpoint={mobileBreakpoint}>
+          <SeedsList>
+            {round.seeds.map((seed, idx) => (
+              <RenderSeedComponent
+                key={roundIdx + "" + idx}
+                seed={seed}
+                breakpoint={mobileBreakpoint}
+                roundIndex={roundIdx}
+                seedIndex={idx}
+                rounds={rounds}
+              />
+            ))}
+          </SeedsList>
+        </Round>
+      ))}
+    </Bracket>
   );
 };
 
-export const winPercent = (p1, p2) => {
-  return p1 && p2
-    ? (100 * (1 / (50 ** -(p1 - p2) + 1)).toFixed(2)).toFixed(0)
-    : 100;
-};
-const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
+export const RenderSeedComponent = ({
+  seed,
+  breakpoint,
+  roundIndex,
+  seedIndex,
+}) => {
   const { logos } = useSelector((state) => state.lambda);
   const dispatch = useDispatch();
   const field = useSelector((state) => state.lambda.field);
-  const { region, bracket, finalFour } = useSelector((state) => state.bracket);
+  const { region, bracket, champion } = useSelector((state) => state.bracket);
   const chance = winPercent(
     field[seed[0]]?.percentile,
     field[seed[1]]?.percentile
@@ -35,26 +49,19 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
     let str = "flex pt-1.5 pl-2";
     if (seed[pos] !== -1) {
       str += " cursor-pointer text-black hover:bg-green-100";
-
       let nextPos;
-      if (roundIndex < 3) {
+      if (roundIndex === 3)
+        nextPos =
+          bracket[4]?.rounds[0]?.seeds[Math.floor(region / 2)][region % 2];
+      else if (region === 4 && roundIndex === 1) nextPos = champion;
+      else
         nextPos =
           bracket[region]?.rounds[roundIndex + 1]?.seeds[
             Math.floor(seedIndex / 2)
           ][seedIndex % 2];
-      } else {
-        nextPos = finalFour[0][Math.floor(region / 2)][region % 2];
-      }
-
-      // Check if it's a winner
-      if (seed[pos] === nextPos) {
-        str += " bg-green-200 font-bold";
-      } else if (nextPos !== -1) {
-        str += " font-normal text-gray-400";
-      }
-    } else {
-      str += " text-gray-500";
-    }
+      if (seed[pos] === nextPos) str += " bg-green-200 font-bold";
+      else if (nextPos !== -1) str += " font-normal text-gray-400";
+    } else str += " text-gray-500";
     return str;
   };
 
@@ -156,45 +163,8 @@ const renderSeed = ({ seed, breakpoint, roundIndex, seedIndex }) => {
   );
 };
 
-export const Seed = styled.div`
-  padding: 1em 1.5em;
-  min-width: 300px;
-  width: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 0 1 auto;
-  flex-direction: column;
-  justify-content: center;
-  font-size: 13px;
-  @media (max-width: 500px) {
-    width: 100%;
-  }
-  @media (min-width: 500px) {
-    &::after {
-      content: "";
-      position: absolute;
-      height: 50%;
-      width: 1.5em;
-      right: 0;
-    }
-    &:nth-child(even)::before {
-      content: "";
-      border-top: 2px solid #707070;
-      position: absolute;
-      top: -0.5px;
-      width: 1.5em;
-      right: -1.5em;
-    }
-    &:nth-child(even)::after {
-      border-bottom: 2px solid #707070;
-      top: -0.5px;
-      border-right: 2px solid #707070;
-    }
-    &:nth-child(odd):not(:last-child)::after {
-      border-top: 2px solid #707070;
-      top: calc(50% - 0.5px);
-      border-right: 2px solid #707070;
-    }
-  }
-`;
+export const winPercent = (p1, p2) => {
+  return p1 && p2
+    ? (100 * (1 / (50 ** -(p1 - p2) + 1)).toFixed(2)).toFixed(0)
+    : 100;
+};

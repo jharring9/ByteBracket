@@ -13,10 +13,17 @@ export const Finalize = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
   const { field } = useSelector((state) => state.lambda);
-  const { bracket, finalFour, champion } = useSelector(
-    (state) => state.bracket
-  );
+  const { values: stats } = useSelector((state) => state.stats);
+  const { bracket, champion } = useSelector((state) => state.bracket);
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+    return () => {
+      window.removeEventListener("popstate", onBackButtonEvent);
+    };
+  }, []);
 
   /**
    * Handle submission of bracket.
@@ -32,11 +39,11 @@ export const Finalize = () => {
       },
       body: JSON.stringify({
         bracket: bracket,
-        finalFour: finalFour,
         champion: champion,
         complete: true,
         name: name,
         winner: field[champion]?.name,
+        stats: stats,
       }),
     });
     if (res.ok) {
@@ -62,14 +69,6 @@ export const Finalize = () => {
     e.preventDefault();
     handleBack();
   };
-
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener('popstate', onBackButtonEvent);
-    return () => {
-      window.removeEventListener('popstate', onBackButtonEvent);
-    };
-  }, []);
 
   return (
     <>
