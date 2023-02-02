@@ -1,41 +1,71 @@
-import React from "react";
-import { Bracket, Round, Seed, SeedsList } from "./Styles";
+import React, { useEffect, useState } from "react";
+import { Round, Seed, SeedsList } from "./Styles";
 import { useDispatch, useSelector } from "react-redux";
 import { setWinner } from "../../store/bracketSlice";
 import { classNames } from "../icons";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { useWindowSize } from "./useWindowSize";
 
-export const SingleSided = ({ rounds, mobileBreakpoint = 992 }) => {
-  return (
-    <Bracket
-      className="flex justify-center"
-      mobileBreakpoint={mobileBreakpoint}
-    >
-      {rounds.map((round, roundIdx) => (
-        <Round key={roundIdx} mobileBreakpoint={mobileBreakpoint}>
-          <SeedsList>
-            {round.seeds.map((seed, idx) => (
-              <RenderSeedComponent
-                key={roundIdx + "" + idx}
-                seed={seed}
-                breakpoint={mobileBreakpoint}
-                roundIndex={roundIdx}
-                seedIndex={idx}
-                rounds={rounds}
-              />
-            ))}
-          </SeedsList>
-        </Round>
-      ))}
-    </Bracket>
-  );
+export const SingleSided = ({ rounds }) => {
+  const isResponsive = useWindowSize(992);
+  const [swiperRef, setSwiperRef] = useState(null);
+  const { region } = useSelector((state) => state.bracket);
+
+  useEffect(() => {
+    if (isResponsive) {
+      swiperRef?.slideTo(0);
+    }
+  }, [region, swiperRef]);
+
+  if (isResponsive) {
+    return (
+      <div className="flex justify-center">
+        <Swiper onSwiper={setSwiperRef}>
+          {rounds.map((round, roundIdx) => (
+            <Round key={roundIdx}>
+              <SwiperSlide>
+                <SeedsList>
+                  {round.seeds.map((seed, idx) => (
+                    <RenderSeedComponent
+                      key={roundIdx + "" + idx}
+                      seed={seed}
+                      roundIndex={roundIdx}
+                      seedIndex={idx}
+                      rounds={rounds}
+                    />
+                  ))}
+                </SeedsList>
+              </SwiperSlide>
+            </Round>
+          ))}
+        </Swiper>
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex justify-center">
+        {rounds.map((round, roundIdx) => (
+          <Round key={roundIdx}>
+            <SeedsList>
+              {round.seeds.map((seed, idx) => (
+                <RenderSeedComponent
+                  key={roundIdx + "" + idx}
+                  seed={seed}
+                  roundIndex={roundIdx}
+                  seedIndex={idx}
+                  rounds={rounds}
+                />
+              ))}
+            </SeedsList>
+          </Round>
+        ))}
+      </div>
+    );
+  }
 };
 
-export const RenderSeedComponent = ({
-  seed,
-  breakpoint,
-  roundIndex,
-  seedIndex,
-}) => {
+export const RenderSeedComponent = ({ seed, roundIndex, seedIndex }) => {
   const { logos } = useSelector((state) => state.lambda);
   const dispatch = useDispatch();
   const field = useSelector((state) => state.lambda.field);
@@ -66,7 +96,7 @@ export const RenderSeedComponent = ({
   };
 
   return (
-    <Seed mobileBreakpoint={breakpoint}>
+    <Seed>
       <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
         <div>
           <div

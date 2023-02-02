@@ -1,19 +1,11 @@
 import styled from "styled-components";
 
-export const Bracket = styled.div`
-  display: flex;
-  flex-direction: row;
-  @media (max-width: ${(props) => props.mobileBreakpoint}px) {
-    flex-direction: column;
-  }
-`;
-
 export const Round = styled.div`
   flex: 0;
   // min-width:300px;
   display: flex;
   flex-direction: column;
-  @media (max-width: ${(props) => props.mobileBreakpoint}px) {
+  @media (max-width: 992px) {
     min-width: 0;
   }
 `;
@@ -40,7 +32,7 @@ export const Seed = styled.div`
   flex-direction: column;
   justify-content: center;
   font-size: 13px;
-  @media (max-width: 199px) {
+  @media (max-width: 992px) {
     width: 100%;
   }
   @media (min-width: 200px) {
@@ -63,11 +55,13 @@ export const Seed = styled.div`
       border-bottom: 2px solid #707070;
       top: -0.5px;
       border-right: 2px solid #707070;
+      border-bottom-right-radius: 5px;
     }
     &:nth-child(odd):not(:last-child)::after {
       border-top: 2px solid #707070;
       top: calc(50% - 0.5px);
       border-right: 2px solid #707070;
+      border-top-right-radius: 5px;
     }
   }
 `;

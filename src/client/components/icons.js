@@ -395,3 +395,23 @@ export const DisableStat = ({
     </svg>
   </button>
 );
+
+export const CreateCard = ({ children, onBack, onNext, loading }) => (
+  <div className="relative mx-auto">
+    <div className="mx-auto mt-2 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-4 lg:px-8">
+      <div className="rounded-md shadow sm:overflow-hidden md:rounded-lg">
+        <div className="space-y-6 bg-gray-200 px-4 py-5 sm:p-6">{children}</div>
+        <div className="bg-gray-50 py-3 text-right sm:px-8">
+          <div className="justify-center lg:col-span-4 lg:flex ">
+            <div className="mt-4 flex justify-center lg:mt-2">
+              <BackButton onClick={onBack} />
+            </div>
+            <div className="flex justify-center lg:mt-2">
+              <ContinueButton onClick={onNext} loading={loading} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);

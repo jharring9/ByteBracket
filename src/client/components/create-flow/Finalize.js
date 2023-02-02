@@ -50,6 +50,7 @@ export const Finalize = () => {
       dispatch(resetStats);
       dispatch(clearTop25);
       dispatch(resetBracket);
+      dispatch(setCreateStage(1));
       navigate("/account");
     }
     setLoading(false);
@@ -75,41 +76,39 @@ export const Finalize = () => {
       {user.username ? (
         <div className="relative mx-auto mt-8 lg:mt-14">
           <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:px-8">
-            <form>
-              <div className="shadow sm:overflow-hidden sm:rounded-md">
-                <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="col-span-3 sm:col-span-2">
-                      <label
-                        htmlFor="company-website"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Bracket Name
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        value={name}
-                        onChange={(ev) => setName(ev.target.value)}
-                        className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        placeholder="Create a bracket nickname"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                  <div className="justify-center lg:col-span-4 lg:flex ">
-                    <div className="mt-4 flex justify-center lg:mt-2">
-                      <BackButton onClick={handleBack} />
-                    </div>
-                    <div className="flex justify-center lg:mt-2">
-                      <SaveButton onClick={onFinalize} loading={loading} />
-                    </div>
+            <div className="shadow sm:overflow-hidden sm:rounded-md">
+              <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="col-span-3 sm:col-span-2">
+                    <label
+                      htmlFor="company-website"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Bracket Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={name}
+                      onChange={(ev) => setName(ev.target.value)}
+                      className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      placeholder="Create a bracket nickname"
+                    />
                   </div>
                 </div>
               </div>
-            </form>
+              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="justify-center lg:col-span-4 lg:flex ">
+                  <div className="mt-4 flex justify-center lg:mt-2">
+                    <BackButton onClick={handleBack} />
+                  </div>
+                  <div className="flex justify-center lg:mt-2">
+                    <SaveButton onClick={onFinalize} loading={loading} />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ) : (

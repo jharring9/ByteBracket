@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BackButton, ContinueButton, ErrorAlert, SpeedDial } from "../icons";
+import { CreateCard, ErrorAlert, SpeedDial } from "../icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
@@ -88,7 +88,8 @@ export const MakePicks = () => {
   };
 
   /**
-   * Select all favorites in current region.
+   * Randomly pick winners for all matchups in the current region,
+   * weighted by team's percentile.
    */
   const autoComplete = () => {
     /* Autopick all favorites in the current region */
@@ -129,30 +130,22 @@ export const MakePicks = () => {
 
   return (
     <>
-      <div className="mx-auto mt-4 max-w-7xl px-4 px-6 sm:mt-6 lg:mt-8">
-        <h1 className="text-center text-3xl text-gray-900">
-          Make Your Picks: {bracket[region].name}
-        </h1>
-        {error && (
-          <div className="flex flex-col items-center justify-center">
-            <div className=" mt-3 w-full md:w-2/3 lg:m-4">
-              <ErrorAlert
-                header="There was a problem with your picks"
-                message={error}
-              />
-            </div>
-          </div>
-        )}
-        <SingleSided rounds={bracket[region].rounds} />
-        <div className="justify-center lg:col-span-4 lg:flex ">
-          <div className="mt-4 flex justify-center lg:mt-2">
-            <BackButton onClick={handleBack} />
-          </div>
-          <div className="flex justify-center lg:mt-2">
-            <ContinueButton onClick={handleNext} />
+      <h1 className="mt-4 text-center text-3xl text-gray-900 lg:mt-6">
+        Make Your Picks: {bracket[region].name}
+      </h1>
+      {error && (
+        <div className="flex flex-col items-center justify-center">
+          <div className=" mt-3 w-full md:w-2/3 lg:m-4">
+            <ErrorAlert
+              header="There was a problem with your picks"
+              message={error}
+            />
           </div>
         </div>
-      </div>
+      )}
+      <CreateCard onBack={handleBack} onNext={handleNext}>
+        <SingleSided rounds={bracket[region].rounds} />
+      </CreateCard>
       <SpeedDial action={autoComplete} />
     </>
   );
