@@ -21,7 +21,6 @@ module.exports = (app) => {
       return res.status(400).send({ error: "Missing required fields" });
     }
 
-
     if (
       !(await bracketDB.saveBracket(
         sessionUser,
@@ -52,7 +51,7 @@ module.exports = (app) => {
 
     const result = await bracketDB.getBracket(user, id);
     if (result) {
-      return res.status(200).send(result.bracket);
+      return res.status(200).send(result);
     }
     return res.status(404).send({ error: "Bracket not found" });
   });
