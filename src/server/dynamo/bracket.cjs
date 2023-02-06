@@ -45,7 +45,6 @@ exports.saveBracket = async (
   id,
   bracket,
   champion,
-  complete,
   name,
   winnerName,
   stats
@@ -57,7 +56,6 @@ exports.saveBracket = async (
       champion: champion,
       username: username,
       id: id,
-      complete: complete,
       name: name,
       winnerName: winnerName,
       stats: stats,
@@ -66,7 +64,6 @@ exports.saveBracket = async (
   try {
     return await ddbDocClient.send(new PutCommand(params));
   } catch (err) {
-    console.log(err);
     return null;
   }
 };

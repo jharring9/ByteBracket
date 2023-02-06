@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CreateCard, ErrorAlert, SpeedDial } from "../icons";
+import { CreateCard, ErrorAlert, SpeedDial } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
 import {
   SingleSided,
   winPercent,
-} from "../bracket-components/SingleSidedBracket";
+} from "../bracket-components/DynamicBracket";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();

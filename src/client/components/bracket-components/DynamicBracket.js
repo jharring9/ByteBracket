@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Round, Seed, SeedsList } from "./Styles";
 import { useDispatch, useSelector } from "react-redux";
 import { setWinner } from "../../store/bracketSlice";
-import { classNames } from "../icons";
+import { classNames } from "../shared";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useWindowSize } from "./useWindowSize";

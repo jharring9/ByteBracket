@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Logo } from "./icons";
+import { Logo } from "./shared";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 

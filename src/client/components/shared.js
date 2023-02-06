@@ -2,6 +2,7 @@ import React from "react";
 import { XCircleIcon } from "@heroicons/react/20/solid";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
+import { setLogos } from "../store/lambdaSlice";
 
 export const TrendingUp = () => (
   <svg
@@ -415,3 +416,20 @@ export const CreateCard = ({ children, onBack, onNext, loading }) => (
     </div>
   </div>
 );
+
+export const fetchImages = async (dispatch) => {
+  const res = await fetch("/v1/logos", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+  const data = await res.json();
+  if (res.ok) {
+    dispatch(setLogos(data));
+    for (const url in data) {
+      new Image().src = data[url];
+    }
+  }
+};

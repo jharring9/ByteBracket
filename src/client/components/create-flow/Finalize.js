@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
-import { BackButton, SaveButton } from "../icons";
+import { BackButton, SaveButton } from "../shared";
 import { setCreateStage } from "../../store/createStageSlice";
 
 export const Finalize = () => {
@@ -40,7 +40,6 @@ export const Finalize = () => {
       body: JSON.stringify({
         bracket: bracket,
         champion: champion,
-        complete: true,
         name: name,
         winner: field[champion]?.name,
         stats: stats,

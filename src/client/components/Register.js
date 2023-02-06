@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorAlert, Facebook, Github, Google } from "./icons";
+import { ErrorAlert, Facebook, Github, Google } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
 

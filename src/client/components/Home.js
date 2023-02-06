@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BracketArt } from "./icons";
+import { BracketArt } from "./shared";
 
 export const Home = () => {
   const navigate = useNavigate();

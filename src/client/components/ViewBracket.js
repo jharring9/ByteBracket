@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { ReadOnlyBracket } from "./bracket-components/ReadOnlyBracket";
 import { useDispatch } from "react-redux";
 import { setField } from "../store/lambdaSlice";
+import { fetchImages } from "./shared";
 
 export const ViewBracket = () => {
   const dispatch = useDispatch();
   const [bracket, setBracket] = useState([]);
-  const [title, setTitle] = useState("");
+  const [champion, setChampion] = useState(-1);
   const { user, id } = useParams();
 
   useEffect(() => {
@@ -31,18 +32,12 @@ export const ViewBracket = () => {
       if (res.ok) {
         const data = await res.json();
         setBracket(data.bracket);
-        setTitle(data.name);
+        setChampion(data.champion);
       }
     };
     fetchBracket();
+    fetchImages(dispatch);
   }, [user, id]);
 
-  return (
-    <>
-      <h1 className="m-4 text-center text-2xl text-gray-900 lg:m-6">
-        Viewing Bracket: {title}
-      </h1>
-      <ReadOnlyBracket regions={bracket} />
-    </>
-  );
+  return <ReadOnlyBracket regions={bracket} champion={champion} />;
 };

@@ -1,44 +1,13 @@
 import React from "react";
-import { ReadOnlySeed, Round, SeedsList } from "./Styles";
+import { ChampionshipSeed, ReadOnlySeed, Round, SeedsList } from "./Styles";
 import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useWindowSize } from "./useWindowSize";
 
-export const ReadOnlyBracket = ({ regions }) => {
+export const ReadOnlyBracket = ({ regions, champion }) => {
   const isResponsive = useWindowSize(1300);
-
-  const newRounds = [
-    {
-      name: "Round of 64",
-      seeds: [],
-    },
-    {
-      name: "Round of 32",
-      seeds: [],
-    },
-    {
-      name: "Sweet 16",
-      seeds: [],
-    },
-    {
-      name: "Elite 8",
-      seeds: [],
-    },
-  ];
-  regions.forEach((region, regionIdx) => {
-    if (regionIdx === 4) {
-      newRounds.push(JSON.parse(JSON.stringify(regions[4].rounds[0])));
-      newRounds.push(JSON.parse(JSON.stringify(regions[4].rounds[1])));
-      return;
-    }
-    region.rounds.forEach((round, roundIdx) => {
-      round.seeds.forEach((seed) => {
-        newRounds[roundIdx].seeds.push([...seed]);
-      });
-    });
-  });
-
+  const rounds = createRounds(regions, isResponsive);
   if (isResponsive) {
     return (
       <div className="flex justify-center">
@@ -70,17 +39,18 @@ export const ReadOnlyBracket = ({ regions }) => {
             },
           }}
         >
-          {newRounds.map((round, roundIdx) => (
+          {rounds.map((round, roundIdx) => (
             <Round key={roundIdx}>
               <SwiperSlide>
                 <SeedsList>
                   {round.seeds.map((seed, idx) => (
                     <RenderSeedComponent
+                      roundIdx={roundIdx}
+                      seedIdx={idx}
+                      rounds={rounds}
                       key={roundIdx + "" + idx}
                       seed={seed}
-                      roundIndex={roundIdx}
-                      seedIndex={idx}
-                      isResponsive={isResponsive}
+                      mobile={true}
                     />
                   ))}
                 </SeedsList>
@@ -93,16 +63,18 @@ export const ReadOnlyBracket = ({ regions }) => {
   } else {
     return (
       <div className="flex justify-center">
-        {newRounds.map((round, roundIdx) => (
+        {rounds.map((round, roundIdx) => (
           <Round key={roundIdx}>
             <SeedsList>
               {round.seeds.map((seed, idx) => (
                 <RenderSeedComponent
+                  roundIdx={roundIdx}
+                  seedIdx={idx}
+                  rounds={rounds}
                   key={roundIdx + "" + idx}
                   seed={seed}
-                  roundIndex={roundIdx}
-                  seedIndex={idx}
-                  isResponsive={isResponsive}
+                  mobile={false}
+                  champion={champion}
                 />
               ))}
             </SeedsList>
@@ -113,23 +85,131 @@ export const ReadOnlyBracket = ({ regions }) => {
   }
 };
 
-export const RenderSeedComponent = ({ seed }) => {
-  const field = useSelector((state) => state.lambda.field);
+export const RenderSeedComponent = ({
+  seed,
+  rounds,
+  roundIdx,
+  seedIdx,
+  mobile,
+  champion,
+}) => {
+  const { logos, field } = useSelector((state) => state.lambda);
 
-  return (
-    <ReadOnlySeed>
-      <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
-        <div>
-          <div className="m-0 flex whitespace-nowrap p-0 pl-2">
-            {field[seed[0]]?.seed + ". "}
-            {field[seed[0]]?.name}
+  const style = (position) => {
+    let str = "m-0 flex whitespace-nowrap p-0 pl-2";
+    if (roundIdx === 5 && seed[position] === champion) {
+      str += " font-bold";
+    } else if (
+      roundIdx < 5 &&
+      seed[position] ===
+        rounds[roundIdx + 1].seeds[Math.floor(seedIdx / 2)][seedIdx % 2]
+    ) {
+      str += " font-bold";
+    } else if (
+      roundIdx > 5 &&
+      seed[position] ===
+        rounds[roundIdx - 1].seeds[Math.floor(seedIdx / 2)][seedIdx % 2]
+    ) {
+      str += " font-bold";
+    } else if (
+      roundIdx === 6 &&
+      seed[position] === rounds[roundIdx - 1].seeds[0][1]
+    ) {
+      str += " font-bold";
+    }
+    return str;
+  };
+
+  if (!mobile && roundIdx === 5) {
+    return (
+      <>
+        <div className="absolute top-36 flex items-center justify-center">
+          {champion && (
+            <img
+              src={logos[field[champion]?.name]}
+              alt="team logo"
+              className="h-32"
+            />
+          )}
+        </div>
+        <ChampionshipSeed>
+          <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
+            <div>
+              <div className={style(0)}>
+                {field[seed[0]]?.seed + ". "}
+                {field[seed[0]]?.name}
+              </div>
+              <div className={style(1)}>
+                {field[seed[1]]?.seed + ". "}
+                {field[seed[1]]?.name}
+              </div>
+            </div>
           </div>
-          <div className="m-0 flex whitespace-nowrap border-t-2 border-gray-700 p-0 pl-2">
-            {field[seed[1]]?.seed + ". "}
-            {field[seed[1]]?.name}
+        </ChampionshipSeed>
+      </>
+    );
+  } else {
+    return (
+      <ReadOnlySeed align={!mobile && roundIdx >= 5 ? "left" : "right"}>
+        <div className="relative w-full rounded border-0 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
+          <div>
+            <div className={style(0)}>
+              {field[seed[0]]?.seed + ". "}
+              {field[seed[0]]?.name}
+            </div>
+            <div className={style(1)}>
+              {field[seed[1]]?.seed + ". "}
+              {field[seed[1]]?.name}
+            </div>
           </div>
         </div>
-      </div>
-    </ReadOnlySeed>
-  );
+      </ReadOnlySeed>
+    );
+  }
+};
+
+const createRounds = (regions, isResponsive) => {
+  let newRounds = isResponsive
+    ? [
+        { name: "Round of 64", seeds: [] },
+        { name: "Round of 32", seeds: [] },
+        { name: "Sweet 16", seeds: [] },
+        { name: "Elite 8", seeds: [] },
+      ]
+    : [
+        { name: "Round of 64 - Left", seeds: [] },
+        { name: "Round of 32 - Left", seeds: [] },
+        { name: "Sweet 16 - Left", seeds: [] },
+        { name: "Elite 8 - Left", seeds: [] },
+        { name: "Final Four - Left", seeds: [] },
+        { name: "Championship", seeds: [] },
+        { name: "Final Four - Right", seeds: [] },
+        { name: "Elite 8 - Right", seeds: [] },
+        { name: "Sweet 16 - Right", seeds: [] },
+        { name: "Round of 32 - Right", seeds: [] },
+        { name: "Round of 64 - Right", seeds: [] },
+      ];
+  regions.forEach((region, regionIdx) => {
+    if (regionIdx === 4) {
+      if (isResponsive) {
+        newRounds.push(JSON.parse(JSON.stringify(regions[4].rounds[0])));
+        newRounds.push(JSON.parse(JSON.stringify(regions[4].rounds[1])));
+      } else {
+        newRounds[4].seeds.push(regions[4].rounds[0].seeds[0]);
+        newRounds[5].seeds.push(regions[4].rounds[1].seeds[0]);
+        newRounds[6].seeds.push(regions[4].rounds[0].seeds[1]);
+      }
+      return;
+    }
+    region.rounds.forEach((round, roundIdx) => {
+      round.seeds.forEach((seed) => {
+        if (isResponsive) {
+          newRounds[roundIdx].seeds.push([...seed]);
+        } else {
+          newRounds[regionIdx < 2 ? roundIdx : 10 - roundIdx].seeds.push(seed);
+        }
+      });
+    });
+  });
+  return newRounds;
 };

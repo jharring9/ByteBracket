@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { classNames } from "../icons";
+import { classNames } from "../shared";
 
 export const Brackets = ({ user }) => {
   const [brackets, setBrackets] = useState([]);

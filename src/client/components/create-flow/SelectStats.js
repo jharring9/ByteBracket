@@ -1,6 +1,6 @@
 import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
-import { ContinueButton, ErrorAlert, DisableStat } from "../icons";
+import { ContinueButton, ErrorAlert, DisableStat } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setField, setTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";

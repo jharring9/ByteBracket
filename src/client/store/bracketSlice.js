@@ -18,16 +18,16 @@ export const lambdaSlice = createSlice({
     },
     setWinner: (state, action) => {
       const { round, matchup, position, seed } = action.payload;
+      const bracketCopy = JSON.parse(JSON.stringify(state.bracket));
 
       /* Team is bracket champion */
-      if (state.region === 4 && action.payload.round === 1) {
+      if (state.region === 4 && round === 1) {
         state.champion = seed;
         return;
       }
 
       /* Team is advancing to final four */
-      const bracketCopy = JSON.parse(JSON.stringify(state.bracket));
-      if (action.payload.round === 3) {
+      if (round === 3) {
         bracketCopy[4].rounds[0].seeds[Math.floor(state.region / 2)][
           state.region % 2
         ] = seed;

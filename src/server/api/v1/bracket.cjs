@@ -15,9 +15,9 @@ module.exports = (app) => {
     }
 
     const id = uuidv4();
-    const { bracket, champion, complete, name, winner, stats } = req.body;
+    const { bracket, champion, name, winner, stats } = req.body;
 
-    if (!bracket || !champion || !complete || !name || !winner || !stats) {
+    if (!bracket || !champion || !name || !winner || !stats) {
       return res.status(400).send({ error: "Missing required fields" });
     }
 
@@ -27,7 +27,6 @@ module.exports = (app) => {
         id,
         bracket,
         champion,
-        complete,
         name,
         winner,
         stats
