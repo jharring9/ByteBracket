@@ -17,8 +17,17 @@ module.exports = (app) => {
     const id = uuidv4();
     const { bracket, champion, name, winner, stats } = req.body;
 
-    if (!bracket || !champion || !name || !winner || !stats) {
-      return res.status(400).send({ error: "Missing required fields" });
+    if (!name) {
+      return res.status(400).send({ error: "Missing bracket name" });
+    }
+
+    if (!bracket || !champion || !winner || !stats) {
+      return res
+        .status(400)
+        .send({
+          error:
+            "Missing fields. This is likely a server issue. Please refresh the page and try again.",
+        });
     }
 
     if (
