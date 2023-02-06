@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { EyeIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
-import { classNames } from "../shared";
+import { useSelector } from "react-redux";
 
 export const Brackets = ({ user }) => {
-  const [brackets, setBrackets] = useState([]);
   const navigate = useNavigate();
+  const [brackets, setBrackets] = useState([]);
+  const { logos } = useSelector((state) => state.lambda);
 
   useEffect(() => {
     const getBrackets = async () => {
@@ -47,26 +48,21 @@ export const Brackets = ({ user }) => {
                 className="col-span-1 w-full divide-y divide-gray-200 rounded-lg bg-white shadow"
               >
                 <div className="flex w-full items-center justify-between space-x-6 p-6">
-                  <div className="flex-1 truncate">
-                    <div className="flex items-center space-x-3">
+                  <div className="flex justify-between">
+                    <div>
                       <h3 className="truncate text-sm font-medium text-gray-900">
                         {bracket.name}
                       </h3>
-                      <span
-                        className={classNames(
-                          bracket.complete
-                            ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-black",
-                          "inline-block flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-medium"
-                        )}
-                      >
-                        {bracket.complete ? "Complete" : "In Progress"}
-                      </span>
+                      <p className="mt-1 truncate text-sm text-gray-500">
+                        {bracket.winnerName}
+                      </p>
                     </div>
-                    <p className="mt-1 truncate text-sm text-gray-500">
-                      {bracket.winnerName}
-                    </p>
                   </div>
+                  <img
+                    src={logos[bracket.winnerName]}
+                    alt="team logo"
+                    className="h-16"
+                  />
                 </div>
                 <div>
                   <div className="-mt-px flex divide-x divide-gray-200">
@@ -88,7 +84,7 @@ export const Brackets = ({ user }) => {
             ))}
             <li
               key="new"
-              className="h-36 w-full divide-y divide-gray-200 rounded-lg bg-white"
+              className="h-40 w-full divide-y divide-gray-200 rounded-lg bg-white"
             >
               <button
                 type="button"
