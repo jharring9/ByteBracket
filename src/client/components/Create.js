@@ -3,7 +3,7 @@ import { SelectStats } from "./create-flow/SelectStats";
 import { Top25 } from "./create-flow/Top25";
 import { MakePicks } from "./create-flow/MakePicks";
 import { Finalize } from "./create-flow/Finalize";
-import { ProgressBar } from "./shared";
+import { fetchImages, ProgressBar } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 
 export const Create = () => {
