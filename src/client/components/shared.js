@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import {
+  ExclamationCircleIcon,
   ExclamationTriangleIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
@@ -519,5 +520,145 @@ export const WarnModal = ({
         </div>
       </Dialog>
     </Transition.Root>
+  );
+};
+
+import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
+export const SuccessAlert = ({ setOpen, message }) => {
+  return (
+    <div className="mb-6 rounded-md bg-green-50 p-4">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <CheckCircleIcon
+            className="h-5 w-5 text-green-400"
+            aria-hidden="true"
+          />
+        </div>
+        <div className="ml-3">
+          <p className="text-sm font-medium text-green-800">{message}</p>
+        </div>
+        <div className="ml-auto pl-3">
+          <div className="-mx-1.5 -my-1.5">
+            <button
+              onClick={() => setOpen(false)}
+              className="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50"
+            >
+              <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const smoothScrollTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+export const validateInput = ({
+  username,
+  setUsernameError,
+  first,
+  setFirstError,
+  last,
+  setLastError,
+  email,
+  setEmailError,
+  password,
+  setPasswordError,
+  isNewPassword,
+}) => {
+  let valid = true;
+  if (setUsernameError) {
+    if (!username || username.trim().length === 0) {
+      setUsernameError("Username is required");
+      valid = false;
+    } else setUsernameError(null);
+  }
+  if (setFirstError) {
+    if (!first || first.trim().length === 0) {
+      setFirstError("First name is required");
+      valid = false;
+    } else setFirstError(null);
+  }
+  if (setLastError) {
+    if (!last || last.trim().length === 0) {
+      setLastError("Last name is required");
+      valid = false;
+    } else setLastError(null);
+  }
+  if (setEmailError) {
+    if (!email || email.trim().length === 0) {
+      setEmailError("Email is required");
+      valid = false;
+    } else if (
+      setEmailError &&
+      !/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+    ) {
+      setEmailError("Invalid email address");
+      valid = false;
+    } else setEmailError(null);
+  }
+  if (setPasswordError) {
+    if (!password || password.trim().length === 0) {
+      setPasswordError("Password is required");
+      valid = false;
+    } else if (
+      isNewPassword &&
+      !/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$/.test(password)
+    ) {
+      setPasswordError(
+        "Password must be at least 8 characters, and contain 1 digit and one uppercase number."
+      );
+    } else setPasswordError(null);
+  }
+  return valid;
+};
+
+export const ValidatedInput = ({
+  inputName,
+  type,
+  value,
+  setValue,
+  errorMsg,
+}) => {
+  return (
+    <>
+      <label
+        htmlFor={inputName}
+        className="block text-sm font-medium text-gray-700"
+      >
+        {inputName}
+      </label>
+      <div className="relative mt-1 rounded-md shadow-sm">
+        <input
+          type={type ? type : "text"}
+          name={inputName}
+          id={inputName}
+          className={classNames(
+            errorMsg
+              ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500"
+              : "border-gray-300 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500",
+            "block w-full rounded-md border sm:text-sm"
+          )}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        {errorMsg && (
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <ExclamationCircleIcon
+              className="h-5 w-5 text-red-500"
+              aria-hidden="true"
+            />
+          </div>
+        )}
+      </div>
+      {errorMsg && (
+        <p className="mt-2 text-sm text-red-600" id="email-error">
+          {errorMsg}
+        </p>
+      )}
+    </>
   );
 };

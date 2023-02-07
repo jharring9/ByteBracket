@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorAlert, Facebook, Github, Google } from "./shared";
+import {
+  ErrorAlert,
+  Facebook,
+  Github,
+  Google,
+  ValidatedInput,
+  validateInput,
+} from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
 
@@ -14,6 +21,11 @@ export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState(null);
+  const [firstError, setFirstError] = useState(null);
+  const [lastError, setLastError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   useEffect(() => {
     if (user.username) {
@@ -23,6 +35,23 @@ export const Register = () => {
 
   const onRegister = async (ev) => {
     ev.preventDefault();
+    if (
+      !validateInput({
+        username,
+        setUsernameError,
+        first,
+        setFirstError,
+        last,
+        setLastError,
+        email,
+        setEmailError,
+        password,
+        setPasswordError,
+        isNewPassword: true,
+      })
+    )
+      return;
+
     const res = await fetch("/v1/user", {
       method: "POST",
       body: JSON.stringify({
@@ -80,101 +109,46 @@ export const Register = () => {
               />
             )}
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </label>
-              <div className="mt-1">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="Username"
+                value={username}
+                setValue={setUsername}
+                errorMsg={usernameError}
+              />
             </div>
             <div>
-              <label
-                htmlFor="first"
-                className="block text-sm font-medium text-gray-700"
-              >
-                First Name
-              </label>
-              <div className="mt-1">
-                <input
-                  id="first"
-                  name="first"
-                  type="text"
-                  required
-                  value={first}
-                  onChange={(e) => setFirst(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="First Name"
+                value={first}
+                setValue={setFirst}
+                errorMsg={firstError}
+              />
             </div>
             <div>
-              <label
-                htmlFor="last"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Last Name
-              </label>
-              <div className="mt-1">
-                <input
-                  id="last"
-                  name="last"
-                  type="text"
-                  required
-                  value={last}
-                  onChange={(e) => setLast(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="Last Name"
+                value={last}
+                setValue={setLast}
+                errorMsg={lastError}
+              />
             </div>
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="Email Address"
+                type="email"
+                value={email}
+                setValue={setEmail}
+                errorMsg={emailError}
+              />
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="Password"
+                type="password"
+                value={password}
+                setValue={setPassword}
+                errorMsg={passwordError}
+              />
             </div>
 
             <div>

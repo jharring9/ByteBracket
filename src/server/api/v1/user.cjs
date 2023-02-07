@@ -62,6 +62,42 @@ module.exports = (app) => {
   });
 
   /**
+   * Update user account.
+   */
+  app.put("/v1/user/:user", async (req, res) => {
+    const { user } = req.params;
+    const sessionUser = req.session.user?.username;
+    if (sessionUser !== user) {
+      return res.status(401).send({ error: "unauthorized" });
+    }
+
+    const { first, last, email } = req.body;
+    if (!first || !last || !email) {
+      return res.status(400).send({ error: "All fields required." });
+    }
+
+    const updatedUser = {
+      username: user,
+      first: first.trim(),
+      last: last.trim(),
+      email: email.toLowerCase(),
+    };
+
+    if (!(await userDB.updateUser(updatedUser))) {
+      return res.status(503).send({ error: "Server error. Please try again." });
+    }
+
+    const response = {
+      first: updatedUser.first,
+      last: updatedUser.last,
+      username: user,
+      email: updatedUser.email,
+    };
+    req.session.user = response;
+    res.status(201).send(response);
+  });
+
+  /**
    * Delete a user account.
    */
   app.delete("/v1/user/:user", async (req, res) => {
