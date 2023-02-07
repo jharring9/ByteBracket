@@ -23,7 +23,7 @@ exports.getUser = async (username) => {
 };
 
 exports.saveUser = async (user) => {
-  const now = Date.now().toString();
+  const now = new Date().toISOString();
   user.created = now;
   user.lastUpdated = now;
   const params = {

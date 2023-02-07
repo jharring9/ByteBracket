@@ -49,7 +49,7 @@ exports.saveBracket = async (
   winnerName,
   stats
 ) => {
-  const now = Date.now().toString();
+  const now = new Date().toISOString();
   const params = {
     TableName: bracketTable,
     Item: {
