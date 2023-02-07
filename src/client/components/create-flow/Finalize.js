@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
-import { BackButton, SaveButton } from "../icons";
+import { BackButton, ErrorAlert, SaveButton } from "../shared";
 import { setCreateStage } from "../../store/createStageSlice";
 
 export const Finalize = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { user } = useSelector((state) => state.user);
   const { field, logos } = useSelector((state) => state.lambda);
   const { values: stats } = useSelector((state) => state.stats);
@@ -40,7 +41,6 @@ export const Finalize = () => {
       body: JSON.stringify({
         bracket: bracket,
         champion: champion,
-        complete: true,
         name: name,
         winner: field[champion]?.name,
         stats: stats,
@@ -52,6 +52,9 @@ export const Finalize = () => {
       dispatch(resetBracket);
       dispatch(setCreateStage(1));
       navigate("/account");
+    } else {
+      const data = await res.json();
+      setError(data.error);
     }
     setLoading(false);
   };
@@ -78,6 +81,13 @@ export const Finalize = () => {
           <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:w-1/2 lg:px-8">
             <div className="shadow sm:overflow-hidden sm:rounded-md">
               <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                {error && (
+                  <ErrorAlert
+                    className="mb-6"
+                    header="Error submitting bracket"
+                    message={error}
+                  />
+                )}
                 <div className="flex gap-6">
                   <div className="flex-auto">
                     <label

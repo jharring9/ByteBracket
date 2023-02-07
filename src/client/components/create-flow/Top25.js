@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BackButton, ContinueButton, TrendingDown, TrendingUp } from "../icons";
+import { BackButton, ContinueButton, TrendingDown, TrendingUp } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
 

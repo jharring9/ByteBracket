@@ -1,4 +1,8 @@
-const { GetCommand, PutCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
+const {
+  GetCommand,
+  PutCommand,
+  DeleteCommand,
+} = require("@aws-sdk/lib-dynamodb");
 const { ddbDocClient } = require("./ddbDocumentClient.cjs");
 
 const userTable = "users";
@@ -19,6 +23,9 @@ exports.getUser = async (username) => {
 };
 
 exports.saveUser = async (user) => {
+  const now = new Date().toISOString();
+  user.created = now;
+  user.lastUpdated = now;
   const params = {
     TableName: userTable,
     Item: user,

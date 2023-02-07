@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Switch } from "@headlessui/react";
-import { classNames } from "../icons";
+import { classNames } from "../shared";
 
 export const Profile = ({ user }) => {
   const [availableToHire, setAvailableToHire] = useState(true);

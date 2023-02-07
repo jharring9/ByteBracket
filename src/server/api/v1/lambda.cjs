@@ -226,6 +226,10 @@ module.exports = (app) => {
     res.send(LOGOS);
   });
 
+  app.get("/v1/field", async (req, res) => {
+    res.send(generateField(null));
+  });
+
   app.post("/v1/lambda", async (req, res) => {
     AWS.config.update({ region: "us-east-1" });
     const invokeLambda = async () => {
@@ -271,6 +275,6 @@ const generateField = (s2p) => {
     record: `${Math.floor(Math.random() * 35)}-${Math.floor(
       Math.random() * 35
     )}`,
-    percentile: s2p[team],
+    percentile: s2p ? s2p[team] : null,
   }));
 };

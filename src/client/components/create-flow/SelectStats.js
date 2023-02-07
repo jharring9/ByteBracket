@@ -1,6 +1,6 @@
 import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
-import { ContinueButton, ErrorAlert, DisableStat } from "../icons";
+import { ContinueButton, ErrorAlert, DisableStat } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setField, setTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
@@ -63,7 +63,7 @@ export const SelectStats = () => {
           message={error}
         />
       )}
-      <div className="mx-auto mt-4 max-w-7xl px-4 px-6 sm:mt-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4">
+      <div className="mx-auto mt-4 max-w-7xl px-6 sm:mt-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4">
         <div className="order-1">
           <InfoModal
             name="Win-Loss %"
@@ -179,7 +179,7 @@ const InfoModal = ({ name, value, setValue, details }) => {
         {name}
       </label>
       <div className="grid grid-cols-10">
-        <div className="col-span-1">
+        <div className="col-span-2 md:col-span-1">
           <DisableStat
             value={value}
             disabledValue={disabledValue}
@@ -187,7 +187,7 @@ const InfoModal = ({ name, value, setValue, details }) => {
             setDisabledValue={setDisabledValue}
           />
         </div>
-        <div className="col-span-9 flex items-center">
+        <div className="col-span-8 md:col-span-9 flex items-center">
           <input
             id="minmax-range"
             type="range"

@@ -15,12 +15,20 @@ module.exports = (app) => {
     }
 
     const id = uuidv4();
-    const { bracket, champion, complete, name, winner, stats } = req.body;
+    const { bracket, champion, name, winner, stats } = req.body;
 
-    if (!bracket || !champion || !complete || !name || !winner || !stats) {
-      return res.status(400).send({ error: "Missing required fields" });
+    if (!name) {
+      return res.status(400).send({ error: "Missing bracket name" });
     }
 
+    if (!bracket || !champion || !winner || !stats) {
+      return res
+        .status(400)
+        .send({
+          error:
+            "Missing fields. This is likely a server issue. Please refresh the page and try again.",
+        });
+    }
 
     if (
       !(await bracketDB.saveBracket(
@@ -28,7 +36,6 @@ module.exports = (app) => {
         id,
         bracket,
         champion,
-        complete,
         name,
         winner,
         stats
@@ -52,7 +59,7 @@ module.exports = (app) => {
 
     const result = await bracketDB.getBracket(user, id);
     if (result) {
-      return res.status(200).send(result.bracket);
+      return res.status(200).send(result);
     }
     return res.status(404).send({ error: "Bracket not found" });
   });
