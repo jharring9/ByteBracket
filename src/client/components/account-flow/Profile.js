@@ -29,16 +29,21 @@ export const Profile = ({ user }) => {
   /**
    * Revert changes to user account.
    */
-  const handleCancel = () => {
+  const handleCancel = (ev) => {
+    ev.preventDefault();
     setFirst(user.first);
     setLast(user.last);
     setEmail(user.email);
+    setFirstError(null);
+    setLastError(null);
+    setEmailError(null);
   };
 
   /**
    * Update user account.
    */
-  const handleUpdate = async () => {
+  const handleUpdate = async (ev) => {
+    ev.preventDefault();
     if (
       !validateInput({
         first,
@@ -76,7 +81,7 @@ export const Profile = ({ user }) => {
   };
 
   return (
-    <div className="divide-y divide-gray-200 lg:col-span-9">
+    <form className="divide-y divide-gray-200 lg:col-span-9">
       <div className="py-6 px-4 sm:p-6 lg:pb-8">
         {success && (
           <SuccessAlert
@@ -140,18 +145,20 @@ export const Profile = ({ user }) => {
       </div>
       <div className="mt-4 flex justify-end py-4 px-4 sm:px-6">
         <button
+          type="reset"
           onClick={handleCancel}
           className="inline-flex justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Cancel
         </button>
         <button
+          type="submit"
           onClick={handleUpdate}
           className="ml-5 inline-flex justify-center rounded-md border border-transparent bg-indigo-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Save
         </button>
       </div>
-    </div>
+    </form>
   );
 };
