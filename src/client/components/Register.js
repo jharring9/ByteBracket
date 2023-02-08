@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   ErrorAlert,
   Facebook,
@@ -14,6 +14,8 @@ import { setUser } from "../store/userSlice";
 export const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [queryParams, _] = useSearchParams();
+  const fromCreate = queryParams.get("fromCreate");
   const { user } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [first, setFirst] = useState("");
@@ -29,7 +31,7 @@ export const Register = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate("/account");
+      navigate(fromCreate ? "/create" : "/account");
     }
   }, [user]);
 
@@ -69,7 +71,6 @@ export const Register = () => {
     const data = await res.json();
     if (res.ok) {
       dispatch(setUser(data));
-      navigate("/account");
     } else {
       setError(data.error);
     }

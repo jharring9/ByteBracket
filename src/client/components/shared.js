@@ -44,6 +44,7 @@ export const TrendingDown = () => (
 
 export const BackButton = ({ onClick }) => (
   <button
+    type="reset"
     className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-100 px-5 text-indigo-700 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
     onClick={onClick}
   >
@@ -103,6 +104,7 @@ export const ContinueButton = ({ onClick, loading }) => (
 
 export const SaveButton = ({ onClick, loading }) => (
   <button
+    type="submit"
     className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-700 px-5 text-indigo-100 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
     onClick={onClick}
   >

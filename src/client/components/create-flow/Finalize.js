@@ -85,8 +85,8 @@ export const Finalize = () => {
       {user.username ? (
         <div className="relative mx-auto mt-8 lg:mt-14">
           <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:w-1/2 lg:px-8">
-            <div className="shadow sm:overflow-hidden sm:rounded-md">
-              <form className="space-y-6 bg-white px-4 py-5 sm:p-6">
+            <form className="shadow sm:overflow-hidden sm:rounded-md">
+              <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                 {error && (
                   <ErrorAlert
                     className="mb-6"
@@ -113,7 +113,7 @@ export const Finalize = () => {
                     )}
                   </div>
                 </div>
-              </form>
+              </div>
               <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                 <div className="justify-center lg:col-span-4 lg:flex ">
                   <div className="mt-4 flex justify-center lg:mt-2">
@@ -124,7 +124,7 @@ export const Finalize = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       ) : (
