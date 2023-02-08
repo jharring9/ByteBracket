@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CreateCard, ErrorAlert, SpeedDial } from "../shared";
+import { CreateCard, ErrorAlert, smoothScrollTop, SpeedDial } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
@@ -18,7 +18,7 @@ export const MakePicks = () => {
    * Smooth scroll to top of page when user advances to next region.
    */
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    smoothScrollTop();
     window.history.pushState(null, null, window.location.pathname);
     window.addEventListener("popstate", onBackButtonEvent);
     return () => {

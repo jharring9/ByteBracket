@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorAlert, Facebook, Github, Google } from "./shared";
+import {
+  ErrorAlert,
+  Facebook,
+  Github,
+  Google,
+  ValidatedInput,
+  validateInput,
+} from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
 
@@ -11,6 +18,8 @@ export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
 
   useEffect(() => {
     if (user.username) {
@@ -20,6 +29,16 @@ export const Login = () => {
 
   const onLogin = async (ev) => {
     ev.preventDefault();
+    if (
+      !validateInput({
+        username,
+        setUsernameError,
+        password,
+        setPasswordError,
+      })
+    )
+      return;
+
     const res = await fetch("/v1/session", {
       method: "POST",
       body: JSON.stringify({
@@ -74,43 +93,21 @@ export const Login = () => {
               />
             )}
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </label>
-              <div className="mt-1">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="Username"
+                value={username}
+                setValue={setUsername}
+                errorMsg={usernameError}
+              />
             </div>
-
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <ValidatedInput
+                inputName="Password"
+                type="password"
+                value={password}
+                setValue={setPassword}
+                errorMsg={passwordError}
+              />
             </div>
 
             <div className="flex items-center justify-between">
@@ -142,7 +139,6 @@ export const Login = () => {
             <div>
               <button
                 onClick={onLogin}
-                type="submit"
                 className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 Sign in

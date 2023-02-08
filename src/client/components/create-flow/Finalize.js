@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
-import { BackButton, ErrorAlert, SaveButton } from "../shared";
+import { BackButton, ErrorAlert, SaveButton, ValidatedInput } from "../shared";
 import { setCreateStage } from "../../store/createStageSlice";
 
 export const Finalize = () => {
@@ -17,6 +17,7 @@ export const Finalize = () => {
   const { values: stats } = useSelector((state) => state.stats);
   const { bracket, champion } = useSelector((state) => state.bracket);
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState(null);
 
   useEffect(() => {
     window.history.pushState(null, null, window.location.pathname);
@@ -32,6 +33,11 @@ export const Finalize = () => {
   const onFinalize = async (ev) => {
     setLoading(true);
     ev.preventDefault();
+    if (name.trim().length === 0) {
+      setNameError("Please enter a name for your bracket.");
+      setLoading(false);
+      return;
+    } else setNameError(null);
     const res = await fetch(`/v1/${user.username}/bracket`, {
       method: "POST",
       credentials: "include",
@@ -80,7 +86,7 @@ export const Finalize = () => {
         <div className="relative mx-auto mt-8 lg:mt-14">
           <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:w-1/2 lg:px-8">
             <div className="shadow sm:overflow-hidden sm:rounded-md">
-              <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+              <form className="space-y-6 bg-white px-4 py-5 sm:p-6">
                 {error && (
                   <ErrorAlert
                     className="mb-6"
@@ -90,20 +96,11 @@ export const Finalize = () => {
                 )}
                 <div className="flex gap-6">
                   <div className="flex-auto">
-                    <label
-                      htmlFor="company-website"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Create a bracket name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
+                    <ValidatedInput
+                      inputName="Bracket name"
                       value={name}
-                      onChange={(ev) => setName(ev.target.value)}
-                      className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder="Bracket name"
+                      setValue={setName}
+                      errorMsg={nameError}
                     />
                   </div>
                   <div className="flex-initial">
@@ -116,7 +113,7 @@ export const Finalize = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </form>
               <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                 <div className="justify-center lg:col-span-4 lg:flex ">
                   <div className="mt-4 flex justify-center lg:mt-2">

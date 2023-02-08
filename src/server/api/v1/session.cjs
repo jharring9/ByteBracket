@@ -13,7 +13,7 @@ module.exports = (app) => {
       return res.status(400).send({ error: "Both fields required." });
     }
 
-    const dynamoUser = await userDB.getUser(username);
+    const dynamoUser = await userDB.getUser(username.toLowerCase());
     if (!dynamoUser?.username) {
       return res.status(401).send({ error: "Invalid username or password." });
     }

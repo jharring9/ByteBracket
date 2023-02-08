@@ -50,7 +50,9 @@ export const SelectStats = () => {
       dispatch(resetBracket());
       dispatch(setCreateStage(2));
     } else {
-      setError(JSON.stringify(await res.json()));
+      setError(
+        "There was an error processing your statistics. Please try again later."
+      );
       setLoading(false);
     }
   };
@@ -187,7 +189,7 @@ const InfoModal = ({ name, value, setValue, details }) => {
             setDisabledValue={setDisabledValue}
           />
         </div>
-        <div className="col-span-8 md:col-span-9 flex items-center">
+        <div className="col-span-8 flex items-center md:col-span-9">
           <input
             id="minmax-range"
             type="range"
