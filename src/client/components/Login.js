@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ErrorAlert,
+  Facebook,
   Google,
   ValidatedInput,
   validateInput,
@@ -57,8 +58,8 @@ export const Login = () => {
     }
   };
 
-  const googleOauth = async () => {
-    await fetch("/v1/oauth/google")
+  const oauth = async (provider) => {
+    await fetch(`/v1/oauth/${provider}`)
       .then(async (res) => await res.text())
       .then((address) => (window.location.href = address));
   };
@@ -162,33 +163,23 @@ export const Login = () => {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-1 gap-3">
-              {/*<div>*/}
-              {/*  <a*/}
-              {/*    href="#"*/}
-              {/*    className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"*/}
-              {/*  >*/}
-              {/*    <Facebook />*/}
-              {/*  </a>*/}
-              {/*</div>*/}
-
+            <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <div
-                  onClick={googleOauth}
+                  onClick={() => oauth("facebook")}
+                  className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                >
+                  <Facebook />
+                </div>
+              </div>
+              <div>
+                <div
+                  onClick={() => oauth("google")}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Google />
                 </div>
               </div>
-
-              {/*<div>*/}
-              {/*  <a*/}
-              {/*    href="#"*/}
-              {/*    className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"*/}
-              {/*  >*/}
-              {/*    <Github />*/}
-              {/*  </a>*/}
-              {/*</div>*/}
             </div>
           </div>
         </div>
