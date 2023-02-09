@@ -10,6 +10,11 @@ import {
 } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
+import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
+import {decodeToken} from 'react-jwt'
+//TODO
+//Figure out the custom button-( https://www.npmjs.com/package/@react-oauth/google)
+//Decide on where we should decode the credentials (https://livefiredev.com/in-depth-guide-sign-in-with-google-in-a-react-js-application/)
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -59,7 +64,25 @@ export const Login = () => {
     }
   };
 
-  return (
+  // const googleLogin = () => useGoogleLogin({
+  //   onSuccess: tokenResponse => {
+  //     console.log(tokenResponse)
+  //   },
+  // })
+
+  const login = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+  });
+
+  const responseGoogle = response => {
+    console.log(response);
+    console.log(response.credential)
+    let token = response.credential;
+    console.log(decodeToken(token));
+  };
+
+
+  return(
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h1
@@ -173,7 +196,18 @@ export const Login = () => {
                   href="#"
                   className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
-                  <Google />
+                  {/*<GoogleOAuthProvider clientId="213000508882-r8u1p0q5rm6v7u82hvs0ncq9b1nkkqo5.apps.googleusercontent.com">*/}
+                  {/*  <Google onClick={() => login()}/>*/}
+                    <GoogleLogin
+                        clientId="213000508882-r8u1p0q5rm6v7u82hvs0ncq9b1nkkqo5.apps.googleusercontent.com"
+                        buttonText=""
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        theme = 'outline'
+                        width = '40'
+                        height ='5'
+                    />
+                  {/*</GoogleOAuthProvider>*/}
                 </a>
               </div>
 

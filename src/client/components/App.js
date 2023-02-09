@@ -15,6 +15,7 @@ import { About } from "./About";
 import { setUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { ViewBracket } from "./ViewBracket";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ export default function App() {
 
   return (
     <div className="relative overflow-hidden bg-gray-100">
+      <GoogleOAuthProvider clientId="213000508882-r8u1p0q5rm6v7u82hvs0ncq9b1nkkqo5.apps.googleusercontent.com">
       <BrowserRouter>
         <Header navigation={navigation} setNavigation={setNavigation} />
         <Routes>
@@ -57,6 +59,7 @@ export default function App() {
         </Routes>
         <Footer navigation={navigation} />
       </BrowserRouter>
+      </GoogleOAuthProvider>
     </div>
   );
 }
