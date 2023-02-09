@@ -2,19 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ErrorAlert,
-  Facebook,
-  Github,
   Google,
   ValidatedInput,
   validateInput,
 } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
-import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
-import {decodeToken} from 'react-jwt'
-//TODO
-//Figure out the custom button-( https://www.npmjs.com/package/@react-oauth/google)
-//Decide on where we should decode the credentials (https://livefiredev.com/in-depth-guide-sign-in-with-google-in-a-react-js-application/)
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -64,25 +57,13 @@ export const Login = () => {
     }
   };
 
-  // const googleLogin = () => useGoogleLogin({
-  //   onSuccess: tokenResponse => {
-  //     console.log(tokenResponse)
-  //   },
-  // })
-
-  const login = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
-  });
-
-  const responseGoogle = response => {
-    console.log(response);
-    console.log(response.credential)
-    let token = response.credential;
-    console.log(decodeToken(token));
+  const googleOauth = async () => {
+    await fetch("/v1/oauth/google")
+      .then(async (res) => await res.text())
+      .then((address) => (window.location.href = address));
   };
 
-
-  return(
+  return (
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h1
@@ -181,44 +162,33 @@ export const Login = () => {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              <div>
-                <a
-                  href="#"
-                  className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
-                >
-                  <Facebook />
-                </a>
-              </div>
+            <div className="mt-6 grid grid-cols-1 gap-3">
+              {/*<div>*/}
+              {/*  <a*/}
+              {/*    href="#"*/}
+              {/*    className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"*/}
+              {/*  >*/}
+              {/*    <Facebook />*/}
+              {/*  </a>*/}
+              {/*</div>*/}
 
               <div>
-                <a
-                  href="#"
-                  className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                <div
+                  onClick={googleOauth}
+                  className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
-                  {/*<GoogleOAuthProvider clientId="213000508882-r8u1p0q5rm6v7u82hvs0ncq9b1nkkqo5.apps.googleusercontent.com">*/}
-                  {/*  <Google onClick={() => login()}/>*/}
-                    <GoogleLogin
-                        clientId="213000508882-r8u1p0q5rm6v7u82hvs0ncq9b1nkkqo5.apps.googleusercontent.com"
-                        buttonText=""
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        theme = 'outline'
-                        width = '40'
-                        height ='5'
-                    />
-                  {/*</GoogleOAuthProvider>*/}
-                </a>
+                  <Google />
+                </div>
               </div>
 
-              <div>
-                <a
-                  href="#"
-                  className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
-                >
-                  <Github />
-                </a>
-              </div>
+              {/*<div>*/}
+              {/*  <a*/}
+              {/*    href="#"*/}
+              {/*    className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"*/}
+              {/*  >*/}
+              {/*    <Github />*/}
+              {/*  </a>*/}
+              {/*</div>*/}
             </div>
           </div>
         </div>
