@@ -1,25 +1,21 @@
 const querystring = require("querystring");
 const axios = require("axios");
 const userDB = require("../../../dynamo/user.cjs");
-//TODO JD -- replace client ID and client secret with yours
 const CLIENT_ID =
-  "878429727576-sns97cnt3m37nntv03trkakhfi9uos3b.apps.googleusercontent.com";
-const CLIENT_SECRET = "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";
+  "213000508882-r8u1p0q5rm6v7u82hvs0ncq9b1nkkqo5.apps.googleusercontent.com";
+const CLIENT_SECRET = "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";
 const SERVER_ROOT_URI =
   process.env.NODE_ENV !== "production"
     ? "http://localhost:8080"
     : "https://bytebracket.io";
-const REDIRECT_URI = "v1/oauth/google/callback";
-const UI_RETURN_URI = "/account";
-
-// todo JH -- https://www.gethugames.in/2012/04/authentication-and-authorization-for-google-apis-in-javascript-popup-window-tutorial.html
+const REDIRECT_URI = "auth/callback/google";
 
 module.exports = (app) => {
   app.get("/v1/oauth/google", (req, res) => {
     return res.send(getGoogleAuthURL());
   });
 
-  app.get(`/${REDIRECT_URI}`, async (req, res) => {
+  app.get("/v1/oauth/google/process", async (req, res) => {
     const code = req.query.code;
     const { id_token, access_token } = await getTokens({
       code,
@@ -46,7 +42,6 @@ module.exports = (app) => {
     const dynamoUser = await userDB.getUser(googleUser.email.toLowerCase());
     if (!dynamoUser?.username) {
       const user = {
-        // TODO JD/JH -- do we want email to be their username? if not, we need a new react page to ask for a username
         username: googleUser.email.toLowerCase(),
         email: googleUser.email.toLowerCase(),
         first: googleUser.given_name,
@@ -64,7 +59,7 @@ module.exports = (app) => {
       username: dynamoUser?.username || googleUser.email,
       email: dynamoUser?.email || googleUser.email,
     };
-    return res.redirect(UI_RETURN_URI);
+    return res.status(201).send(req.session.user);
   });
 };
 

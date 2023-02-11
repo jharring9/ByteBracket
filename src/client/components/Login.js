@@ -4,6 +4,7 @@ import {
   ErrorAlert,
   Facebook,
   Google,
+  oauth,
   ValidatedInput,
   validateInput,
 } from "./shared";
@@ -56,12 +57,6 @@ export const Login = () => {
     } else {
       setError(data.error);
     }
-  };
-
-  const oauth = async (provider) => {
-    await fetch(`/v1/oauth/${provider}`)
-      .then(async (res) => await res.text())
-      .then((address) => (window.location.href = address));
   };
 
   return (
@@ -166,7 +161,7 @@ export const Login = () => {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <div
-                  onClick={() => oauth("facebook")}
+                  onClick={() => oauth("facebook", dispatch)}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Facebook />
@@ -174,7 +169,7 @@ export const Login = () => {
               </div>
               <div>
                 <div
-                  onClick={() => oauth("google")}
+                  onClick={() => oauth("google", dispatch)}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Google />

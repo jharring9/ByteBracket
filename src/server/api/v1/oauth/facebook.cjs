@@ -7,15 +7,14 @@ const SERVER_ROOT_URI =
   process.env.NODE_ENV !== "production"
     ? "http://localhost:8080"
     : "https://bytebracket.io";
-const REDIRECT_URI = "v1/oauth/facebook/callback";
-const UI_RETURN_URI = "/account";
+const REDIRECT_URI = "auth/callback/facebook";
 
 module.exports = (app) => {
   app.get("/v1/oauth/facebook", (req, res) => {
     return res.send(getFacebookAuthURL());
   });
 
-  app.get(`/${REDIRECT_URI}`, async (req, res) => {
+  app.get("/v1/oauth/facebook/process", async (req, res) => {
     const code = req.query.code;
     const { access_token } = await getTokens({
       clientId: CLIENT_ID,
@@ -34,7 +33,6 @@ module.exports = (app) => {
     const dynamoUser = await userDB.getUser(facebookUser.email.toLowerCase());
     if (!dynamoUser?.username) {
       const user = {
-        // TODO JD/JH -- do we want email to be their username? if not, we need a new react page to ask for a username
         username: facebookUser.email.toLowerCase(),
         email: facebookUser.email.toLowerCase(),
         first: facebookUser.first_name,
@@ -52,7 +50,7 @@ module.exports = (app) => {
       username: dynamoUser?.username || facebookUser.email,
       email: dynamoUser?.email || facebookUser.email,
     };
-    return res.redirect(UI_RETURN_URI);
+    return res.status(201).send(req.session.user);
   });
 };
 

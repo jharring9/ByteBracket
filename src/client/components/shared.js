@@ -524,6 +524,7 @@ export const WarnModal = ({
 };
 
 import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { setUser } from "../store/userSlice";
 export const SuccessAlert = ({ setOpen, message }) => {
   return (
     <div className="mb-6 rounded-md bg-green-50 p-4">
@@ -573,6 +574,9 @@ export const validateInput = ({
   if (setUsernameError) {
     if (!username || username.trim().length === 0) {
       setUsernameError("Username is required");
+      valid = false;
+    } else if (/[^a-zA-Z0-9]/.test(username)) {
+      setUsernameError("Username must be alphanumeric");
       valid = false;
     } else setUsernameError(null);
   }
@@ -661,4 +665,50 @@ export const ValidatedInput = ({
       )}
     </>
   );
+};
+
+export const oauth = async (provider, dispatch) => {
+  await fetch(`/v1/oauth/${provider}`)
+    .then(async (res) => await res.text())
+    .then((address) => {
+      openSignInWindow(address, "sso-popup", dispatch);
+    });
+};
+
+let windowObjectReference = null;
+let previousUrl = null;
+let processing = false;
+
+const openSignInWindow = (url, name, dispatch) => {
+  window.removeEventListener("message", processLogin);
+  const strWindowFeatures =
+    "toolbar=no, menubar=no, width=600, height=700, top=100, left=100";
+  if (windowObjectReference === null || windowObjectReference.closed) {
+    windowObjectReference = window.open(url, name, strWindowFeatures);
+  } else if (previousUrl !== url) {
+    windowObjectReference = window.open(url, name, strWindowFeatures);
+    windowObjectReference.focus();
+  } else {
+    windowObjectReference.focus();
+  }
+  window.addEventListener(
+    "message",
+    (event) => processLogin(event, dispatch),
+    false
+  );
+  previousUrl = url;
+};
+
+const processLogin = async (event, dispatch) => {
+  if (processing) return;
+  processing = true;
+  const { provider, code } = Object.fromEntries(
+    new URLSearchParams(event.data)
+  );
+  const res = await fetch(`/v1/oauth/${provider}/process?code=${code}`);
+  const data = await res.json();
+  if (res.ok) {
+    dispatch(setUser(data));
+  }
+  processing = false;
 };
