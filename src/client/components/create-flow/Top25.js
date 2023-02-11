@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { BackButton, ContinueButton, TrendingDown, TrendingUp } from "../shared";
+import {
+  BackButton,
+  ContinueButton,
+  TrendingDown,
+  TrendingUp,
+} from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
 
@@ -40,9 +45,9 @@ export const Top25 = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     window.history.pushState(null, null, window.location.pathname);
-    window.addEventListener('popstate', onBackButtonEvent);
+    window.addEventListener("popstate", onBackButtonEvent);
     return () => {
-      window.removeEventListener('popstate', onBackButtonEvent);
+      window.removeEventListener("popstate", onBackButtonEvent);
     };
   }, []);
 
@@ -60,121 +65,163 @@ export const Top25 = () => {
   }, [top25]);
 
   return (
-    <div className="mt-4 sm:mt-6 md:mx-auto md:max-w-7xl md:px-4 md:px-6 lg:mt-8 lg:grid lg:grid-cols-7 lg:gap-4">
-      <div className="lg:col-span-5">
+    <div className="mt-4 sm:mt-6 md:mx-auto md:max-w-7xl md:px-4 md:px-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4">
+      <div className="lg:col-span-2">
         <div className="text-center">
-          <h2 className="mb-4 text-2xl sm:mb-5 lg:mb-8">Your Top 25</h2>
+          <h2 className="text-2xl font-semibold">Your Top 25</h2>
         </div>
-        <div className="relative col-span-3 overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  #
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Team
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  AP Rank
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Diff<span className="hidden sm:inline-flex">erence</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {top25.map((row, i) => {
-                return (
-                  <tr
-                    className={
-                      i === top25.length - 1
-                        ? ""
-                        : i % 2 === 0
-                        ? "border-b bg-white"
-                        : "border-b bg-gray-50"
-                    }
-                    key={i}
-                  >
-                    <th
-                      scope="row"
-                      className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-                    >
-                      {row.rank}
-                    </th>
-                    <td className="flex px-6 py-4">
-                      {logos[row.team] && (
-                        <img
-                          src={logos[row.team]}
-                          alt="team logo"
-                          className="mr-2 mb-1 h-6 w-6"
-                        />
-                      )}
-                      {row.team}
-                      {row.diff >= 10 && <TrendingUp className="ml-2" />}
-                      {row.diff <= -10 && <TrendingDown className="ml-2" />}
-                    </td>
-                    <td className="px-6 py-4">{row.apRank}</td>
-                    <td className="px-6 py-4">{row.diff}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="mt-2 flex flex-col lg:mt-5">
+          <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block w-full min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table className="w-full divide-y divide-gray-300">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-2 pr-2 text-center text-sm font-semibold text-gray-900 sm:pl-6"
+                      >
+                        Rank
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-2 py-3.5 text-left text-sm font-semibold text-gray-900 sm:px-3"
+                      >
+                        Team
+                      </th>
+                      <th
+                        scope="col"
+                        className="py-3.5 pl-2 pr-6 text-center text-sm font-semibold text-gray-900 sm:px-3"
+                      >
+                        AP Rank
+                      </th>
+                      <th
+                        scope="col"
+                        className="hidden pl-3 pr-4 text-center text-sm font-semibold text-gray-900 sm:table-cell sm:pr-6"
+                      >
+                        Difference
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {top25.map((row, index) => (
+                      <tr key={row.team}>
+                        <td className="whitespace-nowrap py-4 pl-2 pr-3 text-sm sm:pl-6">
+                          <div className="flex justify-center">
+                            <h1
+                              className="text-center text-4xl"
+                              style={{ fontFamily: "loveloBold" }}
+                            >
+                              {index + 1}
+                            </h1>
+                          </div>
+                        </td>
+                        <td className="max-w-[200px] whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 flex-shrink-0">
+                              <img
+                                className="h-10 w-10"
+                                src={logos[row.team]}
+                                alt="team logo"
+                              />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-center font-medium text-gray-900">
+                                {row.team}
+                              </div>
+                              <div className="text-gray-500">W-L</div>
+                            </div>
+                            <div className="ml-2 h-10 w-10 flex-shrink-0">
+                              {row.diff >= 10 && (
+                                <TrendingUp className="h-5 w-5 sm:h-8 sm:w-8" />
+                              )}
+                              {row.diff <= -10 && (
+                                <TrendingDown className="h-5 w-5 sm:h-8 sm:w-8" />
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-2 py-4 text-center text-sm text-gray-500">
+                          {row.apRank}
+                        </td>
+                        <td className="hidden whitespace-nowrap px-2 py-4 text-center text-sm text-gray-500 sm:table-cell">
+                          {row.diff}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mt-4 lg:mt-0 lg:col-span-2">
+      <div className="mt-4 lg:col-span-1 lg:mt-0">
         <div className="text-center">
-          <h2 className="mb-4 text-2xl sm:mb-5 lg:mb-8">Biggest Movers</h2>
+          <h2 className="text-2xl font-semibold">Biggest Movers</h2>
         </div>
-        <div className="relative col-span-3 overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Team
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Diff<span className="hidden sm:inline-flex">erence</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {biggestMovers.map((row, i) => {
-                const stylingData =
-                  i % 2 === 0 ? "bg-white border-b" : "border-b bg-gray-50";
-                return (
-                  <tr
-                    key={i}
-                    className={
-                      i === biggestMovers.length - 1 ? "" : stylingData
-                    }
-                  >
-                    <th
-                      scope="row"
-                      className="flex whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-                    >
-                      {logos[row.team] && (
-                        <img
-                          src={logos[row.team]}
-                          alt="team logo"
-                          className="mr-2 mb-1 h-6 w-6"
-                        />
-                      )}
-                      {row.team}
-                      {row.diff > 0 && <TrendingUp className="ml-2" />}
-                      {row.diff < 0 && <TrendingDown className="ml-2" />}
-                    </th>
-                    <td className="px-6 py-4">{row.diff}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="mt-2 flex flex-col lg:mt-5">
+          <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table className="min-w-full table-fixed divide-y divide-gray-300 sm:table-auto">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Team
+                      </th>
+                      <th
+                        scope="col"
+                        className="pl-3 pr-4 text-center text-sm font-semibold text-gray-900 sm:pr-6"
+                      >
+                        Difference
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {biggestMovers.map((row) => (
+                      <tr key={row.team}>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 flex-shrink-0">
+                              <img
+                                className="h-10 w-10"
+                                src={logos[row.team]}
+                                alt="team logo"
+                              />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-center font-medium text-gray-900">
+                                {row.team}
+                              </div>
+                              <div className="text-gray-500">W-L</div>
+                            </div>
+                            <div className="ml-2 h-10 w-10 flex-shrink-0">
+                              {row.diff >= 10 && (
+                                <TrendingUp className="h-5 w-5 sm:h-8 sm:w-8" />
+                              )}
+                              {row.diff <= -10 && (
+                                <TrendingDown className="h-5 w-5 sm:h-8 sm:w-8" />
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-2 py-4 text-center text-sm text-gray-500">
+                          {row.diff}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
       <div className="lg:col-span-4 lg:flex">
         <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
           <BackButton onClick={handleBack} />
