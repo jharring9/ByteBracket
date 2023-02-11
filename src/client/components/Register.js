@@ -3,8 +3,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   ErrorAlert,
   Facebook,
-  Github,
   Google,
+  oauth,
   ValidatedInput,
   validateInput,
 } from "./shared";
@@ -175,32 +175,22 @@ export const Register = () => {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 gap-3">
+            <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
-                <a
-                  href="#"
-                  className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                <div
+                  onClick={() => oauth("facebook", dispatch)}
+                  className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Facebook />
-                </a>
+                </div>
               </div>
-
               <div>
-                <a
-                  href="#"
-                  className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
+                <div
+                  onClick={() => oauth("google", dispatch)}
+                  className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Google />
-                </a>
-              </div>
-
-              <div>
-                <a
-                  href="#"
-                  className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
-                >
-                  <Github />
-                </a>
+                </div>
               </div>
             </div>
           </div>
