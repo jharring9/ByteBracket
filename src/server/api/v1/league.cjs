@@ -95,7 +95,7 @@ module.exports = (app) => {
     const result = await leagueDB.scanLeagues();
     if (result) {
       result.map((league) => {
-        league.entryCount = league.entries.size;
+        league.entryCount = league.entries.size - 1;
         delete result.entries;
         return league;
       });
@@ -119,7 +119,7 @@ module.exports = (app) => {
     const result = await leagueDB.batchGetLeagues(leagues);
     if (result) {
       result.map((league) => {
-        league.entryCount = league.entries.size;
+        league.entryCount = league.entries.size - 1;
         delete result.entries;
         return league;
       });
