@@ -3,10 +3,12 @@ const {
   PutCommand,
   DeleteCommand,
   QueryCommand,
+  BatchGetCommand,
 } = require("@aws-sdk/lib-dynamodb");
 const { ddbDocClient } = require("./ddbDocumentClient.cjs");
 
 const bracketTable = "brackets";
+exports.bracketTable = bracketTable;
 
 exports.getBracket = async (username, id) => {
   const params = {
@@ -60,6 +62,8 @@ exports.saveBracket = async (
       name: name,
       winnerName: winnerName,
       stats: stats,
+      points: 0,
+      leagues: new Set([""]),
       created: now,
       lastUpdated: now,
     },
@@ -85,3 +89,24 @@ exports.deleteBracket = async (username, id) => {
     return null;
   }
 };
+
+exports.batchGetBrackets = async (entries) => {
+  const params = {
+    RequestItems: {
+      [bracketTable]: {
+        Keys: entries.map((entry) => ({
+          username: entry.username,
+          id: entry.bracketId,
+        })),
+        AttributesToGet: ["id", "username", "name", "winnerName", "points"],
+      },
+    },
+  };
+  try {
+    const { Responses } = await ddbDocClient.send(new BatchGetCommand(params));
+    return Responses[bracketTable];
+  } catch (err) {
+    return null;
+  }
+};
+

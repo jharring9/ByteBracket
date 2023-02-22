@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = ({ navigation }) => {
   return (
-    <footer>
+    <footer className="mt-auto">
       <div className="mx-auto max-w-7xl overflow-hidden py-20 px-6 sm:py-24 lg:px-8">
         <nav
           className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12"

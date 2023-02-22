@@ -18,6 +18,7 @@ module.exports = (app) => {
         last: dynamoUser.last,
         username: dynamoUser.username,
         email: dynamoUser.email,
+        leagues: Array.from(dynamoUser.leagues || []).filter((l) => l !== ""),
       };
       return res.send(response);
     }
@@ -56,6 +57,7 @@ module.exports = (app) => {
       last: user.last,
       username: user.username,
       email: user.email,
+      leagues: [],
     };
     req.session.user = response;
     res.status(201).send(response);
@@ -92,6 +94,7 @@ module.exports = (app) => {
       last: updatedUser.last,
       username: user,
       email: updatedUser.email,
+      leagues: [],
     };
     req.session.user = response;
     res.status(201).send(response);
@@ -112,5 +115,22 @@ module.exports = (app) => {
       return res.status(204).send();
     }
     return res.status(404).send({ error: "Bracket not found" });
+  });
+
+  /**
+   * Add league to user account.
+   */
+  app.post("/v1/user/:user/league", async (req, res) => {
+    const { user } = req.params;
+    const { leagueId } = req.body;
+    const sessionUser = req.session.user?.username;
+    if (sessionUser !== user) {
+      return res.status(401).send({ error: "unauthorized" });
+    }
+    const result = await userDB.addLeagueToUser(user, leagueId);
+    if (result) {
+      return res.status(201).send();
+    }
+    return res.status(400).send({ error: "Error adding league to user" });
   });
 };

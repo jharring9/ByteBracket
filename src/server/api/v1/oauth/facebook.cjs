@@ -37,6 +37,7 @@ module.exports = (app) => {
         email: facebookUser.email.toLowerCase(),
         first: facebookUser.first_name,
         last: facebookUser.last_name,
+        leagues: new Set([""]),
       };
       if (!(await userDB.saveUser(user))) {
         return res
@@ -49,6 +50,7 @@ module.exports = (app) => {
       last: dynamoUser?.last || facebookUser.last_name,
       username: dynamoUser?.username || facebookUser.email,
       email: dynamoUser?.email || facebookUser.email,
+      leagues: Array.from(dynamoUser?.leagues || new Set([""])),
     };
     return res.status(201).send(req.session.user);
   });

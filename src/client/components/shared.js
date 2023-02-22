@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import {
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
+  InformationCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { CheckIcon } from "@heroicons/react/24/solid";
@@ -44,6 +45,7 @@ export const TrendingDown = () => (
 
 export const BackButton = ({ onClick }) => (
   <button
+    type="reset"
     className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-100 px-5 text-indigo-700 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
     onClick={onClick}
   >
@@ -103,6 +105,7 @@ export const ContinueButton = ({ onClick, loading }) => (
 
 export const SaveButton = ({ onClick, loading }) => (
   <button
+    type="submit"
     className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-700 px-5 text-indigo-100 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
     onClick={onClick}
   >
@@ -206,7 +209,7 @@ export const Logo = () => (
 );
 
 export const ErrorAlert = ({ header, message }) => (
-  <div className="mx-auto max-w-7xl rounded-md bg-red-100 p-4 px-4 px-6">
+  <div className=" mx-auto mb-6 max-w-7xl rounded-md bg-red-100 p-4 px-4 px-6">
     <div className="flex">
       <div className="flex-shrink-0">
         <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
@@ -221,7 +224,7 @@ export const ErrorAlert = ({ header, message }) => (
   </div>
 );
 
-export const BracketArt = () => (
+export const BracketArt = ({ mounted }) => (
   <div className="relative mt-12 sm:mx-auto sm:max-w-lg lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
     <svg
       className="absolute top-0 left-1/2 origin-top -translate-x-1/2 -translate-y-8 scale-90 transform md:scale-100"
@@ -259,7 +262,14 @@ export const BracketArt = () => (
     </svg>
     <div className="relative mx-auto w-full lg:max-w-md">
       <div className="relative block w-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-        <img className="w-full" src="/assets/bracket.png" alt="" />
+        <Transition
+          show={mounted}
+          enter="transition ease-out duration-[2000ms]"
+          enterFrom="opacity-0 translate-x-4"
+          enterTo="opacity-100 translate-y-0"
+        >
+          <img className="w-full" src="/assets/bracket.png" alt="" />
+        </Transition>
       </div>
     </div>
   </div>
@@ -384,11 +394,16 @@ export const DisableStat = ({
       setDisabledValue(value);
       return setValue(disabledValue);
     }}
-    className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800"
+    className={classNames(
+      disabledValue !== 0
+        ? "border-gray-500 bg-gray-200 text-gray-500 hover:bg-gray-500 hover:text-white"
+        : "border-red-700 text-red-700 hover:bg-red-700 hover:text-white",
+      "mr-2 inline-flex items-center rounded-lg border p-0.5 text-center text-sm font-medium"
+    )}
   >
     <svg
       aria-hidden="true"
-      className="h-3 w-3"
+      className="h-5 w-5"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 352 512"
@@ -438,7 +453,7 @@ export const fetchImages = async (dispatch) => {
   }
 };
 
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Popover, Transition } from "@headlessui/react";
 export const WarnModal = ({
   open,
   setOpen,
@@ -527,7 +542,7 @@ import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { setUser } from "../store/userSlice";
 export const SuccessAlert = ({ setOpen, message }) => {
   return (
-    <div className="mb-6 rounded-md bg-green-50 p-4">
+    <div className="mb-6 rounded-md bg-green-100 p-4">
       <div className="flex">
         <div className="flex-shrink-0">
           <CheckCircleIcon
@@ -542,7 +557,7 @@ export const SuccessAlert = ({ setOpen, message }) => {
           <div className="-mx-1.5 -my-1.5">
             <button
               onClick={() => setOpen(false)}
-              className="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50"
+              className="inline-flex rounded-md bg-green-100 p-1.5 text-green-500 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50"
             >
               <XMarkIcon className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -626,15 +641,23 @@ export const ValidatedInput = ({
   value,
   setValue,
   errorMsg,
+  popoverInfo,
+  disabled,
 }) => {
   return (
     <>
-      <label
-        htmlFor={inputName}
-        className="block text-sm font-medium text-gray-700"
-      >
-        {inputName}
-      </label>
+      {popoverInfo ? (
+        <div className="-mb-1">
+          <InfoPopover name={inputName} details={popoverInfo} />
+        </div>
+      ) : (
+        <label
+          htmlFor={inputName}
+          className="block text-sm font-medium text-gray-700"
+        >
+          {inputName}
+        </label>
+      )}
       <div className="relative mt-1 rounded-md shadow-sm">
         <input
           type={type ? type : "text"}
@@ -644,10 +667,11 @@ export const ValidatedInput = ({
             errorMsg
               ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500"
               : "border-gray-300 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500",
-            "block w-full rounded-md border sm:text-sm"
+            "block w-full rounded-md border disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm"
           )}
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          disabled={disabled}
         />
         {errorMsg && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
@@ -711,4 +735,71 @@ const processLogin = async (event, dispatch) => {
     dispatch(setUser(data));
   }
   processing = false;
+};
+
+export const LoadingWrapper = ({ children, isLoading }) => {
+  return isLoading ? (
+    <div className="flex h-96 items-center justify-center">
+      <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
+    </div>
+  ) : (
+    <Transition
+      show={true}
+      appear={true}
+      enter="transition ease-out duration-[500ms]"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+    >
+      {children}
+    </Transition>
+  );
+};
+
+export const normalTransition = {
+  enter: "ease duration-[200ms]",
+  enterFrom: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+  enterTo: "opacity-100 translate-y-0 sm:scale-100",
+};
+
+export const slowTransition = {
+  enter: "ease-out duration-[500ms]",
+  enterFrom: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+  enterTo: "opacity-100 translate-y-0 sm:scale-100",
+};
+
+export const InfoPopover = ({ name, details }) => {
+  return (
+    <Popover className="relative">
+      {({ open }) => (
+        <>
+          <Popover.Button className="mb-2 text-sm font-medium text-gray-700 focus:outline-none dark:text-white">
+            <div className="flex">
+              {name}
+              <InformationCircleIcon className="ml-1 h-4 w-4 text-blue-600" />
+            </div>
+          </Popover.Button>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-200"
+            enterFrom="opacity-0 translate-y-1"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-1"
+          >
+            <Popover.Panel className="absolute left-1/2 z-10 w-full -translate-x-1/2 transform px-4 sm:w-5/6 sm:px-0">
+              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="relative bg-white p-4">
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-900">{name}</p>
+                    <p className="text-sm text-gray-500">{details}</p>
+                  </div>
+                </div>
+              </div>
+            </Popover.Panel>
+          </Transition>
+        </>
+      )}
+    </Popover>
+  );
 };

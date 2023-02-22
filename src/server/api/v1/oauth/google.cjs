@@ -46,6 +46,7 @@ module.exports = (app) => {
         email: googleUser.email.toLowerCase(),
         first: googleUser.given_name,
         last: googleUser.family_name,
+        leagues: new Set([""]),
       };
       if (!(await userDB.saveUser(user))) {
         return res
@@ -58,6 +59,7 @@ module.exports = (app) => {
       last: dynamoUser?.last || googleUser.family_name,
       username: dynamoUser?.username || googleUser.email,
       email: dynamoUser?.email || googleUser.email,
+      leagues: Array.from(dynamoUser?.leagues || googleUser.leagues),
     };
     return res.status(201).send(req.session.user);
   });

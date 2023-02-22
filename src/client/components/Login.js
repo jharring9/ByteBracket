@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   ErrorAlert,
   Facebook,
@@ -14,6 +14,8 @@ import { setUser } from "../store/userSlice";
 export const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [queryParams, _] = useSearchParams();
+  const returnUrl = queryParams.get("return");
   const { user } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,9 +25,9 @@ export const Login = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate("/account");
+      navigate(returnUrl ?  `/${returnUrl}` : "/account");
     }
-  }, [user]);
+  }, [user, returnUrl]);
 
   const onLogin = async (ev) => {
     ev.preventDefault();
@@ -53,7 +55,6 @@ export const Login = () => {
     const data = await res.json();
     if (res.ok) {
       dispatch(setUser(data));
-      navigate("/account");
     } else {
       setError(data.error);
     }

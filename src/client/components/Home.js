@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BracketArt } from "./shared";
+import { Transition } from "@headlessui/react";
 
 export const Home = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const navigate = useNavigate();
   return (
     <main className="mx-auto mt-16 max-w-7xl px-4 px-6 sm:mt-24 lg:mt-32">
@@ -13,16 +20,23 @@ export const Home = () => {
               Coming soon
             </span>
             <span className="mt-1 block text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
-              <span className="block text-gray-900">Where sports data</span>
+              <span className="block text-gray-900">A better way to</span>
               <span className="block">
-                meets <span className="text-indigo-600">intuition.</span>
+                <Transition
+                  show={mounted}
+                  enter="transition ease-out duration-[2000ms]"
+                  enterFrom="opacity-0 -translate-y-4"
+                  enterTo="opacity-100 translate-y-0"
+                >
+                  <span className="text-indigo-600">bracket.</span>
+                </Transition>
               </span>
             </span>
           </h1>
           <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-            lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-            fugiat aliqua ad ad non deserunt sunt.
+            Choose which statistics you believe impact winning games, and our
+            algorithm will give you personalized picks. Create a March Madness
+            bracket today!
           </p>
           <div className="mt-5 sm:mx-auto sm:max-w-lg sm:text-center lg:mx-0 lg:text-left">
             <button
@@ -34,7 +48,7 @@ export const Home = () => {
             </button>
           </div>
         </div>
-        <BracketArt />
+        <BracketArt mounted={mounted} />
       </div>
     </main>
   );

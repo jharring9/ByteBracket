@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { CreateCard, ErrorAlert, smoothScrollTop, SpeedDial } from "../shared";
+import {
+  CreateCard,
+  ErrorAlert,
+  normalTransition,
+  smoothScrollTop,
+  SpeedDial,
+} from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
-import {
-  SingleSided,
-  winPercent,
-} from "../bracket-components/DynamicBracket";
+import { SingleSided, winPercent } from "../bracket-components/DynamicBracket";
+import { Transition } from "@headlessui/react";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
@@ -129,24 +133,32 @@ export const MakePicks = () => {
   };
 
   return (
-    <>
+    <Transition
+      show={true}
+      appear={true}
+      enter="transition ease-out duration-[2000ms]"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+    >
       <h1 className="mt-4 text-center text-3xl text-gray-900 lg:mt-6">
         Make Your Picks: {bracket[region].name}
       </h1>
-      {error && (
-        <div className="flex flex-col items-center justify-center">
-          <div className=" mt-3 w-full md:w-2/3 lg:m-4">
-            <ErrorAlert
-              header="There was a problem with your picks"
-              message={error}
-            />
-          </div>
+      <Transition
+        show={!!error}
+        {...normalTransition}
+        className="flex flex-col items-center justify-center"
+      >
+        <div className="mt-3 w-full md:w-2/3 lg:m-4">
+          <ErrorAlert
+            header="There was a problem with your picks"
+            message={error}
+          />
         </div>
-      )}
+      </Transition>
       <CreateCard onBack={handleBack} onNext={handleNext}>
         <SingleSided rounds={bracket[region].rounds} />
       </CreateCard>
       <SpeedDial action={autoComplete} />
-    </>
+    </Transition>
   );
 };

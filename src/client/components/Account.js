@@ -6,16 +6,15 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Profile } from "./account-flow/Profile";
-import { classNames, fetchImages } from "./shared";
+import { classNames } from "./shared";
 import { Brackets } from "./account-flow/Brackets";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 let sidebar = [];
 
 export const Account = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ export const Account = () => {
       { name: "Profile", href: 3, icon: UserCircleIcon, current: false },
       { name: "Password", href: 4, icon: KeyIcon, current: false },
     ];
-    fetchImages(dispatch);
   }, []);
 
   const updateStage = (newStage) => {
