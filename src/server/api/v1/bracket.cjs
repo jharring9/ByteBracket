@@ -1,6 +1,7 @@
 "use strict";
 
 const bracketDB = require("../../dynamo/bracket.cjs");
+const leagueDB = require("../../dynamo/league.cjs");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = (app) => {
@@ -11,7 +12,7 @@ module.exports = (app) => {
     const sessionUser = req.session.user?.username;
     const queryUser = req.params.user;
     if (sessionUser !== queryUser) {
-      res.status(401).send({ error: "unauthorized" });
+      return res.status(401).send({ error: "unauthorized" });
     }
 
     const id = uuidv4();
@@ -22,12 +23,9 @@ module.exports = (app) => {
     }
 
     if (!bracket || !champion || !winner || !stats) {
-      return res
-        .status(400)
-        .send({
-          error:
-            "Missing fields. This is likely a server issue. Please refresh the page and try again.",
-        });
+      return res.status(400).send({
+        error: "Missing fields. This is likely a server issue.",
+      });
     }
 
     if (
@@ -44,7 +42,7 @@ module.exports = (app) => {
       return res.status(503).send({ error: "Server error. Please try again." });
     }
 
-    res.status(201).send({ id: id });
+    return res.status(201).send({ id: id });
   });
 
   /**
@@ -52,11 +50,9 @@ module.exports = (app) => {
    */
   app.get("/v1/:user/bracket/:id", async (req, res) => {
     const { user, id } = req.params;
-    const sessionUser = req.session.user?.username;
-    if (sessionUser !== user) {
-      res.status(401).send({ error: "unauthorized" });
+    if (!req.session.user?.username) {
+      return res.status(401).send({ error: "unauthorized" });
     }
-
     const result = await bracketDB.getBracket(user, id);
     if (result) {
       return res.status(200).send(result);
@@ -89,6 +85,16 @@ module.exports = (app) => {
     const sessionUser = req.session.user?.username;
     if (sessionUser !== user) {
       return res.status(401).send({ error: "unauthorized" });
+    }
+
+    const bracket = await bracketDB.getBracket(user, id);
+    if (bracket) {
+      const { leagues } = bracket;
+      if (leagues) {
+        for (const league of leagues) {
+          await leagueDB.removeEntryFromLeague(`${user}#${id}`, league);
+        }
+      }
     }
 
     const result = await bracketDB.deleteBracket(user, id);

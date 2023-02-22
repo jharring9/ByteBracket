@@ -15,7 +15,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [queryParams, _] = useSearchParams();
-  const fromCreate = queryParams.get("fromCreate");
+  const returnUrl = queryParams.get("return");
   const { user } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [first, setFirst] = useState("");
@@ -31,7 +31,7 @@ export const Register = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate(fromCreate ? "/create" : "/account");
+      navigate(returnUrl ?  `/${returnUrl}` : "/account");
     }
   }, [user]);
 

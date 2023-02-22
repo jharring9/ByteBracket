@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   ErrorAlert,
+  normalTransition,
   smoothScrollTop,
   SuccessAlert,
   ValidatedInput,
@@ -8,6 +9,7 @@ import {
 } from "../shared";
 import { setUser } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
+import { Transition } from "@headlessui/react";
 
 export const Profile = ({ user }) => {
   const dispatch = useDispatch();
@@ -83,15 +85,15 @@ export const Profile = ({ user }) => {
   return (
     <form className="divide-y divide-gray-200 lg:col-span-9">
       <div className="py-6 px-4 sm:p-6 lg:pb-8">
-        {success && (
+        <Transition as="div" show={success}>
           <SuccessAlert
             setOpen={setSuccess}
             message="Your profile has been updated."
           />
-        )}
-        {error && (
+        </Transition>
+        <Transition as="div" show={!!error} {...normalTransition}>
           <ErrorAlert header="Error updating profile" message={error} />
-        )}
+        </Transition>
         <div>
           <h2 className="text-lg font-medium leading-6 text-gray-900">
             Profile

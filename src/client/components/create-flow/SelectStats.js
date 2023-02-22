@@ -1,11 +1,17 @@
 import { PieChart } from "react-minimal-pie-chart";
 import React, { useState } from "react";
-import { ContinueButton, ErrorAlert, DisableStat } from "../shared";
+import {
+  ContinueButton,
+  ErrorAlert,
+  DisableStat,
+  InfoPopover,
+} from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setField, setTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setStats } from "../../store/statsSlice";
+import { Transition } from "@headlessui/react";
 
 export const SelectStats = () => {
   const dispatch = useDispatch();
@@ -65,79 +71,86 @@ export const SelectStats = () => {
           message={error}
         />
       )}
-      <div className="mx-auto mt-4 max-w-7xl px-6 sm:mt-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4">
+      <Transition
+        show={true}
+        appear={true}
+        enter="transition ease-out duration-[1000ms]"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        className="mx-auto mt-4 max-w-7xl px-6 sm:mt-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4"
+      >
         <div className="order-1">
-          <InfoModal
+          <StatSelection
             name="Win-Loss %"
-            details="Details"
+            details="The ratio of a team’s wins to their losses. Their winning percentage."
             value={stats.wl}
             setValue={(val) => dispatch(setStats({ ...stats, wl: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Strength of Schedule"
-            details="Details"
+            details="Average record of opponents. Quantifies how difficult their schedule has been based on the teams they have played."
             value={stats.sos}
             setValue={(val) => dispatch(setStats({ ...stats, sos: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Points per Game"
-            details="Details"
+            details="The average number of points they score each game, or how good their offense is. "
             value={stats.ppg}
             setValue={(val) => dispatch(setStats({ ...stats, ppg: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Opponent Points per Game"
-            details="Details"
+            details="The average number of points their opponents score per game, or how good their defense is."
             value={stats.oppg}
             setValue={(val) => dispatch(setStats({ ...stats, oppg: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Field Goal %"
-            details="Details"
+            details="The percentage of their shots that go in, or how efficient they are."
             value={stats.fg}
             setValue={(val) => dispatch(setStats({ ...stats, fg: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="3-Point Makes"
-            details="Details"
+            details="The number of 3 pointers that a team makes. Accounts both for teams that shoot a lot and for teams that make a lot."
             value={stats.tpm}
             setValue={(val) => dispatch(setStats({ ...stats, tpm: val }))}
           />
         </div>
         <div className="md:order-2 lg:order-3">
-          <InfoModal
+          <StatSelection
             name="Free Throw Makes"
-            details="Details"
+            details="The number of free throws that a team makes. Accounts both for teams that shoot a lot and for teams make a lot."
             value={stats.ft}
             setValue={(val) => dispatch(setStats({ ...stats, ft: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Total Rebounds"
-            details="Details"
+            details="The total number of offensive and defensive rebounds for a team over the course of the season."
             value={stats.trb}
             setValue={(val) => dispatch(setStats({ ...stats, trb: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Assists"
-            details="Details"
+            details="The cumulative number of baskets for which an assist was earned over the course of the season."
             value={stats.ast}
             setValue={(val) => dispatch(setStats({ ...stats, ast: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Steals & Blocks"
-            details="Details"
+            details="The cumulative number of the combined steals and blocks of a team over the season. "
             value={stats.stlblk}
             setValue={(val) => dispatch(setStats({ ...stats, stlblk: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Turnovers"
-            details="Details"
+            details="The cumulative number of turnovers from a team over the course of a season. Placing high importance on this statistic favors teams with fewer turnovers."
             value={stats.to}
             setValue={(val) => dispatch(setStats({ ...stats, to: val }))}
           />
-          <InfoModal
+          <StatSelection
             name="Personal Fouls"
-            details="Details"
+            details="The total number of fouls from a team over the course of a season. Placing high importance on this statistic favors teams with fewer fouls."
             value={stats.pf}
             setValue={(val) => dispatch(setStats({ ...stats, pf: val }))}
           />
@@ -165,21 +178,19 @@ export const SelectStats = () => {
             <ContinueButton onClick={handleSubmit} loading={loading} />
           </div>
         </div>
-      </div>
+      </Transition>
     </>
   );
 };
 
-const InfoModal = ({ name, value, setValue, details }) => {
+/**
+ * Component for selection of individual stat. Includes a slider, a popover, and a disable button.
+ */
+const StatSelection = ({ name, value, setValue, details }) => {
   const [disabledValue, setDisabledValue] = useState(0);
   return (
     <div>
-      <label
-        htmlFor="minmax-range"
-        className="mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
-        {name}
-      </label>
+      <InfoPopover name={name} details={details} />
       <div className="grid grid-cols-10">
         <div className="col-span-2 md:col-span-1">
           <DisableStat

@@ -7,6 +7,7 @@ const {
 const { ddbDocClient } = require("./ddbDocumentClient.cjs");
 
 const userTable = "users";
+exports.userTable = userTable;
 
 exports.getUser = async (username) => {
   const params = {
@@ -27,6 +28,7 @@ exports.saveUser = async (user) => {
   const now = new Date().toISOString();
   user.created = now;
   user.lastUpdated = now;
+  user.leagues = new Set([""]);
   const params = {
     TableName: userTable,
     Item: user,
@@ -44,8 +46,7 @@ exports.updateUser = async (user) => {
     Key: {
       username: user.username,
     },
-    UpdateExpression:
-      "set email = :e, #f = :f, #l = :l, lastUpdated = :u",
+    UpdateExpression: "set email = :e, #f = :f, #l = :l, lastUpdated = :u",
     ExpressionAttributeValues: {
       ":e": user.email,
       ":f": user.first,
@@ -54,7 +55,7 @@ exports.updateUser = async (user) => {
     },
     ExpressionAttributeNames: {
       "#f": "first",
-      "#l": "last"
+      "#l": "last",
     },
   };
   try {
@@ -73,6 +74,41 @@ exports.deleteUser = async (username) => {
   };
   try {
     return await ddbDocClient.send(new DeleteCommand(params));
+  } catch (err) {
+    return null;
+  }
+};
+
+exports.getUserLeagues = async (username) => {
+  const params = {
+    TableName: userTable,
+    Key: {
+      username: username,
+    },
+    AttributesToGet: ["leagues"],
+  };
+  try {
+    const { Item } = await ddbDocClient.send(new GetCommand(params));
+    Item.leagues = Array.from(Item.leagues).filter((l) => l !== "");
+    return Item;
+  } catch (err) {
+    return null;
+  }
+};
+
+exports.addLeagueToUser = async (username, leagueId) => {
+  const params = {
+    TableName: userTable,
+    Key: {
+      username: username,
+    },
+    UpdateExpression: "add leagues :l",
+    ExpressionAttributeValues: {
+      ":l": new Set([leagueId]),
+    },
+  };
+  try {
+    return await ddbDocClient.send(new UpdateCommand(params));
   } catch (err) {
     return null;
   }

@@ -15,7 +15,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [queryParams, _] = useSearchParams();
-  const fromCreate = queryParams.get("fromCreate");
+  const returnUrl = queryParams.get("return");
   const { user } = useSelector((state) => state.user);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,9 +25,9 @@ export const Login = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate(fromCreate ? "/create" : "/account");
+      navigate(returnUrl ?  `/${returnUrl}` : "/account");
     }
-  }, [user, fromCreate]);
+  }, [user, returnUrl]);
 
   const onLogin = async (ev) => {
     ev.preventDefault();

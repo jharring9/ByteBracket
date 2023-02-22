@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "../../../public/output.css";
+import "flowbite";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Home } from "./Home";
 import { Create } from "./Create";
 import { NotFound } from "./NotFound";
-import "flowbite";
 import { Login } from "./Login";
 import { Logout } from "./Logout";
 import { Register } from "./Register";
@@ -16,6 +16,12 @@ import { setUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { ViewBracket } from "./ViewBracket";
 import { AcceptOauthCallback } from "./AcceptOauthCallback";
+import { ViewLeague } from "./leagues-flow/ViewLeague";
+import { fetchImages } from "./shared";
+import { Leagues } from "./Leagues";
+import { JoinLeague } from "./leagues-flow/JoinLeague";
+import { PrivacyPolicy } from "./PrivacyPolicy";
+import { CreateLeague } from "./leagues-flow/CreateLeague";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -23,7 +29,7 @@ export default function App() {
     { name: "Home", href: "/home", current: false },
     { name: "Create Bracket", href: "/create", current: false },
     { name: "About", href: "/about", current: false },
-    { name: "Social", href: "/social", current: false },
+    { name: "Leagues", href: "/leagues", current: false },
   ]);
 
   useEffect(() => {
@@ -38,11 +44,12 @@ export default function App() {
       }
     };
     checkSession();
+    fetchImages(dispatch);
   }, []);
 
   return (
-    <div className="relative overflow-hidden bg-gray-100">
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="flex min-h-screen flex-col">
         <Header navigation={navigation} setNavigation={setNavigation} />
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
@@ -53,6 +60,10 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
+          <Route path="/leagues" element={<Leagues />} />
+          <Route path="/leagues/:id" element={<ViewLeague />} />
+          <Route path="/newleague" element={<CreateLeague />} />
+          <Route path="/join/:id" element={<JoinLeague />} />
           <Route path="/bracket/:user/:id" element={<ViewBracket />} />
           <Route
             path="/auth/callback/google"
@@ -62,10 +73,11 @@ export default function App() {
             path="/auth/callback/facebook"
             element={<AcceptOauthCallback provider="facebook" />}
           />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer navigation={navigation} />
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }

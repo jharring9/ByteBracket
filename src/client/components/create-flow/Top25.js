@@ -7,6 +7,7 @@ import {
 } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
+import { Transition } from "@headlessui/react";
 
 export const Top25 = () => {
   const dispatch = useDispatch();
@@ -65,7 +66,14 @@ export const Top25 = () => {
   }, [top25]);
 
   return (
-    <div className="mt-4 sm:mt-6 md:mx-auto md:max-w-7xl md:px-4 md:px-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4">
+    <Transition
+      show={true}
+      appear={true}
+      enter="transition ease-out duration-[2000ms]"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      className="mt-4 sm:mt-6 md:mx-auto md:max-w-7xl md:px-4 md:px-6 lg:mt-8 lg:grid lg:grid-cols-3 lg:gap-4"
+    >
       <div className="lg:col-span-2">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Your Top 25</h2>
@@ -108,10 +116,7 @@ export const Top25 = () => {
                       <tr key={row.team}>
                         <td className="whitespace-nowrap py-4 pl-2 pr-3 text-sm sm:pl-6">
                           <div className="flex justify-center">
-                            <h1
-                              className="text-center text-4xl"
-                              style={{ fontFamily: "loveloBold" }}
-                            >
+                            <h1 className="text-center text-3xl font-bold">
                               {index + 1}
                             </h1>
                           </div>
@@ -230,6 +235,6 @@ export const Top25 = () => {
           <ContinueButton onClick={handleNext} loading={loading} />
         </div>
       </div>
-    </div>
+    </Transition>
   );
 };

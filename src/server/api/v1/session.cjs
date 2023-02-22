@@ -27,6 +27,7 @@ module.exports = (app) => {
       last: dynamoUser.last,
       username: dynamoUser.username,
       email: dynamoUser.email,
+      leagues: Array.from(dynamoUser.leagues).filter((l) => l !== ""),
     };
     req.session.user = response;
     res.status(201).send(response);
@@ -35,8 +36,15 @@ module.exports = (app) => {
   /**
    * Check if user session is valid/active.
    */
-  app.get("/v1/session", (req, res) => {
+  app.get("/v1/session", async (req, res) => {
     if (req.session.user) {
+      const dynamoUser = await userDB.getUser(req.session.user.username);
+      if (!dynamoUser) {
+        return res.status(401).send({ error: "Invalid session." });
+      }
+      req.session.user.leagues = Array.from(dynamoUser.leagues || []).filter(
+        (l) => l !== ""
+      );
       res.status(200).send(req.session.user);
     } else {
       res.status(404).send({ error: "No session found." });

@@ -4,10 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { WarnModal } from "../shared";
 import { DocumentPlusIcon } from "@heroicons/react/24/solid";
+import { Transition } from "@headlessui/react";
 
 export const Brackets = ({ user }) => {
   const navigate = useNavigate();
   const [brackets, setBrackets] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { logos } = useSelector((state) => state.lambda);
 
   useEffect(() => {
@@ -28,6 +30,7 @@ export const Brackets = ({ user }) => {
     } else {
       navigate("/login");
     }
+    setLoading(false);
   };
 
   const deleteBracket = async (id) => {
@@ -54,39 +57,50 @@ export const Brackets = ({ user }) => {
           </h2>
           <p className="mt-1 text-sm text-gray-500">See your ByteBrackets.</p>
         </div>
-        <div className="mt-6 flex flex-col">
-          <ul
-            role="list"
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            {brackets.map((bracket) => (
-              <BracketGridItem
-                user={user}
-                bracket={bracket}
-                logos={logos}
-                deleteBracket={deleteBracket}
-              />
-            ))}
-            <li
-              key="new"
-              className="h-40 w-full divide-y divide-gray-200 rounded-lg bg-white"
+        <Transition
+          as={React.Fragment}
+          show={!loading}
+          enter="ease-out duration-500"
+          enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enterTo="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+          leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        >
+          <div className="mt-6 flex flex-col">
+            <ul
+              role="list"
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
             >
-              <button
-                type="button"
-                onClick={() => navigate("/create")}
-                className="relative block h-full w-full rounded-lg border-2 border-dashed border-gray-300 text-center text-gray-300 hover:border-gray-400 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                <DocumentPlusIcon
-                  className="mx-auto h-12 w-12"
-                  aria-hidden="true"
+              {brackets.map((bracket) => (
+                <BracketGridItem
+                  user={user}
+                  bracket={bracket}
+                  logos={logos}
+                  deleteBracket={deleteBracket}
                 />
-                <span className="mt-2 block text-sm font-medium text-gray-900">
-                  Create a new bracket
-                </span>
-              </button>
-            </li>
-          </ul>
-        </div>
+              ))}
+              <li
+                key="new"
+                className="h-40 w-full divide-y divide-gray-200 rounded-lg bg-white"
+              >
+                <button
+                  type="button"
+                  onClick={() => navigate("/create")}
+                  className="relative block h-full w-full rounded-lg border-2 border-dashed border-gray-300 text-center text-gray-300 hover:border-gray-400 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  <DocumentPlusIcon
+                    className="mx-auto h-12 w-12"
+                    aria-hidden="true"
+                  />
+                  <span className="mt-2 block text-sm font-medium text-gray-900">
+                    Create a new bracket
+                  </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </Transition>
       </div>
     </div>
   );

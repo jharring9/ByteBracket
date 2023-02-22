@@ -6,16 +6,17 @@ import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
 import { BackButton, ErrorAlert, SaveButton, ValidatedInput } from "../shared";
 import { setCreateStage } from "../../store/createStageSlice";
+import { Transition } from "@headlessui/react";
 
 export const Finalize = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const { user } = useSelector((state) => state.user);
   const { field, logos } = useSelector((state) => state.lambda);
   const { values: stats } = useSelector((state) => state.stats);
   const { bracket, champion } = useSelector((state) => state.bracket);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
@@ -81,7 +82,13 @@ export const Finalize = () => {
   };
 
   return (
-    <>
+    <Transition
+      show={true}
+      appear={true}
+      enter="transition ease-out duration-[1000ms]"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+    >
       {user.username ? (
         <div className="relative mx-auto mt-8 lg:mt-14">
           <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:w-1/2 lg:px-8">
@@ -89,7 +96,6 @@ export const Finalize = () => {
               <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
                 {error && (
                   <ErrorAlert
-                    className="mb-6"
                     header="Error submitting bracket"
                     message={error}
                   />
@@ -136,14 +142,14 @@ export const Finalize = () => {
             <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
               Please{" "}
               <Link
-                to="/login?fromCreate=true"
+                to="/login?return=create"
                 className="font-medium text-indigo-600 hover:underline"
               >
                 log in
               </Link>{" "}
               or{" "}
               <Link
-                to="/register?fromCreate=true"
+                to="/register?return=create"
                 className="font-medium text-indigo-600 hover:underline"
               >
                 create a free account
@@ -155,6 +161,6 @@ export const Finalize = () => {
           </div>
         </div>
       )}
-    </>
+    </Transition>
   );
 };
