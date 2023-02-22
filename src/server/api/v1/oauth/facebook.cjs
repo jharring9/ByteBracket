@@ -50,7 +50,7 @@ module.exports = (app) => {
       last: dynamoUser?.last || facebookUser.last_name,
       username: dynamoUser?.username || facebookUser.email,
       email: dynamoUser?.email || facebookUser.email,
-      leagues: Array.from(dynamoUser?.leagues || new Set([""])),
+      leagues: Array.from(dynamoUser?.leagues || []),
     };
     return res.status(201).send(req.session.user);
   });

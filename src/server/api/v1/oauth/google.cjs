@@ -59,7 +59,7 @@ module.exports = (app) => {
       last: dynamoUser?.last || googleUser.family_name,
       username: dynamoUser?.username || googleUser.email,
       email: dynamoUser?.email || googleUser.email,
-      leagues: Array.from(dynamoUser?.leagues || googleUser.leagues),
+      leagues: Array.from(dynamoUser?.leagues || []),
     };
     return res.status(201).send(req.session.user);
   });
