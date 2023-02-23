@@ -10,6 +10,7 @@ import {
 } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
+import ReactGA from "react-ga4";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -25,9 +26,13 @@ export const Login = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate(returnUrl ?  `/${returnUrl}` : "/account");
+      navigate(returnUrl ? `/${returnUrl}` : "/account");
     }
   }, [user, returnUrl]);
+
+  useEffect(() => {
+    document.title = "Login - ByteBracket";
+  }, []);
 
   const onLogin = async (ev) => {
     ev.preventDefault();
@@ -54,6 +59,7 @@ export const Login = () => {
     });
     const data = await res.json();
     if (res.ok) {
+      ReactGA.event("login", { method: "native" });
       dispatch(setUser(data));
     } else {
       setError(data.error);

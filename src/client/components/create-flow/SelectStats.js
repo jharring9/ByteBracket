@@ -12,6 +12,7 @@ import { resetBracket } from "../../store/bracketSlice";
 import { setCreateStage } from "../../store/createStageSlice";
 import { setStats } from "../../store/statsSlice";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const SelectStats = () => {
   const dispatch = useDispatch();
@@ -50,6 +51,11 @@ export const SelectStats = () => {
       },
     });
     if (res.ok) {
+      ReactGA.event({
+        category: "Bracket",
+        action: "Stats Selected",
+        label: "Stats Selected",
+      });
       const data = await res.json();
       dispatch(setField(data.field));
       dispatch(setTop25(data.top25));

@@ -89,6 +89,10 @@ export const ViewLeague = () => {
     }
   }, [isPrivate, manager, user]);
 
+  useEffect(() => {
+    document.title = "League - ByteBracket";
+  }, [])
+
   const getLeague = async () => {
     const response = await fetch(`/v1/league/${leagueId}`);
     const data = await response.json();

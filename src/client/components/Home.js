@@ -8,6 +8,7 @@ export const Home = () => {
 
   useEffect(() => {
     setMounted(true);
+    document.title = "ByteBracket";
   }, []);
 
   const navigate = useNavigate();

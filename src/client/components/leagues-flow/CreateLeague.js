@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import { ErrorAlert, LoadingWrapper, ValidatedInput } from "../shared";
 import { Switch } from "@headlessui/react";
@@ -66,6 +66,10 @@ export const CreateLeague = () => {
       setError(error);
     }
   };
+
+  useEffect(() => {
+    document.title = "Create League - ByteBracket";
+  }, [])
 
   return (
     <LoadingWrapper>

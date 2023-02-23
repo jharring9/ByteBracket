@@ -10,6 +10,8 @@ import { classNames } from "./shared";
 import { Brackets } from "./account-flow/Brackets";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ChangePassword } from "./account-flow/ChangePassword";
+import { Leagues } from "./account-flow/Leagues";
 
 let sidebar = [];
 
@@ -18,6 +20,7 @@ export const Account = () => {
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
+    document.title = "Account - ByteBracket";
     if (!user.username) navigate("/login");
     sidebar = [
       { name: "Brackets", href: 1, icon: QueueListIcon, current: true },
@@ -99,7 +102,9 @@ export const Account = () => {
             </aside>
 
             {stage === 1 && <Brackets user={user} />}
+            {stage === 2 && <Leagues />}
             {stage === 3 && <Profile user={user} />}
+            {stage === 4 && <ChangePassword user={user} />}
           </div>
         </div>
       </div>

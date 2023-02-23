@@ -1,6 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 export const PrivacyPolicy = () => {
+  useEffect(() => {
+    document.title = "Privacy Policy - ByteBracket";
+  }, []);
+  
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
       <div className="mt-4 max-w-7xl">

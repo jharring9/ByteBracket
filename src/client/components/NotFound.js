@@ -5,6 +5,10 @@ export const NotFound = () => {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
+  useEffect(() => {
+    document.title = "Page Not Found - ByteBracket";
+  }, [])
+
   return (
     <div className="min-h-full bg-white py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
       <div className="mx-auto max-w-max">

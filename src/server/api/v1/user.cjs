@@ -101,6 +101,37 @@ module.exports = (app) => {
   });
 
   /**
+   * Update user password.
+   */
+  app.put("/v1/user/:user/password", async (req, res) => {
+    const { user } = req.params;
+    const sessionUser = req.session.user?.username;
+    if (sessionUser !== user) {
+      return res.status(401).send({ error: "unauthorized" });
+    }
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).send({ error: "All fields required." });
+    }
+
+    const dynamoUser = await userDB.getUser(user);
+    if (!dynamoUser?.username) {
+      return res.status(404).send({ error: "User not found." });
+    }
+
+    if (!bcrypt.compareSync(currentPassword, dynamoUser.password)) {
+      return res.status(400).send({ error: "Incorrect current password." });
+    }
+
+    const encryptedPassword = bcrypt.hashSync(newPassword, 10);
+    const result = await userDB.updatePassword(user, encryptedPassword);
+    if (result) {
+      return res.status(201).send();
+    }
+    return res.status(503).send({ error: "Server error. Please try again." });
+  });
+
+  /**
    * Delete a user account.
    */
   app.delete("/v1/user/:user", async (req, res) => {

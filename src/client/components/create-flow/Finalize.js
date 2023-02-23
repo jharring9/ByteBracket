@@ -7,6 +7,7 @@ import { resetStats } from "../../store/statsSlice";
 import { BackButton, ErrorAlert, SaveButton, ValidatedInput } from "../shared";
 import { setCreateStage } from "../../store/createStageSlice";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const Finalize = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,11 @@ export const Finalize = () => {
       }),
     });
     if (res.ok) {
+      ReactGA.event({
+        category: "Bracket",
+        action: "Created",
+        label: name,
+      });
       dispatch(resetStats);
       dispatch(clearTop25);
       dispatch(resetBracket);

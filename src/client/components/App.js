@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../../public/output.css";
 import "flowbite";
+import ReactGA from "react-ga4";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -22,6 +23,9 @@ import { Leagues } from "./Leagues";
 import { JoinLeague } from "./leagues-flow/JoinLeague";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { CreateLeague } from "./leagues-flow/CreateLeague";
+
+/* Google Analytics */
+ReactGA.initialize("G-GR6LZND73X");
 
 export default function App() {
   const dispatch = useDispatch();
