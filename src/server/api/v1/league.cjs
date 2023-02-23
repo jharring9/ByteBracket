@@ -178,6 +178,36 @@ module.exports = (app) => {
   });
 
   /**
+   * Delete a bracket from a league.
+   */
+  app.delete("/v1/league/:leagueId/:bracketId", async (req, res) => {
+    const user = req.session.user?.username;
+    const { leagueId, bracketId } = req.params;
+    if (!leagueId || !bracketId) {
+      return res.status(400).send({ error: "Invalid request" });
+    }
+    if (!user) {
+      return res.status(401).send({ error: "unauthorized" });
+    }
+    try {
+      const result = await leagueDB.removeEntryFromLeague(
+        user,
+        leagueId,
+        bracketId
+      );
+      if (result) {
+        return res.sendStatus(204);
+      }
+      return res
+        .status(500)
+        .send({ error: "Error removing entry from league" });
+    } catch (err) {
+      console.error("Error removing entry from league: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
+    }
+  });
+
+  /**
    * Update league settings.
    */
   app.put("/v1/league/:id", async (req, res) => {
