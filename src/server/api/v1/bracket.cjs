@@ -20,7 +20,7 @@ module.exports = (app) => {
       if (!name) {
         return res.status(400).send({ error: "Missing bracket name" });
       }
-      if (!bracket || !champion || !winner || !stats) {
+      if (!bracket || typeof winner !== "number" || !winner || !stats) {
         console.error("Missing fields: ", { bracket, champion, winner, stats });
         return res.status(400).send({
           error: "Missing fields. This is likely a server issue.",
