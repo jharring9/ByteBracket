@@ -14,35 +14,38 @@ module.exports = (app) => {
     if (sessionUser !== queryUser) {
       return res.status(401).send({ error: "unauthorized" });
     }
-
-    const id = uuidv4();
-    const { bracket, champion, name, winner, stats } = req.body;
-
-    if (!name) {
-      return res.status(400).send({ error: "Missing bracket name" });
+    try {
+      const id = uuidv4();
+      const { bracket, champion, name, winner, stats } = req.body;
+      if (!name) {
+        return res.status(400).send({ error: "Missing bracket name" });
+      }
+      if (!bracket || typeof champion !== "number" || !winner || !stats) {
+        console.error("Missing fields: ", { bracket, champion, winner, stats });
+        return res.status(400).send({
+          error: "Missing fields. This is likely a server issue.",
+        });
+      }
+      if (
+        !(await bracketDB.saveBracket(
+          sessionUser,
+          id,
+          bracket,
+          champion,
+          name,
+          winner,
+          stats
+        ))
+      ) {
+        return res
+          .status(503)
+          .send({ error: "Server error. Please try again." });
+      }
+      return res.status(201).send({ id: id });
+    } catch (err) {
+      console.error("Error posting new bracket: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-
-    if (!bracket || !champion || !winner || !stats) {
-      return res.status(400).send({
-        error: "Missing fields. This is likely a server issue.",
-      });
-    }
-
-    if (
-      !(await bracketDB.saveBracket(
-        sessionUser,
-        id,
-        bracket,
-        champion,
-        name,
-        winner,
-        stats
-      ))
-    ) {
-      return res.status(503).send({ error: "Server error. Please try again." });
-    }
-
-    return res.status(201).send({ id: id });
   });
 
   /**
@@ -53,11 +56,16 @@ module.exports = (app) => {
     if (!req.session.user?.username) {
       return res.status(401).send({ error: "unauthorized" });
     }
-    const result = await bracketDB.getBracket(user, id);
-    if (result) {
-      return res.status(200).send(result);
+    try {
+      const result = await bracketDB.getBracket(user, id);
+      if (result) {
+        return res.status(200).send(result);
+      }
+      return res.status(404).send({ error: "Bracket not found" });
+    } catch (err) {
+      console.error("Error getting user bracket: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(404).send({ error: "Bracket not found" });
   });
 
   /**
@@ -69,12 +77,16 @@ module.exports = (app) => {
     if (sessionUser !== user) {
       return res.status(401).send({ error: "unauthorized" });
     }
-
-    const result = await bracketDB.getUserBrackets(user);
-    if (result) {
-      return res.status(200).send(result);
+    try {
+      const result = await bracketDB.getUserBrackets(user);
+      if (result) {
+        return res.status(200).send(result);
+      }
+      return res.status(404).send({ error: "User not found" });
+    } catch (err) {
+      console.error("Error getting user brackets: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(404).send({ error: "User not found" });
   });
 
   /**
@@ -86,21 +98,24 @@ module.exports = (app) => {
     if (sessionUser !== user) {
       return res.status(401).send({ error: "unauthorized" });
     }
-
-    const bracket = await bracketDB.getBracket(user, id);
-    if (bracket) {
-      const { leagues } = bracket;
-      if (leagues) {
-        for (const league of leagues) {
-          await leagueDB.removeEntryFromLeague(`${user}#${id}`, league);
+    try {
+      const bracket = await bracketDB.getBracket(user, id);
+      if (bracket) {
+        const { leagues } = bracket;
+        if (leagues) {
+          for (const league of leagues) {
+            await leagueDB.removeEntryFromLeague(user, league, id);
+          }
         }
       }
+      const result = await bracketDB.deleteBracket(user, id);
+      if (result) {
+        return res.status(204).send();
+      }
+      return res.status(404).send({ error: "Bracket not found" });
+    } catch (err) {
+      console.error("Error deleting bracket: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-
-    const result = await bracketDB.deleteBracket(user, id);
-    if (result) {
-      return res.status(204).send();
-    }
-    return res.status(404).send({ error: "Bracket not found" });
   });
 };

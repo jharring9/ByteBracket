@@ -17,51 +17,56 @@ module.exports = (app) => {
 
   app.get("/v1/oauth/google/process", async (req, res) => {
     const code = req.query.code;
-    const { id_token, access_token } = await getTokens({
-      code,
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      redirectUri: `${SERVER_ROOT_URI}/${REDIRECT_URI}`,
-    });
-
-    const googleUser = await axios
-      .get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${id_token}`,
-          },
-        }
-      )
-      .then((res) => res.data)
-      .catch((error) => {
-        throw new Error(error.message);
+    try {
+      const { id_token, access_token } = await getTokens({
+        code,
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        redirectUri: `${SERVER_ROOT_URI}/${REDIRECT_URI}`,
       });
 
-    /* Try to find user in DynamoDB - if it doesn't exist, create it */
-    const dynamoUser = await userDB.getUser(googleUser.email.toLowerCase());
-    if (!dynamoUser?.username) {
-      const user = {
-        username: googleUser.email.toLowerCase(),
-        email: googleUser.email.toLowerCase(),
-        first: googleUser.given_name,
-        last: googleUser.family_name,
-        leagues: new Set([""]),
-      };
-      if (!(await userDB.saveUser(user))) {
-        return res
-          .status(503)
-          .send({ error: "Server error. Please try again." });
+      const googleUser = await axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${id_token}`,
+            },
+          }
+        )
+        .then((res) => res.data)
+        .catch((error) => {
+          throw new Error(error.message);
+        });
+
+      /* Try to find user in DynamoDB - if it doesn't exist, create it */
+      const dynamoUser = await userDB.getUser(googleUser.email.toLowerCase());
+      if (!dynamoUser?.username) {
+        const user = {
+          username: googleUser.email.toLowerCase(),
+          email: googleUser.email.toLowerCase(),
+          first: googleUser.given_name,
+          last: googleUser.family_name,
+          leagues: new Set([""]),
+        };
+        if (!(await userDB.saveUser(user))) {
+          return res
+            .status(503)
+            .send({ error: "Server error. Please try again." });
+        }
       }
+      req.session.user = {
+        first: dynamoUser?.first || googleUser.given_name,
+        last: dynamoUser?.last || googleUser.family_name,
+        username: dynamoUser?.username || googleUser.email,
+        email: dynamoUser?.email || googleUser.email,
+        leagues: Array.from(dynamoUser?.leagues || []),
+      };
+      return res.status(201).send(req.session.user);
+    } catch (err) {
+      console.error("Error in Google OAuth: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    req.session.user = {
-      first: dynamoUser?.first || googleUser.given_name,
-      last: dynamoUser?.last || googleUser.family_name,
-      username: dynamoUser?.username || googleUser.email,
-      email: dynamoUser?.email || googleUser.email,
-      leagues: Array.from(dynamoUser?.leagues || googleUser.leagues),
-    };
-    return res.status(201).send(req.session.user);
   });
 };
 

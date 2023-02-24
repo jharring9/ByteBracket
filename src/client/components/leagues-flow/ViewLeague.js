@@ -7,6 +7,7 @@ import {
   normalTransition,
   SuccessAlert,
   ValidatedInput,
+  WarnModal,
 } from "../shared.js";
 import {
   CalendarIcon,
@@ -23,6 +24,7 @@ import {
   QueueListIcon,
   RectangleStackIcon,
   UserIcon,
+  XMarkIcon,
 } from "@heroicons/react/20/solid";
 import {
   Link,
@@ -46,10 +48,11 @@ export const ViewLeague = () => {
   const [manageLeague, setManageLeague] = useState(false);
   const [loading, setLoading] = useState(true);
   const [brackets, setBrackets] = useState([]);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
   const [codeModal, setCodeModal] = useState(false);
   const [codeError, setCodeError] = useState(null);
+  const [leagueOpen, setLeagueOpen] = useState(true);
 
   /* League information */
   const [leagueName, setLeagueName] = useState("");
@@ -89,6 +92,10 @@ export const ViewLeague = () => {
     }
   }, [isPrivate, manager, user]);
 
+  useEffect(() => {
+    document.title = "League - ByteBracket";
+  }, []);
+
   const getLeague = async () => {
     const response = await fetch(`/v1/league/${leagueId}`);
     const data = await response.json();
@@ -101,6 +108,7 @@ export const ViewLeague = () => {
     setMaxEntries(data.maxEntries);
     setMaxPerUser(data.entriesPerUser);
     setCloseDate(data.lockDate);
+    setLeagueOpen(new Date(data.lockDate) > new Date());
     setCodeModal(false);
     setLoading(false);
   };
@@ -154,9 +162,7 @@ export const ViewLeague = () => {
       return;
     }
 
-    const userEntries = entries.filter(
-      (entry) => entry.username === user.username
-    );
+    const userEntries = entries.filter((e) => e.username === user.username);
     if (userEntries.length >= maxPerUser) {
       setError(
         "You have reached the maximum number of entries for this league."
@@ -164,21 +170,20 @@ export const ViewLeague = () => {
       return;
     }
 
-    const body = {
-      bracketId: id,
-      username: user.username,
-    };
     const response = await fetch(`/v1/league/${leagueId}`, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        bracketId: id,
+        username: user.username,
+      }),
       headers: {
         "content-type": "application/json",
       },
     });
     if (response.ok) {
       await getLeague();
-      setSuccess(true);
+      setSuccess("Your bracket has been entered.");
       setError(null);
     } else {
       const data = await response.json();
@@ -187,9 +192,54 @@ export const ViewLeague = () => {
     }
   };
 
+  /**
+   * Removes a bracket from the league.
+   */
+  const removeBracket = async (bracketId) => {
+    const result = await fetch(`/v1/league/${leagueId}/${bracketId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (result.ok) {
+      await getLeague();
+      setSuccess("Bracket removed from league");
+      setError(null);
+    } else {
+      const data = await result.json();
+      setSuccess(null);
+      setError(data.error);
+    }
+  };
+
+  /**
+   * Displays the league entries.
+   */
   const LeagueEntries = () =>
     entries.length > 0 ? (
-      <EntriesList entries={entries} logos={logos} />
+      <main className="pt-8 pb-16">
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0">
+            <h2 className="text-2xl font-bold text-gray-900">Entries</h2>
+          </div>
+          <ul
+            role="list"
+            className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
+          >
+            {entries.map((entry) => (
+              <EntryListItem
+                key={entry.id}
+                entry={entry}
+                leagueId={leagueId}
+                isOpen={leagueOpen}
+                logos={logos}
+                username={user.username}
+                navigate={navigate}
+                removeBracket={removeBracket}
+              />
+            ))}
+          </ul>
+        </div>
+      </main>
     ) : (
       <NoEntriesCard
         setEnterModal={setEnterModal}
@@ -223,11 +273,8 @@ export const ViewLeague = () => {
         />
         <header className="bg-white py-8 shadow">
           <div className="mx-auto max-w-7xl">
-            <Transition as="div" show={success} {...normalTransition}>
-              <SuccessAlert
-                setOpen={setSuccess}
-                message="Your bracket has been entered."
-              />
+            <Transition as="div" show={!!success} {...normalTransition}>
+              <SuccessAlert setOpen={setSuccess} message={success} />
             </Transition>
             <Transition as="div" show={!!error} {...normalTransition}>
               <ErrorAlert header="Error entering bracket" message={error} />
@@ -347,15 +394,17 @@ export const ViewLeague = () => {
                   </button>
                 </span>
               )}
-              <span className="ml-3">
-                <CreateEntryDropdown
-                  existingBracketAction={() => {
-                    getBrackets();
-                    setEnterModal(true);
-                  }}
-                  newEntryAction={() => navigate("/create")}
-                />
-              </span>
+              {leagueOpen && (
+                <span className="ml-3">
+                  <CreateEntryDropdown
+                    existingBracketAction={() => {
+                      getBrackets();
+                      setEnterModal(true);
+                    }}
+                    newEntryAction={() => navigate("/create")}
+                  />
+                </span>
+              )}
             </div>
           </div>
         </header>
@@ -485,80 +534,110 @@ const NoEntriesCard = ({ setEnterModal, setShareModal, getBrackets }) => {
   );
 };
 
-/**
- * Displays a stacked list of entries in the league.
- */
-const EntriesList = ({ entries, logos }) => {
+const EntryListItem = ({
+  entry,
+  leagueId,
+  isOpen,
+  logos,
+  username,
+  navigate,
+  removeBracket,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <main className="pt-8 pb-16">
-      <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="px-4 sm:px-0">
-          <h2 className="text-2xl font-bold text-gray-900">Entries</h2>
-        </div>
-        <ul
-          role="list"
-          className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
-        >
-          {entries.map((entry) => (
-            <li key={entry.id}>
-              <Link
-                to={`/bracket/${entry.username}/${entry.id}`}
-                className="group block"
-              >
-                <div className="flex items-center py-5 px-4 sm:py-6 sm:px-0">
-                  <div className="flex min-w-0 flex-1 items-center">
-                    <div className="w-4 md:w-10">
-                      <h1 className="text-xl font-bold group-hover:text-gray-500">
-                        {entry.rank}
-                      </h1>
-                    </div>
-                    <div className="w-16">
-                      <div className="flex items-center">
-                        <img
-                          className="mr-3 h-12 group-hover:opacity-75"
-                          src={logos[entry.winnerName]}
-                          alt="winner logo"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid min-w-0 flex-1 grid-cols-2 px-4 md:gap-4">
-                      <div>
-                        <p className="md:text-md truncate text-sm font-medium text-purple-600 lg:text-lg">
-                          {entry.name}
-                        </p>
-                        <p className="mt-2 flex items-center text-sm text-gray-500">
-                          <UserIcon
-                            className="mr-1.5 hidden h-5 w-5 flex-shrink-0 text-gray-400 sm:block"
-                            aria-hidden="true"
-                          />
-                          <span className="truncate">{entry.username}</span>
-                        </p>
-                      </div>
-                      <div>
-                        <div>
-                          <h2 className="flex justify-center text-xl font-bold text-gray-900">
-                            {entry.points}
-                          </h2>
-                          <h6 className="flex items-center justify-center text-sm text-gray-900">
-                            points
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <ChevronRightIcon
-                      className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
+    <li>
+      <WarnModal
+        open={showModal}
+        setOpen={setShowModal}
+        header="Remove bracket"
+        content="Are you sure you want to remove this bracket from the league? The bracket will not be deleted from your account."
+        cta="Remove"
+        onComplete={() => removeBracket(entry.id)}
+      />
+      <div
+        className={classNames(
+          isOpen ? "cursor-auto" : "cursor-pointer",
+          "group block"
+        )}
+      >
+        <div className="flex items-center py-5 px-4 sm:py-6 sm:px-0">
+          <div
+            onClick={() =>
+              navigate(
+                isOpen
+                  ? `/leagues/${leagueId}`
+                  : `/bracket/${entry.username}/${entry.id}`
+              )
+            }
+            className="flex min-w-0 flex-1 items-center"
+          >
+            {!isOpen && (
+              <>
+                <div className="w-4 md:w-10">
+                  <h1 className="text-xl font-bold group-hover:text-gray-500">
+                    {entry.rank}
+                  </h1>
+                </div>
+                <div className="w-16">
+                  <div className="flex items-center">
+                    <img
+                      className="mr-3 h-12 group-hover:opacity-75"
+                      src={logos[entry.winnerName]}
+                      alt="winner logo"
                     />
                   </div>
                 </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+              </>
+            )}
+            <div className="grid min-w-0 flex-1 grid-cols-2 px-4 md:gap-4">
+              <div>
+                <p className="md:text-md truncate text-sm font-medium text-purple-600 lg:text-lg">
+                  {entry.name}
+                </p>
+                <p className="mt-2 flex items-center text-sm text-gray-500">
+                  <UserIcon
+                    className="mr-1.5 hidden h-5 w-5 flex-shrink-0 text-gray-400 sm:block"
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">{entry.username}</span>
+                </p>
+              </div>
+              <div>
+                <div>
+                  <h2 className="flex justify-center text-xl font-bold text-gray-900">
+                    {entry.points}
+                  </h2>
+                  <h6 className="flex items-center justify-center text-sm text-gray-900">
+                    points
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            {isOpen ? (
+              <div className="mr-5 w-4 sm:mr-0 md:w-10">
+                {entry.username === username && (
+                  <button
+                    title="Remove this bracket from the league"
+                    onClick={() => setShowModal(true)}
+                    className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-0.5 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white"
+                  >
+                    <XMarkIcon className="h-6 w-6" />
+                  </button>
+                )}
+              </div>
+            ) : (
+              <ChevronRightIcon
+                className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                aria-hidden="true"
+              />
+            )}
+          </div>
+        </div>
       </div>
-    </main>
+    </li>
   );
 };
 
@@ -720,12 +799,12 @@ const CodeModal = ({ isOpen, attemptEntry, codeError, navigate }) => {
                     as="h3"
                     className="text-2xl font-medium leading-6 text-gray-900"
                   >
-                    This league is private
+                    Enter join code
                   </Dialog.Title>
                   <form>
                     <div className="mt-2">
                       <ValidatedInput
-                        inputName="Please enter the join code"
+                        inputName="This league is private. Please enter the join code."
                         value={codeInput}
                         setValue={setCodeInput}
                         errorMsg={codeError}

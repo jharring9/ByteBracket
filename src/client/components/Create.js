@@ -15,6 +15,7 @@ export const Create = () => {
    */
   useEffect(() => {
     fetchImages(dispatch);
+    document.title = "Create Bracket - ByteBracket";
   }, []);
 
   return (

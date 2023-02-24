@@ -16,43 +16,48 @@ module.exports = (app) => {
 
   app.get("/v1/oauth/facebook/process", async (req, res) => {
     const code = req.query.code;
-    const { access_token } = await getTokens({
-      clientId: CLIENT_ID,
-      redirectUri: `${SERVER_ROOT_URI}/${REDIRECT_URI}`,
-      clientSecret: CLIENT_SECRET,
-      code,
-    });
+    try {
+      const { access_token } = await getTokens({
+        clientId: CLIENT_ID,
+        redirectUri: `${SERVER_ROOT_URI}/${REDIRECT_URI}`,
+        clientSecret: CLIENT_SECRET,
+        code,
+      });
 
-    const facebookUser = await axios
-      .get(
-        `https://graph.facebook.com/me?fields=first_name,last_name,email&access_token=${access_token}`
-      )
-      .then((res) => res.data);
+      const facebookUser = await axios
+        .get(
+          `https://graph.facebook.com/me?fields=first_name,last_name,email&access_token=${access_token}`
+        )
+        .then((res) => res.data);
 
-    /* Try to find user in DynamoDB - if it doesn't exist, create it */
-    const dynamoUser = await userDB.getUser(facebookUser.email.toLowerCase());
-    if (!dynamoUser?.username) {
-      const user = {
-        username: facebookUser.email.toLowerCase(),
-        email: facebookUser.email.toLowerCase(),
-        first: facebookUser.first_name,
-        last: facebookUser.last_name,
-        leagues: new Set([""]),
-      };
-      if (!(await userDB.saveUser(user))) {
-        return res
-          .status(503)
-          .send({ error: "Server error. Please try again." });
+      /* Try to find user in DynamoDB - if it doesn't exist, create it */
+      const dynamoUser = await userDB.getUser(facebookUser.email.toLowerCase());
+      if (!dynamoUser?.username) {
+        const user = {
+          username: facebookUser.email.toLowerCase(),
+          email: facebookUser.email.toLowerCase(),
+          first: facebookUser.first_name,
+          last: facebookUser.last_name,
+          leagues: new Set([""]),
+        };
+        if (!(await userDB.saveUser(user))) {
+          return res
+            .status(503)
+            .send({ error: "Server error. Please try again." });
+        }
       }
+      req.session.user = {
+        first: dynamoUser?.first || facebookUser.first_name,
+        last: dynamoUser?.last || facebookUser.last_name,
+        username: dynamoUser?.username || facebookUser.email,
+        email: dynamoUser?.email || facebookUser.email,
+        leagues: Array.from(dynamoUser?.leagues || []),
+      };
+      return res.status(201).send(req.session.user);
+    } catch (err) {
+      console.error("Error in Facebook OAuth: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    req.session.user = {
-      first: dynamoUser?.first || facebookUser.first_name,
-      last: dynamoUser?.last || facebookUser.last_name,
-      username: dynamoUser?.username || facebookUser.email,
-      email: dynamoUser?.email || facebookUser.email,
-      leagues: Array.from(dynamoUser?.leagues || new Set([""])),
-    };
-    return res.status(201).send(req.session.user);
   });
 };
 

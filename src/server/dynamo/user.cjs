@@ -65,6 +65,25 @@ exports.updateUser = async (user) => {
   }
 };
 
+exports.updatePassword = async (username, password) => {
+  const params = {
+    TableName: userTable,
+    Key: {
+      username: username,
+    },
+    UpdateExpression: "set password = :p, lastUpdated = :u",
+    ExpressionAttributeValues: {
+      ":p": password,
+      ":u": new Date().toISOString(),
+    },
+  };
+  try {
+    return await ddbDocClient.send(new UpdateCommand(params));
+  } catch (err) {
+    return null;
+  }
+};
+
 exports.deleteUser = async (username) => {
   const params = {
     TableName: userTable,

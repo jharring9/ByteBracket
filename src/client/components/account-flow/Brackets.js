@@ -74,6 +74,7 @@ export const Brackets = ({ user }) => {
             >
               {brackets.map((bracket) => (
                 <BracketGridItem
+                  key={bracket.id}
                   user={user}
                   bracket={bracket}
                   logos={logos}
@@ -110,10 +111,7 @@ const BracketGridItem = ({ user, bracket, logos, deleteBracket }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <li
-      key={bracket.id}
-      className="col-span-1 w-full divide-y divide-gray-200 rounded-lg bg-white shadow"
-    >
+    <li className="col-span-1 w-full divide-y divide-gray-200 rounded-lg bg-white shadow">
       <WarnModal
         open={showModal}
         setOpen={setShowModal}

@@ -35,6 +35,10 @@ export const Register = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    document.title = "Register - ByteBracket";
+  }, [])
+
   const onRegister = async (ev) => {
     ev.preventDefault();
     if (

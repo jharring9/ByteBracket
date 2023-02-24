@@ -126,19 +126,39 @@ exports.updateLeagueSettings = async (id, settings) => {
   }
 };
 
-exports.removeEntryFromLeague = async (entryToDelete, leagueId) => {
+exports.removeEntryFromLeague = async (userId, leagueId, bracketId) => {
   const params = {
-    TableName: leagueTable,
-    Key: {
-      id: leagueId,
-    },
-    UpdateExpression: "DELETE entries :i",
-    ExpressionAttributeValues: {
-      ":i": new Set([entryToDelete]),
-    },
+    TransactItems: [
+      {
+        Update: {
+          TableName: leagueTable,
+          Key: {
+            id: leagueId,
+          },
+          UpdateExpression: "DELETE entries :e",
+          ExpressionAttributeValues: {
+            ":e": new Set([`${userId}#${bracketId}`]),
+          },
+        },
+      },
+      {
+        Update: {
+          TableName: bracketTable,
+          Key: {
+            username: userId,
+            id: bracketId,
+          },
+          UpdateExpression: "DELETE leagues :e",
+          ExpressionAttributeValues: {
+            ":e": new Set([leagueId]),
+          },
+        },
+      },
+    ],
   };
+
   try {
-    return await ddbDocClient.send(new UpdateCommand(params));
+    return await ddbDocClient.send(new TransactWriteCommand(params));
   } catch (err) {
     return null;
   }

@@ -42,6 +42,10 @@ export const ViewBracket = () => {
     fetchBracket();
   }, [user, id]);
 
+  useEffect(() => {
+    document.title = "View Bracket - ByteBracket";
+  }, [])
+
   return (
     <Transition show={loaded} {...slowTransition}>
       <ReadOnlyBracket regions={bracket} champion={champion} />;

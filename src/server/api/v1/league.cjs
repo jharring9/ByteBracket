@@ -14,40 +14,44 @@ module.exports = (app) => {
     if (!sessionUser) {
       return res.status(401).send({ error: "unauthorized" });
     }
-
-    const id = uuidv4();
-    const { name, maxEntries, entriesPerUser, isPrivate, code, lockDate } =
-      req.body;
-
-    if (
-      !name ||
-      !maxEntries ||
-      !entriesPerUser ||
-      !lockDate ||
-      (isPrivate && code.trim().length === 0)
-    ) {
-      return res.status(400).send({
-        error:
-          "Missing fields. This is likely a server issue. Please refresh the page and try again.",
-      });
+    try {
+      const id = uuidv4();
+      const { name, maxEntries, entriesPerUser, isPrivate, code, lockDate } =
+        req.body;
+      if (
+        !name ||
+        !maxEntries ||
+        !entriesPerUser ||
+        !lockDate ||
+        (isPrivate && code.trim().length === 0)
+      ) {
+        return res.status(400).send({
+          error:
+            "Missing fields. This is likely a server issue. Please refresh the page and try again.",
+        });
+      }
+      const newLeague = {
+        id: id,
+        name: name,
+        maxEntries: maxEntries,
+        entriesPerUser: entriesPerUser,
+        isPrivate: isPrivate,
+        code: code,
+        managerId: sessionUser,
+        lockDate: lockDate,
+        entries: new Set([""]),
+      };
+      if (!(await leagueDB.saveLeague(newLeague))) {
+        return res
+          .status(503)
+          .send({ error: "Server error. Please try again." });
+      }
+      await userDB.addLeagueToUser(sessionUser, id);
+      res.status(201).send({ id: id });
+    } catch (err) {
+      console.error("Error posting new league: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    const newLeague = {
-      id: id,
-      name: name,
-      maxEntries: maxEntries,
-      entriesPerUser: entriesPerUser,
-      isPrivate: isPrivate,
-      code: code,
-      managerId: sessionUser,
-      lockDate: lockDate,
-      entries: new Set([""]),
-      entryCount: 0,
-    };
-    if (!(await leagueDB.saveLeague(newLeague))) {
-      return res.status(503).send({ error: "Server error. Please try again." });
-    }
-    await userDB.addLeagueToUser(sessionUser, id);
-    res.status(201).send({ id: id });
   });
 
   /**
@@ -58,18 +62,23 @@ module.exports = (app) => {
     if (!req.session.user?.username) {
       return res.status(401).send({ error: "unauthorized" });
     }
-    const result = await leagueDB.getLeague(id);
-    if (result) {
-      const entries = Array.from(result.entries)
-        .filter((e) => e !== null && e !== "")
-        .map((e) => {
-          const [username, bracketId] = e.split("#");
-          return { username, bracketId };
-        });
-      result.entries = await bracketDB.batchGetBrackets(entries);
-      return res.status(200).send(result);
+    try {
+      const result = await leagueDB.getLeague(id);
+      if (result) {
+        const entries = Array.from(result.entries)
+          .filter((e) => e !== null && e !== "")
+          .map((e) => {
+            const [username, bracketId] = e.split("#");
+            return { username, bracketId };
+          });
+        result.entries = await bracketDB.batchGetBrackets(entries);
+        return res.status(200).send(result);
+      }
+      return res.status(404).send({ error: "League not found" });
+    } catch (err) {
+      console.error("Error getting league: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(404).send({ error: "League not found" });
   });
 
   /**
@@ -80,28 +89,37 @@ module.exports = (app) => {
     if (!req.session.user?.username) {
       return res.status(401).send({ error: "unauthorized" });
     }
-
-    const result = await leagueDB.deleteLeague(id);
-    if (result) {
-      return res.status(204).send();
+    try {
+      const result = await leagueDB.deleteLeague(id);
+      if (result) {
+        return res.status(204).send();
+      }
+      return res.status(404).send({ error: "League not found" });
+    } catch (err) {
+      console.error("Error deleting league: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(404).send({ error: "League not found" });
   });
 
   /**
    * Scan for all public leagues.
    */
   app.get("/v1/leagues/public", async (req, res) => {
-    const result = await leagueDB.scanLeagues();
-    if (result) {
-      result.map((league) => {
-        league.entryCount = league.entries.size;
-        delete result.entries;
-        return league;
-      });
-      return res.status(200).send(result);
+    try {
+      const result = await leagueDB.scanLeagues();
+      if (result) {
+        result.map((league) => {
+          league.entryCount = league.entries.size - 1;
+          delete result.entries;
+          return league;
+        });
+        return res.status(200).send(result);
+      }
+      return res.status(200).send([]);
+    } catch (err) {
+      console.error("Error scanning public leagues: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(200).send([]);
   });
 
   /**
@@ -112,20 +130,25 @@ module.exports = (app) => {
     if (!user) {
       return res.status(401).send({ error: "unauthorized" });
     }
-    let leagues = (await userDB.getUserLeagues(user))?.leagues;
-    if (!leagues) {
+    try {
+      let leagues = (await userDB.getUserLeagues(user))?.leagues;
+      if (!leagues) {
+        return res.status(200).send([]);
+      }
+      const result = await leagueDB.batchGetLeagues(leagues);
+      if (result) {
+        result.map((league) => {
+          league.entryCount = league.entries.size - 1;
+          delete result.entries;
+          return league;
+        });
+        return res.status(200).send(result);
+      }
       return res.status(200).send([]);
+    } catch (err) {
+      console.error("Error getting user leagues: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    const result = await leagueDB.batchGetLeagues(leagues);
-    if (result) {
-      result.map((league) => {
-        league.entryCount = league.entries.size;
-        delete result.entries;
-        return league;
-      });
-      return res.status(200).send(result);
-    }
-    return res.status(200).send([]);
   });
 
   /**
@@ -141,11 +164,46 @@ module.exports = (app) => {
     if (!user) {
       return res.status(401).send({ error: "unauthorized" });
     }
-    const result = await leagueDB.addEntryToLeague(id, bracketId, user);
-    if (result) {
-      return res.status(200).send(result);
+    try {
+      const result = await leagueDB.addEntryToLeague(id, bracketId, user);
+      if (result) {
+        return res.status(200).send(result);
+      }
+      return res.status(500).send({ error: "Error adding entry to league" });
+    } catch (err) {
+      console.error("Error adding entry to league: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(401).send({ error: "Error adding entry to league" });
+  });
+
+  /**
+   * Delete a bracket from a league.
+   */
+  app.delete("/v1/league/:leagueId/:bracketId", async (req, res) => {
+    const user = req.session.user?.username;
+    const { leagueId, bracketId } = req.params;
+    if (!leagueId || !bracketId) {
+      return res.status(400).send({ error: "Invalid request" });
+    }
+    if (!user) {
+      return res.status(401).send({ error: "unauthorized" });
+    }
+    try {
+      const result = await leagueDB.removeEntryFromLeague(
+        user,
+        leagueId,
+        bracketId
+      );
+      if (result) {
+        return res.sendStatus(204);
+      }
+      return res
+        .status(500)
+        .send({ error: "Error removing entry from league" });
+    } catch (err) {
+      console.error("Error removing entry from league: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
+    }
   });
 
   /**
@@ -176,10 +234,15 @@ module.exports = (app) => {
       code: code,
       lockDate: lockDate,
     };
-    const result = await leagueDB.updateLeagueSettings(id, settings);
-    if (result) {
-      return res.sendStatus(201);
+    try {
+      const result = await leagueDB.updateLeagueSettings(id, settings);
+      if (result) {
+        return res.sendStatus(201);
+      }
+      return res.status(400).send({ error: "Error updating league settings." });
+    } catch (err) {
+      console.error("Error updating league settings: ", err);
+      return res.status(500).send({ error: "Server error. Please try again." });
     }
-    return res.status(400).send({ error: "Error updating league settings." });
   });
 };
