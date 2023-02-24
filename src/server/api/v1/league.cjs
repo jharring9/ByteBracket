@@ -40,7 +40,6 @@ module.exports = (app) => {
         managerId: sessionUser,
         lockDate: lockDate,
         entries: new Set([""]),
-        entryCount: 0,
       };
       if (!(await leagueDB.saveLeague(newLeague))) {
         return res

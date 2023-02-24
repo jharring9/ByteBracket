@@ -104,7 +104,7 @@ module.exports = (app) => {
         const { leagues } = bracket;
         if (leagues) {
           for (const league of leagues) {
-            await leagueDB.removeEntryFromLeague(`${user}#${id}`, league);
+            await leagueDB.removeEntryFromLeague(user, league, id);
           }
         }
       }

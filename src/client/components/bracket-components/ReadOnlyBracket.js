@@ -124,7 +124,7 @@ export const RenderSeedComponent = ({
     return (
       <>
         <div className="absolute top-36 flex items-center justify-center">
-          {champion && (
+          {typeof champion === "number" && (
             <img
               src={logos[field[champion]?.name]}
               alt="team logo"
