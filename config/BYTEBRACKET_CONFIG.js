@@ -1,31 +1,36 @@
+/*
+BEFORE UPDATING AP RANKINGS OR TEAMS/FIELD, MAKE SURE ANY NEW TEAMS' LOGOS ARE ADDED.
+ */
+
 /**
  * Current AP Rankings, using in the top 25.
  */
 exports.AP_RANKINGS = {
-  Purdue: 1,
+  Purdue: 5,
   Alabama: 2,
-  Houston: 3,
-  Tennessee: 4,
-  "Kansas State": 5,
-  Arizona: 6,
-  Virginia: 7,
-  UCLA: 8,
-  Kansas: 9,
-  Texas: 10,
-  TCU: 11,
-  "Iowa State": 12,
-  Xavier: 13,
-  Gonzaga: 14,
-  Auburn: 15,
-  Marquette: 16,
-  Baylor: 17,
-  Charleston: 18,
-  Connecticut: 19,
-  Miami: 20,
-  "Florida Atlantic": 21,
-  "Saint Mary": 22,
-  Providence: 23,
-  Clemson: 24,
+  Houston: 1,
+  Tennessee: 11,
+  "Kansas State": 14,
+  Arizona: 7,
+  Virginia: 6,
+  UCLA: 4,
+  Kansas: 3,
+  Texas: 8,
+  "Iowa State": 23,
+  Xavier: 16,
+  Indiana: 17,
+  Gonzaga: 12,
+  Marquette: 10,
+  Baylor: 9,
+  Connecticut: 18,
+  TCU: 24,
+  Creighton: 19,
+  "Texas A&M": 25,
+  Miami: 13,
+  "Saint Mary": 15,
+  Providence: 20,
+  Northwestern: 21,
+  "San Diego State": 22,
   "New Mexico": 25,
 };
 
@@ -156,6 +161,8 @@ exports.LOGOS = {
   UAB: "https://upload.wikimedia.org/wikipedia/en/f/ff/UAB_Blazers_logo.svg",
   Oregon:
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Oregon_Ducks_logo.svg/2475px-Oregon_Ducks_logo.svg.png",
+  "Texas A&M":
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Texas_A%26M_University_logo.svg/494px-Texas_A%26M_University_logo.svg.png",
 };
 
 /**

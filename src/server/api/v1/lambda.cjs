@@ -25,6 +25,8 @@ module.exports = (app) => {
         const result = await new AWS.Lambda().invoke(params).promise();
         let data = JSON.parse(result.Payload);
         let top25Schools = data["Schools"].slice(0, 25);
+        let Ws = data["W"].slice(0, 25);
+        let Ls = data["L"].slice(0, 25);
         let schools = data["Schools"];
         let percentiles = data["percentiles"];
         let s2p = {};
@@ -37,6 +39,8 @@ module.exports = (app) => {
           return {
             team: school,
             rank: index + 1,
+            W: Ws[index],
+            L: Ls[index],
             apRank: r !== 26 ? r : "-",
             diff: r - (index + 1),
           };
