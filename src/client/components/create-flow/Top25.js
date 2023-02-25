@@ -134,7 +134,7 @@ export const Top25 = () => {
                               <div className="text-center font-medium text-gray-900">
                                 {row.team}
                               </div>
-                              <div className="text-gray-500">W-L</div>
+                              <div className="text-gray-500">{row.W}-{row.L}</div>
                             </div>
                             <div className="ml-2 h-10 w-10 flex-shrink-0">
                               {row.diff >= 10 && (
@@ -203,7 +203,7 @@ export const Top25 = () => {
                               <div className="text-center font-medium text-gray-900">
                                 {row.team}
                               </div>
-                              <div className="text-gray-500">W-L</div>
+                              <div className="text-gray-500">{row.W}-{row.L}</div>
                             </div>
                             <div className="ml-2 h-10 w-10 flex-shrink-0">
                               {row.diff >= 10 && (

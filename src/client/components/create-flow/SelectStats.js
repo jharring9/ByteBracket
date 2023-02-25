@@ -28,11 +28,9 @@ export const SelectStats = () => {
     { title: "FG%", value: stats.fg, color: "#00baad" },
     { title: "FTM", value: stats.ft, color: "#2b7b9b" },
     { title: "3PM", value: stats.tpm, color: "#3e3d6b" },
-    { title: "TR", value: stats.trb, color: "#501749" },
-    { title: "AST", value: stats.ast, color: "#900d3f" },
     { title: "STL/BLK", value: stats.stlblk, color: "#c70039" },
     { title: "TO", value: stats.to, color: "#ff5833" },
-    { title: "PF", value: stats.pf, color: "#ff8c19" },
+    { title: "Big Wins", value: stats.Quad1, color: "#ff8c19" },
   ];
 
   /**
@@ -116,31 +114,19 @@ export const SelectStats = () => {
             value={stats.fg}
             setValue={(val) => dispatch(setStats({ ...stats, fg: val }))}
           />
-          <StatSelection
-            name="3-Point Makes"
-            details="The number of 3 pointers that a team makes. Accounts both for teams that shoot a lot and for teams that make a lot."
-            value={stats.tpm}
-            setValue={(val) => dispatch(setStats({ ...stats, tpm: val }))}
-          />
         </div>
         <div className="md:order-2 lg:order-3">
+          <StatSelection
+              name="3-Point %"
+              details="The percentage of 3 pointers that a team makes."
+              value={stats.tpm}
+              setValue={(val) => dispatch(setStats({ ...stats, tpm: val }))}
+          />
           <StatSelection
             name="Free Throw Makes"
             details="The number of free throws that a team makes. Accounts both for teams that shoot a lot and for teams make a lot."
             value={stats.ft}
             setValue={(val) => dispatch(setStats({ ...stats, ft: val }))}
-          />
-          <StatSelection
-            name="Total Rebounds"
-            details="The total number of offensive and defensive rebounds for a team over the course of the season."
-            value={stats.trb}
-            setValue={(val) => dispatch(setStats({ ...stats, trb: val }))}
-          />
-          <StatSelection
-            name="Assists"
-            details="The cumulative number of baskets for which an assist was earned over the course of the season."
-            value={stats.ast}
-            setValue={(val) => dispatch(setStats({ ...stats, ast: val }))}
           />
           <StatSelection
             name="Steals & Blocks"
@@ -155,9 +141,9 @@ export const SelectStats = () => {
             setValue={(val) => dispatch(setStats({ ...stats, to: val }))}
           />
           <StatSelection
-            name="Personal Fouls"
-            details="The total number of fouls from a team over the course of a season. Placing high importance on this statistic favors teams with fewer fouls."
-            value={stats.pf}
+            name="Big Wins"
+            details="The total number of significant (Quad 1) wins that a team has."
+            value={stats.quad1}
             setValue={(val) => dispatch(setStats({ ...stats, pf: val }))}
           />
         </div>
