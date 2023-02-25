@@ -143,8 +143,8 @@ export const SelectStats = () => {
           <StatSelection
             name="Big Wins"
             details="The total number of significant (Quad 1) wins that a team has."
-            value={stats.quad1}
-            setValue={(val) => dispatch(setStats({ ...stats, pf: val }))}
+            value={stats.Quad1}
+            setValue={(val) => dispatch(setStats({ ...stats, Quad1: val }))}
           />
         </div>
         <div className="align-middle md:order-3 lg:order-2">
@@ -181,7 +181,7 @@ export const SelectStats = () => {
 const StatSelection = ({ name, value, setValue, details }) => {
   const [disabledValue, setDisabledValue] = useState(0);
   return (
-    <div>
+    <div className="md:my-3">
       <InfoPopover name={name} details={details} />
       <div className="grid grid-cols-10">
         <div className="col-span-2 md:col-span-1">
