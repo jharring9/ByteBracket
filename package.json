@@ -37,7 +37,8 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "start": "webpack --config webpack.dev.js && nodemon ./src/server/index.cjs",
-    "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css"
+    "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css",
+    "server": "nodemon ./src/server/index.cjs"
   },
   "eslintConfig": {
     "extends": [
