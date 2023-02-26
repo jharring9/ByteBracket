@@ -76,7 +76,7 @@ export const Finalize = () => {
    * Handle user clicking the back button (return to picking matches).
    */
   const handleBack = () => {
-    dispatch(setCreateStage(3));
+    dispatch(setCreateStage(4));
   };
 
   /**

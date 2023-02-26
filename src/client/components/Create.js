@@ -5,6 +5,7 @@ import { MakePicks } from "./create-flow/MakePicks";
 import { Finalize } from "./create-flow/Finalize";
 import { fetchImages, ProgressBar } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
+import { Review } from "./create-flow/Review";
 
 export const Create = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,8 @@ export const Create = () => {
         {stage === 1 && <SelectStats />}
         {stage === 2 && <Top25 />}
         {stage === 3 && <MakePicks />}
-        {stage === 4 && <Finalize />}
+        {stage === 4 && <Review />}
+        {stage === 5 && <Finalize />}
       </div>
     </div>
   );

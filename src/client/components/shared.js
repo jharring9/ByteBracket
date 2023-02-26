@@ -46,25 +46,12 @@ export const TrendingDown = () => (
 export const BackButton = ({ onClick }) => (
   <button
     type="reset"
-    className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-100 px-5 text-indigo-700 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
+    className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-100 px-5 text-indigo-700 transition-colors duration-150 hover:bg-indigo-200 hover:text-indigo-800 lg:w-auto"
     onClick={onClick}
   >
     <div className="flex justify-center">
       Go Back
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="h-6 w-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-        />
-      </svg>
+      <ArrowUturnLeftIcon className="h-6 w-6" />
     </div>
   </button>
 );
@@ -83,20 +70,7 @@ export const ContinueButton = ({ onClick, loading }) => (
       ) : (
         <>
           Continue
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
+          <ChevronRightIcon className="h-6 w-6" />
         </>
       )}
     </div>
@@ -118,20 +92,7 @@ export const SaveButton = ({ onClick, loading }) => (
       ) : (
         <>
           Save Bracket
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
+          <ChevronRightIcon className="h-6 w-6" />
         </>
       )}
     </div>
@@ -408,9 +369,11 @@ export const DisableStat = ({
 export const CreateCard = ({ children, onBack, onNext, loading }) => (
   <div className="relative mx-auto">
     <div className="mx-auto mt-2 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-4 lg:px-8">
-      <div className="rounded-md shadow sm:overflow-hidden md:rounded-lg">
-        <div className="space-y-6 bg-gray-200 px-4 py-5 sm:p-6">{children}</div>
-        <div className="bg-gray-50 py-3 text-right sm:px-8">
+      <div className="rounded-md border-2 border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
+        <div className="space-y-6 rounded-md bg-gray-200 px-4 py-5 sm:p-6 md:rounded-lg">
+          {children}
+        </div>
+        <div className="rounded-md bg-gray-50 py-3 text-right sm:px-8 md:rounded-lg">
           <div className="justify-center lg:col-span-4 lg:flex ">
             <div className="mt-4 flex justify-center lg:mt-2">
               <BackButton onClick={onBack} />
@@ -529,6 +492,10 @@ export const WarnModal = ({
 
 import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { setUser } from "../store/userSlice";
+import {
+  ArrowUturnLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/outline";
 export const SuccessAlert = ({ setOpen, message }) => {
   return (
     <div className="mb-6 rounded-md bg-green-100 p-4">
@@ -642,7 +609,7 @@ export const ValidatedInput = ({
       ) : (
         <label
           htmlFor={inputName}
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-800"
         >
           {inputName}
         </label>
@@ -761,10 +728,10 @@ export const InfoPopover = ({ name, details }) => {
     <Popover className="relative">
       {({ open }) => (
         <>
-          <Popover.Button className="mb-2 text-sm font-medium text-gray-700 focus:outline-none dark:text-white">
+          <Popover.Button className="mb-2 text-sm font-medium text-gray-800 focus:outline-none">
             <div className="flex">
               {name}
-              <InformationCircleIcon className="ml-1 h-4 w-4 text-blue-600" />
+              <InformationCircleIcon className="ml-1 h-4 w-4 text-gray-500" />
             </div>
           </Popover.Button>
           <Transition
