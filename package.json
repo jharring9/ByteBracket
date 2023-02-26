@@ -38,7 +38,7 @@
     "build": "webpack --config webpack.prod.js",
     "start": "webpack --config webpack.dev.js && nodemon ./src/server/index.cjs",
     "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css",
-    "server": "forever start ~/ByteBracket/src/server/index.cjs",
+    "server": "export NODE_ENV=production && forever start ~/ByteBracket/src/server/index.cjs",
     "s3-sync": "aws s3 sync public s3://bytebracket-webcontent --delete"
   },
   "eslintConfig": {
