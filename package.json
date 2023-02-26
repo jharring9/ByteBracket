@@ -1,6 +1,6 @@
 {
   "name": "bytebracket",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.258.0",
@@ -38,7 +38,8 @@
     "build": "webpack --config webpack.prod.js",
     "start": "webpack --config webpack.dev.js && nodemon ./src/server/index.cjs",
     "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css",
-    "server": "nodemon ./src/server/index.cjs"
+    "server": "nodemon ./src/server/index.cjs",
+    "s3-sync": "aws s3 sync public s3://bytebracket-webcontent --delete"
   },
   "eslintConfig": {
     "extends": [
