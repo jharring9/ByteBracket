@@ -240,7 +240,7 @@ export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export const ProgressBar = () => {
+export const ProgressBar = ({ dispatch }) => {
   const { progressBar } = useSelector((state) => state.createStage);
   return (
     <div
@@ -254,7 +254,10 @@ export const ProgressBar = () => {
         {progressBar.map((step, stepIdx) => (
           <li key={step.name} className="relative md:flex md:flex-1">
             {step.status === "complete" ? (
-              <div className="group flex w-full items-center">
+              <div
+                className="group flex w-full cursor-pointer items-center"
+                onClick={() => dispatch(setCreateStage(stepIdx + 1))}
+              >
                 <span className="flex items-center px-6 py-4 text-sm font-medium">
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 group-hover:bg-indigo-800">
                     <CheckIcon
@@ -323,11 +326,11 @@ export const ProgressBar = () => {
 };
 
 export const SpeedDial = ({ action }) => (
-  <div className="group fixed bottom-2 right-2 md:bottom-6 md:right-6">
+  <div className="group fixed bottom-2 right-2 z-10 md:bottom-6 md:right-6">
     <button
       type="button"
       onClick={action}
-      className="ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-700 text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      className="ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-700 text-white shadow-xl hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -374,7 +377,7 @@ export const CreateCard = ({ children, onBack, onNext, loading }) => (
           {children}
         </div>
         <div className="rounded-md bg-gray-50 py-3 text-right sm:px-8 md:rounded-lg">
-          <div className="justify-center lg:col-span-4 lg:flex ">
+          <div className="justify-center lg:flex">
             <div className="mt-4 flex justify-center lg:mt-2">
               <BackButton onClick={onBack} />
             </div>
@@ -496,6 +499,7 @@ import {
   ArrowUturnLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
+import { setCreateStage } from "../store/createStageSlice";
 export const SuccessAlert = ({ setOpen, message }) => {
   return (
     <div className="mb-6 rounded-md bg-green-100 p-4">
@@ -726,36 +730,34 @@ export const slowTransition = {
 export const InfoPopover = ({ name, details }) => {
   return (
     <Popover className="relative">
-      {({ open }) => (
-        <>
-          <Popover.Button className="mb-2 text-sm font-medium text-gray-800 focus:outline-none">
-            <div className="flex">
-              {name}
-              <InformationCircleIcon className="ml-1 h-4 w-4 text-gray-500" />
-            </div>
-          </Popover.Button>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-200"
-            enterFrom="opacity-0 translate-y-1"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition ease-in duration-150"
-            leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-1"
-          >
-            <Popover.Panel className="absolute left-1/2 z-10 w-full -translate-x-1/2 transform px-4 sm:w-5/6 sm:px-0">
-              <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="relative bg-white p-4">
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-900">{name}</p>
-                    <p className="text-sm text-gray-500">{details}</p>
-                  </div>
+      <>
+        <Popover.Button className="mb-2 text-sm font-medium text-gray-800 focus:outline-none">
+          <div className="flex">
+            {name}
+            <InformationCircleIcon className="ml-1 h-4 w-4 text-gray-400" />
+          </div>
+        </Popover.Button>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <Popover.Panel className="absolute left-1/2 z-10 w-full -translate-x-1/2 transform px-4 sm:w-5/6 sm:px-0">
+            <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="relative bg-white p-4">
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-900">{name}</p>
+                  <p className="text-sm text-gray-500">{details}</p>
                 </div>
               </div>
-            </Popover.Panel>
-          </Transition>
-        </>
-      )}
+            </div>
+          </Popover.Panel>
+        </Transition>
+      </>
     </Popover>
   );
 };

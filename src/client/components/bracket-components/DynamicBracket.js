@@ -20,7 +20,7 @@ export const SingleSided = ({ rounds }) => {
 
   if (isResponsive) {
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-5">
         <Swiper
           onSwiper={setSwiperRef}
           breakpoints={{
@@ -73,7 +73,7 @@ export const SingleSided = ({ rounds }) => {
     );
   } else {
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-5">
         {rounds.map((round, roundIdx) => (
           <Round key={roundIdx}>
             <SeedsList>

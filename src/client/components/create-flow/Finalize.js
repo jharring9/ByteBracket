@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearTop25 } from "../../store/lambdaSlice";
 import { resetBracket } from "../../store/bracketSlice";
 import { resetStats } from "../../store/statsSlice";
-import { BackButton, ErrorAlert, SaveButton, ValidatedInput } from "../shared";
+import {
+  BackButton,
+  ErrorAlert,
+  normalTransition,
+  SaveButton,
+  ValidatedInput,
+} from "../shared";
 import { setCreateStage } from "../../store/createStageSlice";
 import { Transition } from "@headlessui/react";
 import ReactGA from "react-ga4";
@@ -96,47 +102,52 @@ export const Finalize = () => {
       enterTo="opacity-100"
     >
       {user.username ? (
-        <div className="relative mx-auto mt-8 lg:mt-14">
-          <div className="mx-auto mt-6 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-8 lg:w-1/2 lg:px-8">
-            <form className="shadow sm:overflow-hidden sm:rounded-md">
-              <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                {error && (
-                  <ErrorAlert
-                    header="Error submitting bracket"
-                    message={error}
+        <div className="mx-auto mt-4 max-w-2xl px-4 pb-10 sm:px-6 lg:px-8">
+          <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
+            <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg">
+              <Transition
+                show={!!error}
+                {...normalTransition}
+                className="mx-auto mt-3 max-w-full lg:col-span-3 lg:m-4"
+              >
+                <ErrorAlert
+                  header="There was an error submitting your bracket."
+                  message={error}
+                />
+              </Transition>
+              <div className="mx-auto max-w-xl space-y-4 mb-6">
+                <h1 className="text-center text-center text-3xl font-bold text-gray-900">
+                  Submit Your Bracket
+                </h1>
+              </div>
+              <div className="flex gap-6">
+                <div className="flex-auto">
+                  <ValidatedInput
+                    inputName="Bracket name"
+                    value={name}
+                    setValue={setName}
+                    errorMsg={nameError}
                   />
-                )}
-                <div className="flex gap-6">
-                  <div className="flex-auto">
-                    <ValidatedInput
-                      inputName="Bracket name"
-                      value={name}
-                      setValue={setName}
-                      errorMsg={nameError}
+                </div>
+                <div className="flex-initial">
+                  {logos[field[champion]?.name] && (
+                    <img
+                      src={logos[field[champion]?.name]}
+                      alt="team logo"
+                      className="mr-2 mb-1 h-20"
                     />
-                  </div>
-                  <div className="flex-initial">
-                    {logos[field[champion]?.name] && (
-                      <img
-                        src={logos[field[champion]?.name]}
-                        alt="team logo"
-                        className="mr-2 mb-1 h-20"
-                      />
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                <div className="justify-center lg:col-span-4 lg:flex ">
-                  <div className="mt-4 flex justify-center lg:mt-2">
-                    <BackButton onClick={handleBack} />
-                  </div>
-                  <div className="flex justify-center lg:mt-2">
-                    <SaveButton onClick={onFinalize} loading={loading} />
-                  </div>
+              <div className="justify-center lg:flex">
+                <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
+                  <BackButton onClick={handleBack} />
+                </div>
+                <div className="flex justify-center lg:mt-2 lg:justify-start">
+                  <SaveButton onClick={onFinalize} loading={loading} />
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       ) : (

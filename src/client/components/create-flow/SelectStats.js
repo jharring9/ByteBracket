@@ -4,7 +4,7 @@ import {
   ContinueButton,
   ErrorAlert,
   DisableStat,
-  InfoPopover,
+  InfoPopover, normalTransition,
 } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setField, setTop25 } from "../../store/lambdaSlice";
@@ -56,12 +56,18 @@ export const SelectStats = () => {
       });
       const data = await res.json();
       dispatch(setField(data.field));
-      dispatch(setTop25(data.top25));
+      const top25WithDiff = data.top25.map((team) => {
+        return {
+          ...team,
+          diff: team.diff < 0 ? team.diff : `+${team.diff}`,
+        };
+      });
+      dispatch(setTop25(top25WithDiff));
       dispatch(resetBracket());
       dispatch(setCreateStage(2));
     } else {
       setError(
-        "There was an error processing your statistics. Please try again later."
+        "This is most likely a server issue. Please try again later."
       );
       setLoading(false);
     }
@@ -76,18 +82,29 @@ export const SelectStats = () => {
       enterTo="opacity-100"
       className="relative mx-auto"
     >
-      <h1 className="mt-4 text-center text-3xl text-gray-900 lg:mt-6">
-        Select Your Stats
-      </h1>
-      <div className="mx-auto mt-2 max-w-max px-4 pb-6 sm:px-6 lg:mt-4 lg:px-8">
-        <div className="rounded-md border-2 border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
-          {error && (
-            <ErrorAlert
-              header="There was an error processing your statistics."
-              message={error}
-            />
-          )}
-          <div className="rounded-md bg-gray-200 px-4 py-5 sm:p-6 md:rounded-lg lg:grid lg:grid-cols-3 lg:gap-4">
+      <div className="mx-auto mt-4 max-w-max px-4 pb-10 sm:px-6 lg:px-8">
+        <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
+          <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg lg:grid lg:grid-cols-3 lg:gap-4">
+            <Transition
+                show={!!error}
+                {...normalTransition}
+                className="lg:col-span-3 mt-3 max-w-full lg:m-4 mx-auto"
+            >
+              <ErrorAlert
+                  header="There was an error processing your statistics."
+                  message={error}
+              />
+            </Transition>
+            <div className="mx-auto max-w-xl space-y-4 lg:col-span-3">
+              <h1 className="text-center text-center text-4xl font-bold text-gray-900">
+                Build Your Algorithm
+              </h1>
+              <p className="text-center text-gray-600">
+                Choose how important each statistic will be in your algorithm.
+                Each team will be graded based on their relative performance in
+                each category.
+              </p>
+            </div>
             <div className="order-1">
               <StatSelection
                 name="Win-Loss %"
@@ -172,9 +189,7 @@ export const SelectStats = () => {
                 lineWidth={40}
               />
             </div>
-          </div>
-          <div className="rounded-md bg-gray-50 py-3 text-right sm:px-8 md:rounded-lg">
-            <div className="justify-center lg:col-span-4 lg:flex">
+            <div className="justify-center lg:order-4 lg:col-span-3 lg:flex">
               <div className="flex justify-center lg:mt-2">
                 <ContinueButton loading={loading} onClick={handleSubmit} />
               </div>
@@ -210,7 +225,7 @@ const StatSelection = ({ name, value, setValue, details }) => {
             max={10}
             value={value}
             onChange={(val) => setValue(parseInt(val.target.value))}
-            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-400 accent-indigo-700"
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-indigo-700"
             disabled={disabledValue !== 0}
           />
         </div>

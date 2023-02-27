@@ -128,12 +128,12 @@ export const RenderSeedComponent = ({
             <img
               src={logos[field[champion]?.name]}
               alt="team logo"
-              className="h-32"
+              className="h-48 w-auto max-w-[300px]"
             />
           )}
         </div>
         <ChampionshipSeed>
-          <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
+          <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center text-gray-700 shadow-md shadow-gray-200">
             <div>
               <div className={style(0)}>
                 {field[seed[0]]?.seed + ". "}
@@ -151,7 +151,7 @@ export const RenderSeedComponent = ({
   } else {
     return (
       <ReadOnlySeed align={!mobile && roundIdx >= 5 ? "left" : "right"}>
-        <div className="relative w-full rounded border-0 border-black bg-white p-0 text-center shadow-md shadow-gray-200">
+        <div className="relative w-full rounded border border-black bg-white p-0 text-center text-gray-700 shadow-md shadow-gray-200">
           <div>
             <div className={style(0)}>
               {field[seed[0]]?.seed + ". "}
