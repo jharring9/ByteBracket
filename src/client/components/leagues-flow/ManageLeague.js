@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import {
   ErrorAlert,
+  InfoPopover,
   normalTransition,
   SuccessAlert,
   ValidatedInput,
@@ -26,7 +27,6 @@ export const ManageLeague = ({
   const [leagueName, setLeagueName] = useState(name);
   const [maxEntries, setMaxEntries] = useState(max);
   const [maxEntriesPerUser, setMaxEntriesPerUser] = useState(maxPerUser);
-  const [isPublic, setIsPublic] = useState(!isPrivate);
   const [code, setCode] = useState(joinCode);
   const [closeDate, setCloseDate] = useState(lockDate);
 
@@ -48,7 +48,7 @@ export const ManageLeague = ({
     if (!maxEntries || maxEntries < 1) {
       setMaxEntriesError("Max entries must be greater than 0");
       return;
-    } else if (maxEntries > 100) {
+    } else if (isPrivate && maxEntries > 100) {
       setMaxEntriesError("Max entries cannot be greater than 100");
       return;
     } else if (maxEntries < entries) {
@@ -61,7 +61,7 @@ export const ManageLeague = ({
       return;
     } else setMaxEntriesPerUserError(null);
 
-    if (!isPublic && (!code || code.trim().length === 0)) {
+    if (isPrivate && (!code || code.trim().length === 0)) {
       setCodeError("League code is required for private leagues");
       return;
     } else setCodeError(null);
@@ -75,7 +75,6 @@ export const ManageLeague = ({
         name: leagueName,
         maxEntries: maxEntries,
         entriesPerUser: maxEntriesPerUser,
-        isPrivate: !isPublic,
         lockDate: closeDate,
         code: code,
       }),
@@ -128,7 +127,7 @@ export const ManageLeague = ({
                   errorMsg={leagueNameError}
                 />
               </div>
-              <div className="col-span-12 sm:col-span-4">
+              <div className="col-span-12 sm:col-span-6">
                 <ValidatedInput
                   inputName="Max Entries"
                   type="number"
@@ -137,7 +136,7 @@ export const ManageLeague = ({
                   errorMsg={maxEntriesError}
                 />
               </div>
-              <div className="col-span-12 sm:col-span-4">
+              <div className="col-span-12 sm:col-span-6">
                 <ValidatedInput
                   inputName="Max Entries per User"
                   type="number"
@@ -146,48 +145,21 @@ export const ManageLeague = ({
                   errorMsg={maxEntriesPerUserError}
                 />
               </div>
-              <div className="col-span-4 flex items-center justify-center sm:col-span-4">
-                <div>
-                  <label
-                    htmlFor="isPublic"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Publicly joinable
-                  </label>
-                  <Switch
-                    name="isPublic"
-                    checked={isPublic}
-                    onChange={setIsPublic}
-                    className={`${isPublic ? "bg-indigo-700" : "bg-indigo-200"}
-          relative mt-1 inline-flex h-[37px] w-[81px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={`${
-                        isPublic ? "translate-x-11" : "translate-x-0"
-                      }
-            pointer-events-none inline-block h-[33px] w-[33px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                    />
-                  </Switch>
-                </div>
-              </div>
-              <div className="col-span-8 sm:col-span-6">
+              <div className="col-span-12 sm:col-span-6">
                 <ValidatedInput
                   inputName="League Code"
                   popoverInfo="This is the code that users must enter to join your league."
                   value={code}
                   setValue={setCode}
                   errorMsg={codeError}
-                  disabled={isPublic}
+                  disabled={!isPrivate}
                 />
               </div>
               <div className="col-span-12 sm:col-span-6">
-                <label
-                  htmlFor="lockDate"
-                  className="mb-2 block text-sm font-medium text-gray-700"
-                >
-                  League Lock Date
-                </label>
+                <InfoPopover
+                  name="League Lock Date"
+                  details="Final date that users will be able to add/remove entries. After this date, other users' brackets will be viewable."
+                />
                 <select
                   id="lockDate"
                   value={closeDate}

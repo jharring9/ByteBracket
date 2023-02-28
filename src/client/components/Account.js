@@ -23,8 +23,8 @@ export const Account = () => {
     document.title = "Account - ByteBracket";
     if (!user.username) navigate("/login");
     sidebar = [
-      { name: "Brackets", href: 1, icon: QueueListIcon, current: true },
-      { name: "Leagues", href: 2, icon: UserGroupIcon, current: false },
+      { name: "My Brackets", href: 1, icon: QueueListIcon, current: true },
+      { name: "My Leagues", href: 2, icon: UserGroupIcon, current: false },
       { name: "Profile", href: 3, icon: UserCircleIcon, current: false },
       { name: "Password", href: 4, icon: KeyIcon, current: false },
     ];
@@ -100,7 +100,6 @@ export const Account = () => {
                 ))}
               </nav>
             </aside>
-
             {stage === 1 && <Brackets user={user} />}
             {stage === 2 && <Leagues />}
             {stage === 3 && <Profile user={user} />}
