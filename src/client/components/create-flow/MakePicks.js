@@ -12,6 +12,7 @@ import { setCreateStage } from "../../store/createStageSlice";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
 import { SingleSided, winPercent } from "../bracket-components/DynamicBracket";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
@@ -131,6 +132,7 @@ export const MakePicks = () => {
             : finalTeam2,
       })
     );
+    ReactGA.event({ action: "autopick", category: "bracket" });
   };
 
   return (

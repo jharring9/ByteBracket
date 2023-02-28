@@ -61,11 +61,7 @@ export const Finalize = () => {
       }),
     });
     if (res.ok) {
-      ReactGA.event({
-        category: "Bracket",
-        action: "Created",
-        label: name,
-      });
+      ReactGA.event({ action: "createbracket", category: "bracket" });
       dispatch(resetStats);
       dispatch(clearTop25);
       dispatch(resetBracket);

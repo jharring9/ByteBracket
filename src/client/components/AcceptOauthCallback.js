@@ -5,7 +5,7 @@ export const AcceptOauthCallback = ({ provider }) => {
   useEffect(() => {
     const params = window.location.search;
     if (window.opener) {
-      ReactGA.event("login", { method: provider });
+      ReactGA.event({ action: "login", category: "user", label: provider });
       window.opener.postMessage(params + `&provider=${provider}`);
       window.close();
     }

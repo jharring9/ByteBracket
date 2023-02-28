@@ -35,6 +35,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { ManageLeague } from "./ManageLeague";
 import { addLeague } from "../../store/userSlice";
+import ReactGA from "react-ga4";
 
 export const ViewLeague = () => {
   /* Page state */
@@ -182,6 +183,7 @@ export const ViewLeague = () => {
       },
     });
     if (response.ok) {
+      ReactGA.event({ action: "enterleague", category: "league" });
       await getLeague();
       setSuccess("Your bracket has been entered.");
       setError(null);

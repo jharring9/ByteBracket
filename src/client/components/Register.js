@@ -10,6 +10,7 @@ import {
 } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
+import ReactGA from "react-ga4";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -31,13 +32,13 @@ export const Register = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate(returnUrl ?  `/${returnUrl}` : "/account");
+      navigate(returnUrl ? `/${returnUrl}` : "/account");
     }
   }, [user]);
 
   useEffect(() => {
     document.title = "Register - ByteBracket";
-  }, [])
+  }, []);
 
   const onRegister = async (ev) => {
     ev.preventDefault();
@@ -74,6 +75,7 @@ export const Register = () => {
     });
     const data = await res.json();
     if (res.ok) {
+      ReactGA.event({ action: "register", category: "user" });
       dispatch(setUser(data));
     } else {
       setError(data.error);

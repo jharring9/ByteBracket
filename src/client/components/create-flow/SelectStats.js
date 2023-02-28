@@ -49,11 +49,7 @@ export const SelectStats = () => {
       },
     });
     if (res.ok) {
-      ReactGA.event({
-        category: "Bracket",
-        action: "Stats Selected",
-        label: "Stats Selected",
-      });
+      ReactGA.event({ action: "selectstats", category: "bracket" });
       const data = await res.json();
       dispatch(setField(data.field));
       const top25WithDiff = data.top25.map((team) => {

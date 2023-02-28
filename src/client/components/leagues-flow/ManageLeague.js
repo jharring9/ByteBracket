@@ -7,6 +7,7 @@ import {
   ValidatedInput,
 } from "../shared";
 import { useSelector } from "react-redux";
+import ReactGA from "react-ga4";
 
 export const ManageLeague = ({
   id,
@@ -80,6 +81,7 @@ export const ManageLeague = ({
       }),
     });
     if (result.ok) {
+      ReactGA.event({ action: "modifyleague", category: "league" });
       setSuccess(true);
       onSave();
       return;

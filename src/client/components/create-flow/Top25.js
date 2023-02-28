@@ -86,7 +86,7 @@ export const Top25 = () => {
                   <div className="inline-block w-full min-w-full py-2 align-middle md:px-6 lg:px-8">
                     <div className="overflow-hidden">
                       <table className="w-full divide-y divide-gray-300">
-                        <thead className="border-b-2 border-gray-600">
+                        <thead className="border-b-2 border-gray-500">
                           <tr>
                             <th
                               scope="col"
@@ -151,7 +151,7 @@ export const Top25 = () => {
                                   </div>
                                 </div>
                               </td>
-                              <td className="whitespace-nowrap px-2 py-4 text-center text-lg text-gray-500 sm:border-l-2 sm:border-gray-600">
+                              <td className="whitespace-nowrap px-2 py-4 text-center text-lg text-gray-500 sm:border-l-2 sm:border-gray-500">
                                 {row.apRank}
                               </td>
                               <td className="hidden whitespace-nowrap px-2 py-4 text-center text-lg text-gray-500 sm:table-cell">
@@ -175,7 +175,7 @@ export const Top25 = () => {
                   <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                     <div className="overflow-hidden">
                       <table className="min-w-full table-fixed divide-y divide-gray-300 sm:table-auto">
-                        <thead className="border-b-2 border-gray-600">
+                        <thead className="border-b-2 border-gray-500">
                           <tr>
                             <th
                               scope="col"
@@ -221,7 +221,7 @@ export const Top25 = () => {
                                   </div>
                                 </div>
                               </td>
-                              <td className="whitespace-nowrap px-2 py-4 text-center text-lg text-gray-500 sm:border-l-2 sm:border-gray-600">
+                              <td className="whitespace-nowrap px-2 py-4 text-center text-lg text-gray-500 sm:border-l-2 sm:border-gray-500">
                                 {row.diff}
                               </td>
                             </tr>

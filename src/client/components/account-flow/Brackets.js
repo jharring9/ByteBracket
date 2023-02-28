@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { WarnModal } from "../shared";
 import { DocumentPlusIcon } from "@heroicons/react/24/solid";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const Brackets = ({ user }) => {
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ export const Brackets = ({ user }) => {
       },
     });
     if (res.ok) {
+      ReactGA.event({ action: "deletebracket", category: "bracket" });
       getBrackets();
     } else {
       navigate("/login");

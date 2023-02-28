@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import { ErrorAlert, LoadingWrapper, ValidatedInput } from "../shared";
 import { Switch } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const CreateLeague = () => {
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ export const CreateLeague = () => {
       }),
     });
     if (response.ok) {
+      ReactGA.event({ action: "createleague", category: "league" });
       const { id } = await response.json();
       navigate(`/leagues/${id}`);
     } else {
