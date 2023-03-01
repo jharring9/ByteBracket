@@ -16,14 +16,13 @@ module.exports = (app) => {
     }
     try {
       const id = uuidv4();
-      const { name, maxEntries, entriesPerUser, isPrivate, code, lockDate } =
-        req.body;
+      const { name, maxEntries, entriesPerUser, code, lockDate } = req.body;
       if (
         !name ||
         !maxEntries ||
         !entriesPerUser ||
         !lockDate ||
-        (isPrivate && code.trim().length === 0)
+        code.trim().length === 0
       ) {
         return res.status(400).send({
           error:
@@ -35,7 +34,7 @@ module.exports = (app) => {
         name: name,
         maxEntries: maxEntries,
         entriesPerUser: entriesPerUser,
-        isPrivate: isPrivate,
+        isPrivate: true,
         code: code,
         managerId: sessionUser,
         lockDate: lockDate,
@@ -212,15 +211,8 @@ module.exports = (app) => {
   app.put("/v1/league/:id", async (req, res) => {
     const user = req.session.user?.username;
     const { id } = req.params;
-    const { name, maxEntries, entriesPerUser, isPrivate, code, lockDate } =
-      req.body;
-    if (
-      !name ||
-      !maxEntries ||
-      !entriesPerUser ||
-      !lockDate ||
-      (isPrivate && !code)
-    ) {
+    const { name, maxEntries, entriesPerUser, code, lockDate } = req.body;
+    if (!name || !maxEntries || !entriesPerUser || !lockDate) {
       return res.status(400).send({ error: "Missing fields" });
     }
     if (!user) {
@@ -230,7 +222,6 @@ module.exports = (app) => {
       name: name,
       maxEntries: maxEntries,
       entriesPerUser: entriesPerUser,
-      isPrivate: isPrivate,
       code: code,
       lockDate: lockDate,
     };

@@ -10,6 +10,7 @@ import {
 import { setUser } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const Profile = ({ user }) => {
   const dispatch = useDispatch();
@@ -76,6 +77,7 @@ export const Profile = ({ user }) => {
       setSuccess(true);
       setError(null);
       dispatch(setUser(data));
+      ReactGA.event({ action: "updateprofile", category: "user" });
     } else {
       setSuccess(false);
       setError(data.error);

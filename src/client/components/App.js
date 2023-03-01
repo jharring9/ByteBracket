@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../../public/output.css";
-import "flowbite";
 import ReactGA from "react-ga4";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Header } from "./Header";

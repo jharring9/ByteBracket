@@ -1,3 +1,7 @@
+/*
+BEFORE UPDATING AP RANKINGS OR TEAMS/FIELD, MAKE SURE ANY NEW TEAMS' LOGOS ARE ADDED.
+ */
+
 /**
  * Current AP Rankings, using in the top 25.
  */

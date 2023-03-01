@@ -1,7 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import { ErrorAlert, LoadingWrapper, ValidatedInput } from "../shared";
-import { Switch } from "@headlessui/react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ErrorAlert,
+  InfoPopover,
+  LoadingWrapper,
+  ValidatedInput,
+} from "../shared";
+import ReactGA from "react-ga4";
 
 export const CreateLeague = () => {
   const navigate = useNavigate();
@@ -10,7 +15,6 @@ export const CreateLeague = () => {
   const [name, setName] = useState("");
   const [maxEntries, setMaxEntries] = useState(25);
   const [maxEntriesPerUser, setMaxEntriesPerUser] = useState(1);
-  const [isPublic, setIsPublic] = useState(true);
   const [code, setCode] = useState("");
   const [closeDate, setCloseDate] = useState("2023-03-16T05:00:00-0600");
 
@@ -39,8 +43,8 @@ export const CreateLeague = () => {
       return;
     } else setMaxEntriesPerUserError(null);
 
-    if (!isPublic && (!code || code.trim().length === 0)) {
-      setCodeError("Required for private leagues");
+    if (!code || code.trim().length === 0) {
+      setCodeError("Join code is required");
       return;
     } else setCodeError(null);
 
@@ -53,12 +57,12 @@ export const CreateLeague = () => {
         name,
         maxEntries,
         entriesPerUser: maxEntriesPerUser,
-        isPrivate: !isPublic,
         code,
         lockDate: closeDate,
       }),
     });
     if (response.ok) {
+      ReactGA.event({ action: "createleague", category: "league" });
       const { id } = await response.json();
       navigate(`/leagues/${id}`);
     } else {
@@ -69,7 +73,7 @@ export const CreateLeague = () => {
 
   useEffect(() => {
     document.title = "Create League - ByteBracket";
-  }, [])
+  }, []);
 
   return (
     <LoadingWrapper>
@@ -135,50 +139,20 @@ export const CreateLeague = () => {
                     errorMsg={maxEntriesPerUserError}
                   />
                 </div>
-                <div className="col-span-4">
-                  <div>
-                    <label
-                      htmlFor="isPublic"
-                      className="mt-1 block text-sm font-medium text-gray-700"
-                    >
-                      Publicly joinable
-                    </label>
-                    <Switch
-                      name="isPublic"
-                      checked={isPublic}
-                      onChange={setIsPublic}
-                      className={`${
-                        isPublic ? "bg-indigo-700" : "bg-indigo-200"
-                      }
-          relative mt-1 inline-flex h-[37px] w-[81px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className={`${
-                          isPublic ? "translate-x-11" : "translate-x-0"
-                        }
-            pointer-events-none inline-block h-[33px] w-[33px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                      />
-                    </Switch>
-                  </div>
-                </div>
-                <div className="col-span-8">
+                <div className="col-span-12">
                   <ValidatedInput
                     inputName="Join Code"
                     popoverInfo="This is the code that users must enter to join your league. Only applies to private leagues."
                     value={code}
                     setValue={setCode}
                     errorMsg={codeError}
-                    disabled={isPublic}
                   />
                 </div>
                 <div className="col-span-12">
-                  <label
-                    htmlFor="lockDate"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    League Lock Date
-                  </label>
+                  <InfoPopover
+                    name="League Lock Date"
+                    details="Final date that users will be able to add/remove entries. After this date, other users' brackets will be viewable."
+                  />
                   <select
                     id="lockDate"
                     value={closeDate}

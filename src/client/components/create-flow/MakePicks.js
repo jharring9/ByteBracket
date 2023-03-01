@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  CreateCard,
+  BackButton,
+  ContinueButton,
   ErrorAlert,
   normalTransition,
   smoothScrollTop,
@@ -11,6 +12,7 @@ import { setCreateStage } from "../../store/createStageSlice";
 import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
 import { SingleSided, winPercent } from "../bracket-components/DynamicBracket";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
@@ -130,6 +132,7 @@ export const MakePicks = () => {
             : finalTeam2,
       })
     );
+    ReactGA.event({ action: "autopick", category: "bracket" });
   };
 
   return (
@@ -139,25 +142,47 @@ export const MakePicks = () => {
       enter="transition ease-out duration-[2000ms]"
       enterFrom="opacity-0"
       enterTo="opacity-100"
+      className="relative mx-auto"
     >
-      <h1 className="mt-4 text-center text-3xl text-gray-900 lg:mt-6">
-        Make Your Picks: {bracket[region].name}
-      </h1>
-      <Transition
-        show={!!error}
-        {...normalTransition}
-        className="flex flex-col items-center justify-center"
-      >
-        <div className="mt-3 w-full md:w-2/3 lg:m-4">
-          <ErrorAlert
-            header="There was a problem with your picks"
-            message={error}
-          />
+      <div className="mx-auto mt-4 max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+        <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
+          <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg">
+            <Transition
+              show={!!error}
+              {...normalTransition}
+              className="mx-auto mt-3 max-w-full lg:col-span-3 lg:m-4"
+            >
+              <ErrorAlert
+                header="There was an error with your picks."
+                message={error}
+              />
+            </Transition>
+            <div className="mx-auto max-w-xl space-y-4">
+              <h1 className="text-center text-center text-3xl font-bold text-gray-900">
+                Make Your Picks: {bracket[region].name}
+              </h1>
+              <p className="text-center text-gray-600">
+                Choose a winner for each matchup in this region. You may also
+                choose for your algorithm to pick winners by clicking the purple
+                randomize button.
+                <span className="xl:hidden">
+                  {" "}
+                  Swipe left and right to adjust the bracket view.
+                </span>
+              </p>
+            </div>
+            <SingleSided rounds={bracket[region].rounds} />
+            <div className="justify-center lg:flex">
+              <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
+                <BackButton onClick={handleBack} />
+              </div>
+              <div className="flex justify-center lg:mt-2 lg:justify-start">
+                <ContinueButton onClick={handleNext} />
+              </div>
+            </div>
+          </div>
         </div>
-      </Transition>
-      <CreateCard onBack={handleBack} onNext={handleNext}>
-        <SingleSided rounds={bracket[region].rounds} />
-      </CreateCard>
+      </div>
       <SpeedDial action={autoComplete} />
     </Transition>
   );

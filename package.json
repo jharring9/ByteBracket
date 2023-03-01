@@ -1,6 +1,6 @@
 {
   "name": "bytebracket",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.258.0",
@@ -19,7 +19,6 @@
     "cookie-session": "^2.0.0",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
-    "flowbite": "^1.6.2",
     "framer-motion": "^8.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,7 +36,9 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "start": "webpack --config webpack.dev.js && nodemon ./src/server/index.cjs",
-    "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css"
+    "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css",
+    "server": "export NODE_ENV=production && forever start ~/ByteBracket/src/server/index.cjs",
+    "s3-sync": "aws s3 sync public s3://bytebracket-webcontent --delete"
   },
   "eslintConfig": {
     "extends": [

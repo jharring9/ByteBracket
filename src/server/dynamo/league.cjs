@@ -100,10 +100,9 @@ exports.updateLeagueSettings = async (id, settings) => {
       id: id,
     },
     UpdateExpression:
-      "set #n = :n, #a = :a, #c = :c, #m = :m, #e = :e, #l = :l, lastUpdated = :u",
+      "set #n = :n, #c = :c, #m = :m, #e = :e, #l = :l, lastUpdated = :u",
     ExpressionAttributeValues: {
       ":n": settings.name,
-      ":a": settings.isPrivate,
       ":c": settings.code,
       ":m": settings.maxEntries,
       ":e": settings.entriesPerUser,
@@ -112,7 +111,6 @@ exports.updateLeagueSettings = async (id, settings) => {
     },
     ExpressionAttributeNames: {
       "#n": "name",
-      "#a": "isPrivate",
       "#c": "code",
       "#m": "maxEntries",
       "#e": "entriesPerUser",
