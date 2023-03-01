@@ -67,7 +67,7 @@ export const Seed = styled.div`
 
 export const ReadOnlySeed = styled.div`
   padding: .75em 1em;
-  min-width: 120px;
+  min-width: 100px;
   width: 100%;
   position: relative;
   display: flex;

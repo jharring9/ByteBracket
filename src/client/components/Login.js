@@ -59,7 +59,7 @@ export const Login = () => {
     });
     const data = await res.json();
     if (res.ok) {
-      ReactGA.event("login", { method: "native" });
+      ReactGA.event({ action: "login", category: "user", label: "native" });
       dispatch(setUser(data));
     } else {
       setError(data.error);

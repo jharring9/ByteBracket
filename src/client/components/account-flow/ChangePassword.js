@@ -6,6 +6,7 @@ import {
   ValidatedInput,
 } from "../shared";
 import { Transition } from "@headlessui/react";
+import ReactGA from "react-ga4";
 
 export const ChangePassword = ({ user }) => {
   const [oldPass, setOldPass] = useState("");
@@ -44,6 +45,7 @@ export const ChangePassword = ({ user }) => {
     if (res.ok) {
       setSuccess(true);
       setError(null);
+      ReactGA.event({ action: "changepassword", category: "user"});
     } else {
       const { error } = await res.json();
       setSuccess(false);
