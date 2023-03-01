@@ -187,7 +187,7 @@ exports.LOGOS = {
 /**
  * Teams in the tournament. Every 16 indices represents a new region. Seeds are in order 1-16 for each region.
  */
-exports.TEAMS = [x
+exports.TEAMS = [
   "Houston",
   "Connecticut",
   "Purdue",
