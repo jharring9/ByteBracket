@@ -4,7 +4,8 @@ import {
   ContinueButton,
   ErrorAlert,
   DisableStat,
-  InfoPopover, normalTransition,
+  InfoPopover,
+  normalTransition,
 } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setField, setTop25 } from "../../store/lambdaSlice";
@@ -21,15 +22,15 @@ export const SelectStats = () => {
   const [error, setError] = useState(null);
 
   const chartData = [
-    { title: "WL%", value: stats.wl, color: "#ffc300" },
+    { title: "W-L%", value: stats.wl, color: "#ffc300" },
     { title: "SOS", value: stats.sos, color: "#FDDA0D" },
     { title: "PPG", value: stats.ppg, color: "#add45c" },
     { title: "OPPG", value: stats.oppg, color: "#56c785" },
     { title: "FG%", value: stats.fg, color: "#00baad" },
-    { title: "FTM", value: stats.ft, color: "#2b7b9b" },
-    { title: "3PM", value: stats.tpm, color: "#3e3d6b" },
-    { title: "STL/BLK", value: stats.stlblk, color: "#c70039" },
-    { title: "TO", value: stats.to, color: "#ff5833" },
+    { title: "3P%", value: stats.tpm, color: "#2b7b9b" },
+    { title: "FTM", value: stats.ft, color: "#3e3d6b" },
+    { title: "TO", value: stats.to, color: "#c70039" },
+    { title: "TOF", value: stats.stlblk, color: "#ff5833" },
     { title: "Big Wins", value: stats.Quad1, color: "#ff8c19" },
   ];
 
@@ -38,10 +39,19 @@ export const SelectStats = () => {
    */
   const handleSubmit = async () => {
     setLoading(true);
-    const statObj = {};
-    chartData.forEach((stat) => (statObj[stat.title] = stat.value));
     let res = await fetch("/v1/lambda", {
-      body: JSON.stringify(statObj),
+      body: JSON.stringify({
+        "WL%": stats.wl,
+        SOS: stats.sos,
+        PPG: stats.ppg,
+        OPPG: stats.oppg,
+        "FG%": stats.fg,
+        "3PM": stats.tpm,
+        FTM: stats.ft,
+        TO: stats.to,
+        "STL/BLK": stats.stlblk,
+        "Big Wins": stats.Quad1,
+      }),
       method: "POST",
       credentials: "include",
       headers: {
@@ -62,9 +72,7 @@ export const SelectStats = () => {
       dispatch(resetBracket());
       dispatch(setCreateStage(2));
     } else {
-      setError(
-        "This is most likely a server issue. Please try again later."
-      );
+      setError("This is most likely a server issue. Please try again later.");
       setLoading(false);
     }
   };
@@ -82,13 +90,13 @@ export const SelectStats = () => {
         <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
           <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg lg:grid lg:grid-cols-3 lg:gap-4">
             <Transition
-                show={!!error}
-                {...normalTransition}
-                className="lg:col-span-3 mt-3 max-w-full lg:m-4 mx-auto"
+              show={!!error}
+              {...normalTransition}
+              className="mx-auto mt-3 max-w-full lg:col-span-3 lg:m-4"
             >
               <ErrorAlert
-                  header="There was an error processing your statistics."
-                  message={error}
+                header="There was an error processing your statistics."
+                message={error}
               />
             </Transition>
             <div className="mx-auto max-w-xl space-y-4 lg:col-span-3">
@@ -97,8 +105,8 @@ export const SelectStats = () => {
               </h1>
               <p className="text-center text-gray-600">
                 Choose how important each statistic will be in your algorithm.
-                Each team will be graded based on their relative performance in
-                each category.
+                Each team will receive a cumulative grade based on their
+                performance within each statistic.
               </p>
             </div>
             <div className="order-1">
@@ -147,18 +155,18 @@ export const SelectStats = () => {
                 setValue={(val) => dispatch(setStats({ ...stats, ft: val }))}
               />
               <StatSelection
-                name="Steals & Blocks"
-                details="The cumulative number of the combined steals and blocks of a team over the season. "
-                value={stats.stlblk}
-                setValue={(val) =>
-                  dispatch(setStats({ ...stats, stlblk: val }))
-                }
-              />
-              <StatSelection
                 name="Turnovers"
                 details="The cumulative number of turnovers from a team over the course of a season. Placing high importance on this statistic favors teams with fewer turnovers."
                 value={stats.to}
                 setValue={(val) => dispatch(setStats({ ...stats, to: val }))}
+              />
+              <StatSelection
+                name="Turnovers Forced"
+                details="The cumulative number of the combined steals and blocks of a team over the season."
+                value={stats.stlblk}
+                setValue={(val) =>
+                  dispatch(setStats({ ...stats, stlblk: val }))
+                }
               />
               <StatSelection
                 name="Big Wins"

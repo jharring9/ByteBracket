@@ -11,6 +11,8 @@ export const ViewBracket = () => {
   const navigate = useNavigate();
   const [bracket, setBracket] = useState([]);
   const [champion, setChampion] = useState(-1);
+  const [masterBracket, setMasterBracket] = useState([]);
+  const [masterChampion, setMasterChampion] = useState(-1);
   const [loaded, setLoaded] = useState(false);
   const [name, setName] = useState("");
   const { user, id } = useParams();
@@ -26,7 +28,6 @@ export const ViewBracket = () => {
         dispatch(setField(field));
       }
     };
-    fetchField();
 
     const fetchBracket = async () => {
       const res = await fetch(`/v1/${user}/bracket/${id}`, {
@@ -41,7 +42,22 @@ export const ViewBracket = () => {
         setLoaded(true);
       }
     };
+
+    const fetchMasterBracket = async () => {
+      const res = await fetch("/v1/master/bracket/master", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMasterBracket(data.bracket);
+        setMasterChampion(data.champion);
+      }
+    };
+
     fetchImages(dispatch);
+    fetchField();
+    fetchMasterBracket();
     fetchBracket();
   }, [user, id]);
 
@@ -64,11 +80,14 @@ export const ViewBracket = () => {
               <h1 className="text-center text-center text-3xl font-bold text-gray-900">
                 {name}
               </h1>
-              <p className="text-center text-gray-600">
-                Created by {user}
-              </p>
+              <p className="text-center text-gray-600">Created by {user}</p>
             </div>
-            <ReadOnlyBracket regions={bracket} champion={champion} />
+            <ReadOnlyBracket
+              regions={bracket}
+              champion={champion}
+              master={masterBracket}
+              masterChampion={masterChampion}
+            />
             <div className="flex justify-center">
               <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
                 <BackButton onClick={() => navigate(-1)} />

@@ -65,9 +65,6 @@ const generateField = (s2p) => {
   return TEAMS.map((team, index) => ({
     name: team,
     seed: (index % 16) + 1,
-    record: `${Math.floor(Math.random() * 35)}-${Math.floor(
-      Math.random() * 35
-    )}`,
     percentile: s2p ? s2p[team] : null,
   }));
 };
