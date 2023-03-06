@@ -203,7 +203,7 @@ exports.TEAMS = [
   "New Mexico",
   "Penn State",
   "Missouri",
-  "Wisconsin",
+  "Wisconsin/UAB",
   "Alabama",
   "Texas",
   "Saint Mary's (CA)",
@@ -219,7 +219,7 @@ exports.TEAMS = [
   "Florida",
   "Oklahoma",
   "Seton Hall",
-  "Arizona State",
+  "Arizona State/Clemson",
   "UCLA",
   "Kansas",
   "Gonzaga",
@@ -235,7 +235,7 @@ exports.TEAMS = [
   "Florida Atlantic",
   "Colorado",
   "Central Florida",
-  "Pittsburgh",
+  "Pittsburgh/Villanova",
   "Tennessee",
   "Arizona",
   "Baylor",
@@ -251,5 +251,12 @@ exports.TEAMS = [
   "Ohio State",
   "Washington State",
   "Cincinnati",
-  "Virginia Tech",
+  "Virginia Tech/Oral Roberts",
+];
+
+exports.FIRST_FOUR = [
+  ["Wisconsin", "UAB"],
+  ["Arizona State", "Clemson"],
+  ["Pittsburgh", "Villanova"],
+  ["Virginia Tech", "Oral Roberts"],
 ];
