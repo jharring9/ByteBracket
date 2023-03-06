@@ -26,13 +26,17 @@ import { CreateLeague } from "./leagues-flow/CreateLeague";
 /* Google Analytics */
 ReactGA.initialize("G-GR6LZND73X");
 
+/* Bracket Creation */
+export const BEFORE_OPEN = true;
+export const AFTER_START = false;
+
 export default function App() {
   const dispatch = useDispatch();
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/home", current: false },
     { name: "Create Bracket", href: "/create", current: false },
-    { name: "About", href: "/about", current: false },
     { name: "Leagues", href: "/leagues", current: false },
+    { name: "About", href: "/about", current: false },
   ]);
 
   useEffect(() => {

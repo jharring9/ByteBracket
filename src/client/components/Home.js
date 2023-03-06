@@ -21,23 +21,24 @@ export const Home = () => {
               Coming soon
             </span>
             <span className="mt-1 block text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
-              <span className="block text-gray-900">A better way to</span>
-              <span className="block">
+              <span className="block text-gray-900">A better way</span>
+              <span className="block flex">
+                to
                 <Transition
                   show={mounted}
                   enter="transition ease-out duration-[2000ms]"
                   enterFrom="opacity-0 -translate-y-4"
                   enterTo="opacity-100 translate-y-0"
                 >
-                  <span className="text-indigo-600">bracket.</span>
+                  <span className="ml-2 text-indigo-600">bracket.</span>
                 </Transition>
               </span>
             </span>
           </h1>
           <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-            Choose which statistics you believe impact winning games, and our
-            algorithm will give you personalized picks. Create a March Madness
-            bracket today!
+            Choose which statistics you believe will impact winning games, and
+            our algorithm will use team data to give you personalized picks.
+            Create a March Madness bracket today!
           </p>
           <div className="mt-5 sm:mx-auto sm:max-w-lg sm:text-center lg:mx-0 lg:text-left">
             <button

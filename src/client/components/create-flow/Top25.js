@@ -128,7 +128,7 @@ export const Top25 = () => {
                                 <div className="flex items-center">
                                   <div className="w-10 flex-shrink-0">
                                     <img
-                                      className="w-10"
+                                      className="h-auto max-h-16 w-10"
                                       src={logos[row.team]}
                                       alt="team logo"
                                     />
@@ -198,7 +198,7 @@ export const Top25 = () => {
                                 <div className="flex items-center">
                                   <div className="h-10 w-10 flex-shrink-0">
                                     <img
-                                      className="w-10"
+                                      className="h-auto max-h-16 w-10"
                                       src={logos[row.team]}
                                       alt="team logo"
                                     />

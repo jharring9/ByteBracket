@@ -5,9 +5,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useWindowSize } from "./useWindowSize";
 
-export const ReadOnlyBracket = ({ regions, champion }) => {
+export const ReadOnlyBracket = ({
+  regions,
+  champion,
+  master,
+  masterChampion,
+}) => {
   const isResponsive = useWindowSize(1300);
   const rounds = createRounds(regions, isResponsive);
+  if (master) {
+    master = createRounds(master, isResponsive);
+  }
+
   if (isResponsive) {
     return (
       <div className="flex justify-center">
@@ -75,6 +84,8 @@ export const ReadOnlyBracket = ({ regions, champion }) => {
                   seed={seed}
                   mobile={false}
                   champion={champion}
+                  masterRounds={master}
+                  masterChampion={masterChampion}
                 />
               ))}
             </SeedsList>
@@ -92,33 +103,87 @@ export const RenderSeedComponent = ({
   seedIdx,
   mobile,
   champion,
+  masterRounds,
+  masterChampion,
 }) => {
   const { logos, field } = useSelector((state) => state.lambda);
 
-  const style = (position) => {
-    let str = "m-0 flex whitespace-nowrap p-0 pl-2";
-    if (roundIdx === 5 && seed[position] === champion) {
-      str += " font-bold";
-    } else if (
-      roundIdx < 5 &&
-      seed[position] ===
-        rounds[roundIdx + 1].seeds[Math.floor(seedIdx / 2)][seedIdx % 2]
-    ) {
-      str += " font-bold";
-    } else if (
-      roundIdx > 5 &&
-      seed[position] ===
-        rounds[roundIdx - 1].seeds[Math.floor(seedIdx / 2)][seedIdx % 2]
-    ) {
-      str += " font-bold";
-    } else if (
-      roundIdx === 6 &&
-      seed[position] === rounds[roundIdx - 1].seeds[0][1]
-    ) {
-      str += " font-bold";
+  /**
+   * Generates the styling for a particular read-only bracket matchup.
+   */
+  const resultsStyle = (position) => {
+    /* If the master bracket isn't passed, use basic style */
+    if (!masterRounds || mobile) {
+      return ["m-0 flex whitespace-nowrap p-0 px-2 ", null];
     }
-    return str;
+
+    try {
+      /*
+       * styleStr is the string of classes that will be applied to the matchup.
+       * teamStr is the team that actually exists in this matchup (if different from user's pick).
+       */
+      let styleStr = "m-0 flex whitespace-nowrap p-0 px-2 ";
+      let teamStr = null;
+
+      /*
+       * currPos is the team in this position in the tournament.
+       * masterPos is the winner of this matchup in the tournament.
+       * userPos is the winner of this matchup in the user's bracket.
+       */
+      let currPos = masterRounds?.[roundIdx].seeds[seedIdx][position];
+      let masterPos;
+      let userPos;
+
+      if (roundIdx <= 4) {
+        /* Set next-round variables for left side of bracket */
+        masterPos =
+          masterRounds[roundIdx + 1].seeds[Math.floor(seedIdx / 2)][
+            seedIdx % 2
+          ];
+        userPos =
+          rounds[roundIdx + 1].seeds[Math.floor(seedIdx / 2)][seedIdx % 2];
+      } else if (roundIdx === 5) {
+        /* Set next-round variables for championship round */
+        masterPos = masterChampion;
+        userPos = champion;
+      } else {
+        /* Set next-round variables for right side of bracket */
+        masterPos =
+          masterRounds[roundIdx - 1].seeds[Math.floor(seedIdx / 2)][
+            seedIdx % 2
+          ];
+        userPos =
+          rounds[roundIdx - 1].seeds[Math.floor(seedIdx / 2)][seedIdx % 2];
+      }
+
+      if (
+        seed[position] !== currPos &&
+        currPos !== -1 &&
+        roundIdx !== 0 &&
+        roundIdx !== 10
+      ) {
+        /* Check if the current seed is wrong (from a previous incorrect pick) */
+        styleStr += " line-through";
+        teamStr = `${field[currPos]?.seed}. ${field[currPos]?.name}`;
+      } else if (seed[position] === masterPos && seed[position] === userPos) {
+        /* The current pick is correct */
+        styleStr += " bg-green-200 font-bold rounded text-black";
+      } else if (
+        /* The current pick is incorrect */
+        seed[position] !== masterPos &&
+        seed[position] === userPos &&
+        masterPos !== -1
+      ) {
+        styleStr += " bg-red-200 font-bold rounded text-black";
+      }
+      return [styleStr, teamStr];
+    } catch (e) {
+      /* If there was an error, use basic styling */
+      return ["m-0 flex whitespace-nowrap p-0 px-2 ", null];
+    }
   };
+  const [styleStr1, teamStr1] = resultsStyle(0);
+  const [styleStr2, teamStr2] = resultsStyle(1);
 
   if (!mobile && roundIdx === 5) {
     return (
@@ -135,11 +200,11 @@ export const RenderSeedComponent = ({
         <ChampionshipSeed>
           <div className="relative w-full rounded border-2 border-black bg-white p-0 text-center text-gray-700 shadow-md shadow-gray-200">
             <div>
-              <div className={style(0)}>
+              <div className={styleStr1}>
                 {field[seed[0]]?.seed + ". "}
                 {field[seed[0]]?.name}
               </div>
-              <div className={style(1)}>
+              <div className={styleStr2}>
                 {field[seed[1]]?.seed + ". "}
                 {field[seed[1]]?.name}
               </div>
@@ -151,17 +216,23 @@ export const RenderSeedComponent = ({
   } else {
     return (
       <ReadOnlySeed align={!mobile && roundIdx >= 5 ? "left" : "right"}>
+        <div className="absolute left-5 m-0 flex -translate-y-6 whitespace-nowrap p-0 text-gray-400">
+          {teamStr1}
+        </div>
         <div className="relative w-full rounded border border-black bg-white p-0 text-center text-gray-700 shadow-md shadow-gray-200">
           <div>
-            <div className={style(0)}>
+            <div className={styleStr1}>
               {field[seed[0]]?.seed + ". "}
               {field[seed[0]]?.name}
             </div>
-            <div className={style(1)}>
+            <div className={styleStr2}>
               {field[seed[1]]?.seed + ". "}
               {field[seed[1]]?.name}
             </div>
           </div>
+        </div>
+        <div className="absolute left-5 m-0 flex translate-y-6 whitespace-nowrap p-0 text-gray-400">
+          {teamStr2}
         </div>
       </ReadOnlySeed>
     );
