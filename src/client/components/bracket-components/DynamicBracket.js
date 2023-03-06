@@ -20,7 +20,7 @@ export const SingleSided = ({ rounds }) => {
 
   if (isResponsive) {
     return (
-      <div className="flex justify-center mt-5">
+      <div className="mt-5 flex justify-center">
         <Swiper
           onSwiper={setSwiperRef}
           breakpoints={{
@@ -73,7 +73,7 @@ export const SingleSided = ({ rounds }) => {
     );
   } else {
     return (
-      <div className="flex justify-center mt-5">
+      <div className="mt-5 flex justify-center">
         {rounds.map((round, roundIdx) => (
           <Round key={roundIdx}>
             <SeedsList>
@@ -110,7 +110,7 @@ export const RenderSeedComponent = ({
   );
 
   const style = (pos) => {
-    let str = "flex pt-1.5 pl-2";
+    let str = "flex pt-1.5 pl-2 h-8";
     if (seed[pos] !== -1) {
       str += " cursor-pointer text-black hover:bg-green-100";
       let nextPos;
