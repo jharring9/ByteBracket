@@ -22,13 +22,14 @@ export const Home = () => {
             </span>
             <span className="mt-1 block text-4xl font-bold tracking-tight sm:text-5xl xl:text-6xl">
               <span className="block text-gray-900">A better way</span>
-              <span className="block flex">
+              <span className="block">
                 to
                 <Transition
                   show={mounted}
                   enter="transition ease-out duration-[2000ms]"
                   enterFrom="opacity-0 -translate-y-4"
                   enterTo="opacity-100 translate-y-0"
+                  className="inline-block"
                 >
                   <span className="ml-2 text-indigo-600">bracket.</span>
                 </Transition>
