@@ -16,14 +16,8 @@ module.exports = (app) => {
     }
     try {
       const id = uuidv4();
-      const { name, maxEntries, entriesPerUser, code, lockDate } = req.body;
-      if (
-        !name ||
-        !maxEntries ||
-        !entriesPerUser ||
-        !lockDate ||
-        code.trim().length === 0
-      ) {
+      const { name, entriesPerUser, code, lockDate } = req.body;
+      if (!name || !entriesPerUser || !lockDate || code.trim().length === 0) {
         return res.status(400).send({
           error:
             "Missing fields. This is likely a server issue. Please refresh the page and try again.",
@@ -32,7 +26,6 @@ module.exports = (app) => {
       const newLeague = {
         id: id,
         name: name,
-        maxEntries: maxEntries,
         entriesPerUser: entriesPerUser,
         isPrivate: true,
         code: code,
@@ -211,8 +204,8 @@ module.exports = (app) => {
   app.put("/v1/league/:id", async (req, res) => {
     const user = req.session.user?.username;
     const { id } = req.params;
-    const { name, maxEntries, entriesPerUser, code, lockDate } = req.body;
-    if (!name || !maxEntries || !entriesPerUser || !lockDate) {
+    const { name, entriesPerUser, code, lockDate } = req.body;
+    if (!name || !entriesPerUser || !lockDate) {
       return res.status(400).send({ error: "Missing fields" });
     }
     if (!user) {
@@ -220,7 +213,6 @@ module.exports = (app) => {
     }
     const settings = {
       name: name,
-      maxEntries: maxEntries,
       entriesPerUser: entriesPerUser,
       code: code,
       lockDate: lockDate,

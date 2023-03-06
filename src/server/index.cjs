@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const session = require("cookie-session");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "dev";
+const production = env === "production";
 
 const setupServer = async () => {
   /* Set up express pipeline */
@@ -23,7 +24,7 @@ const setupServer = async () => {
   require("./api/index.cjs")(app);
 
   /* Only serve web content for development environment */
-  if (env === "production") {
+  if (production) {
     app.get("/health", (req, res) => {
       res.sendStatus(200);
     });

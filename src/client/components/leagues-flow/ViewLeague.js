@@ -64,7 +64,6 @@ export const ViewLeague = () => {
 
   /* League settings */
   const [code, setCode] = useState("");
-  const [maxEntries, setMaxEntries] = useState(0);
   const [maxPerUser, setMaxPerUser] = useState(0);
   const [closeDate, setCloseDate] = useState(new Date().toISOString());
   const [shareModal, setShareModal] = useState(false);
@@ -106,7 +105,6 @@ export const ViewLeague = () => {
     setManager(data.managerId);
     setCreationDate(data.created.substring(0, 10));
     setCode(data.code);
-    setMaxEntries(data.maxEntries);
     setMaxPerUser(data.entriesPerUser);
     setCloseDate(data.lockDate);
     setLeagueOpen(new Date(data.lockDate) > new Date());
@@ -152,10 +150,6 @@ export const ViewLeague = () => {
   const enterBracket = async (id) => {
     if (entries.some((entry) => entry.id === id)) {
       setError("You have already entered this bracket.");
-      return;
-    }
-    if (entries.length >= maxEntries) {
-      setError("This league is full.");
       return;
     }
     if (new Date(closeDate) < new Date()) {
@@ -417,10 +411,8 @@ export const ViewLeague = () => {
               <ManageLeague
                 id={leagueId}
                 name={leagueName}
-                max={maxEntries}
                 maxPerUser={maxPerUser}
                 isPrivate={isPrivate}
-                entries={entries.length}
                 joinCode={code}
                 lockDate={closeDate}
                 onClose={() => setManageLeague(false)}
@@ -435,7 +427,6 @@ export const ViewLeague = () => {
             entries={entries}
             manager={manager}
             creationDate={creationDate}
-            maxEntries={maxEntries}
             entriesPerUser={maxPerUser}
             closeDate={closeDate}
           />
@@ -651,7 +642,6 @@ const LeagueInformation = ({
   entries,
   manager,
   creationDate,
-  maxEntries,
   entriesPerUser,
   closeDate,
 }) => {
@@ -718,13 +708,6 @@ const LeagueInformation = ({
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="mt-2 flex items-center text-sm text-gray-700">
-              <HashtagIcon
-                className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
-                aria-hidden="true"
-              />
-              Max Entries: {maxEntries}
-            </div>
             <div className="mt-2 flex items-center text-sm text-gray-700">
               <HashtagIcon
                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"

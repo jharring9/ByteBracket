@@ -46,11 +46,11 @@ export const TrendingDown = () => (
 export const BackButton = ({ onClick }) => (
   <button
     type="reset"
-    className="m-2 h-10 w-full rounded-lg border border-black bg-gray-100 px-5 text-black shadow-xl transition-colors duration-150 hover:bg-gray-200 lg:w-auto"
+    className="m-2 h-10 w-full rounded-lg border border-black bg-white px-5 font-medium text-indigo-700 shadow-xl transition-colors duration-150 hover:bg-indigo-200 lg:w-auto"
     onClick={onClick}
   >
     <div className="flex justify-center lg:w-24">
-      <ChevronLeftIcon className="-ml-2 h-6 w-6" />
+      <ChevronLeftIcon className="-ml-2 h-6 w-6 stroke-2" />
       Back
     </div>
   </button>
@@ -58,7 +58,7 @@ export const BackButton = ({ onClick }) => (
 
 export const ContinueButton = ({ onClick, loading }) => (
   <button
-    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-100 px-5 text-black shadow-xl transition-colors duration-150 hover:bg-indigo-200 lg:w-auto"
+    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"
     onClick={onClick}
   >
     <div className="flex justify-center lg:w-24">
@@ -70,7 +70,7 @@ export const ContinueButton = ({ onClick, loading }) => (
       ) : (
         <>
           Continue
-          <ChevronRightIcon className="-mr-2 h-6 w-6" />
+          <ChevronRightIcon className="-mr-2 h-6 w-6 stroke-2" />
         </>
       )}
     </div>
@@ -79,7 +79,7 @@ export const ContinueButton = ({ onClick, loading }) => (
 
 export const SaveButton = ({ onClick, loading }) => (
   <button
-    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-100 px-5 text-black shadow-xl transition-colors duration-150 hover:bg-indigo-200 lg:w-auto"
+    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"
     onClick={onClick}
   >
     <div className="flex justify-center lg:w-24">
@@ -91,7 +91,7 @@ export const SaveButton = ({ onClick, loading }) => (
       ) : (
         <>
           Save
-          <ChevronRightIcon className="-mr-2 h-6 w-6" />
+          <ChevronRightIcon className="-mr-2 h-6 w-6 stroke-2" />
         </>
       )}
     </div>

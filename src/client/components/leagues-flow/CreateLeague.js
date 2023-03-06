@@ -13,13 +13,11 @@ export const CreateLeague = () => {
   const [error, setError] = useState(null);
 
   const [name, setName] = useState("");
-  const [maxEntries, setMaxEntries] = useState(25);
   const [maxEntriesPerUser, setMaxEntriesPerUser] = useState(1);
   const [code, setCode] = useState("");
   const [closeDate, setCloseDate] = useState("2023-03-16T05:00:00-0600");
 
   const [nameError, setNameError] = useState(null);
-  const [maxEntriesError, setMaxEntriesError] = useState(null);
   const [maxEntriesPerUserError, setMaxEntriesPerUserError] = useState(null);
   const [codeError, setCodeError] = useState(null);
 
@@ -29,14 +27,6 @@ export const CreateLeague = () => {
       setNameError("League name is required");
       return;
     } else setNameError(null);
-
-    if (!maxEntries || maxEntries < 1) {
-      setMaxEntriesError("Must be greater than 0");
-      return;
-    } else if (maxEntries > 100) {
-      setMaxEntriesError("Cannot be greater than 100");
-      return;
-    } else setMaxEntriesError(null);
 
     if (!maxEntriesPerUser || maxEntriesPerUser < 1) {
       setMaxEntriesPerUserError("Must be greater than 0");
@@ -55,7 +45,6 @@ export const CreateLeague = () => {
       },
       body: JSON.stringify({
         name,
-        maxEntries,
         entriesPerUser: maxEntriesPerUser,
         code,
         lockDate: closeDate,
@@ -119,17 +108,7 @@ export const CreateLeague = () => {
                     errorMsg={nameError}
                   />
                 </div>
-                <div className="col-span-12 sm:col-span-6">
-                  <ValidatedInput
-                    inputName="Max Entries"
-                    type="number"
-                    popoverInfo="The maximum total number of entries allowed in the league."
-                    value={maxEntries}
-                    setValue={setMaxEntries}
-                    errorMsg={maxEntriesError}
-                  />
-                </div>
-                <div className="col-span-12 sm:col-span-6">
+                <div className="col-span-12">
                   <ValidatedInput
                     inputName="Entries Allowed per User"
                     type="number"
