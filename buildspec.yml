@@ -7,7 +7,7 @@ phases:
 
     commands:
       - npm install
-      - npm install -D webpack-cli
+      - npm install -g webpack-cli
 
   build:
     commands:
