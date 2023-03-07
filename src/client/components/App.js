@@ -26,13 +26,17 @@ import { CreateLeague } from "./leagues-flow/CreateLeague";
 /* Google Analytics */
 ReactGA.initialize("G-GR6LZND73X");
 
+/* Bracket Creation */
+export const BEFORE_OPEN = false;
+export const AFTER_START = false;
+
 export default function App() {
   const dispatch = useDispatch();
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/home", current: false },
     { name: "Create Bracket", href: "/create", current: false },
-    { name: "About", href: "/about", current: false },
     { name: "Leagues", href: "/leagues", current: false },
+    { name: "About", href: "/about", current: false },
   ]);
 
   useEffect(() => {
@@ -67,6 +71,7 @@ export default function App() {
           <Route path="/leagues/:id" element={<ViewLeague />} />
           <Route path="/newleague" element={<CreateLeague />} />
           <Route path="/join/:id" element={<JoinLeague />} />
+          <Route path="/join/:id/:code" element={<JoinLeague />} />
           <Route path="/bracket/:user/:id" element={<ViewBracket />} />
           <Route
             path="/auth/callback/google"

@@ -46,22 +46,22 @@ export const TrendingDown = () => (
 export const BackButton = ({ onClick }) => (
   <button
     type="reset"
-    className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-100 px-5 text-indigo-700 transition-colors duration-150 hover:bg-indigo-200 hover:text-indigo-800 lg:w-auto"
+    className="m-2 h-10 w-full rounded-lg border border-black bg-white px-5 font-medium text-indigo-700 shadow-xl transition-colors duration-150 hover:bg-indigo-200 lg:w-auto"
     onClick={onClick}
   >
-    <div className="flex justify-center">
-      Go Back
-      <ArrowUturnLeftIcon className="h-6 w-6" />
+    <div className="flex justify-center lg:w-24">
+      <ChevronLeftIcon className="-ml-2 h-6 w-6 stroke-2" />
+      Back
     </div>
   </button>
 );
 
 export const ContinueButton = ({ onClick, loading }) => (
   <button
-    className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-700 px-5 text-indigo-100 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
+    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"
     onClick={onClick}
   >
-    <div className="flex justify-center">
+    <div className="flex justify-center lg:w-24">
       {loading ? (
         <>
           <Spinner className="mr-2" />
@@ -70,7 +70,7 @@ export const ContinueButton = ({ onClick, loading }) => (
       ) : (
         <>
           Continue
-          <ChevronRightIcon className="h-6 w-6" />
+          <ChevronRightIcon className="-mr-2 h-6 w-6 stroke-2" />
         </>
       )}
     </div>
@@ -79,11 +79,10 @@ export const ContinueButton = ({ onClick, loading }) => (
 
 export const SaveButton = ({ onClick, loading }) => (
   <button
-    type="submit"
-    className="focus:shadow-outline m-2 h-10 w-full rounded-lg bg-indigo-700 px-5 text-indigo-100 transition-colors duration-150 hover:bg-indigo-800 lg:w-auto"
+    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"
     onClick={onClick}
   >
-    <div className="flex justify-center">
+    <div className="flex justify-center lg:w-24">
       {loading ? (
         <>
           <Spinner className="mr-2" />
@@ -91,8 +90,8 @@ export const SaveButton = ({ onClick, loading }) => (
         </>
       ) : (
         <>
-          Save Bracket
-          <ChevronRightIcon className="h-6 w-6" />
+          Save
+          <ChevronRightIcon className="-mr-2 h-6 w-6 stroke-2" />
         </>
       )}
     </div>
@@ -325,27 +324,6 @@ export const ProgressBar = ({ dispatch }) => {
   );
 };
 
-export const SpeedDial = ({ action }) => (
-  <div className="group fixed bottom-2 right-2 z-10 md:bottom-6 md:right-6">
-    <button
-      type="button"
-      onClick={action}
-      className="ml-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-700 text-white shadow-xl hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 512 512"
-        className="h-12 w-12"
-      >
-        <path
-          d="M255.76 44.764c-6.176 0-12.353 1.384-17.137 4.152L85.87 137.276c-9.57 5.536-9.57 14.29 0 19.826l152.753 88.36c9.57 5.536 24.703 5.536 34.272 0l152.753-88.36c9.57-5.535 9.57-14.29 0-19.825l-152.753-88.36c-4.785-2.77-10.96-4.153-17.135-4.153zm.926 82.855a31.953 18.96 0 0 1 22.127 32.362 31.953 18.96 0 1 1-45.188-26.812 31.953 18.96 0 0 1 23.06-5.55zM75.67 173.84c-5.753-.155-9.664 4.336-9.664 12.28v157.696c0 11.052 7.57 24.163 17.14 29.69l146.93 84.848c9.57 5.526 17.14 1.156 17.14-9.895V290.76c0-11.052-7.57-24.16-17.14-29.688l-146.93-84.847c-2.69-1.555-5.225-2.327-7.476-2.387zm360.773.002c-2.25.06-4.783.83-7.474 2.385l-146.935 84.847c-9.57 5.527-17.14 18.638-17.14 29.69v157.7c0 11.05 7.57 15.418 17.14 9.89L428.97 373.51c9.57-5.527 17.137-18.636 17.137-29.688v-157.7c0-7.942-3.91-12.432-9.664-12.278zM89.297 195.77a31.236 18.008 58.094 0 1 33.818 41.183 31.236 18.008 58.094 1 1-45-25.98 31.236 18.008 58.094 0 1 11.182-15.203zm221.52 64.664A18.008 31.236 31.906 0 1 322 275.637a18.008 31.236 31.906 0 1-45 25.98 18.008 31.236 31.906 0 1 33.818-41.183zM145.296 289.1a31.236 18.008 58.094 0 1 33.818 41.183 31.236 18.008 58.094 0 1-45-25.98 31.236 18.008 58.094 0 1 11.182-15.203zm277.523 29.38A18.008 31.236 31.906 0 1 434 333.684a18.008 31.236 31.906 0 1-45 25.98 18.008 31.236 31.906 0 1 33.818-41.184zm-221.52 64.663a31.236 18.008 58.094 0 1 33.817 41.183 31.236 18.008 58.094 1 1-45-25.98 31.236 18.008 58.094 0 1 11.182-15.203z"
-          fill="#fff"
-        ></path>
-      </svg>
-    </button>
-  </div>
-);
-
 export const DisableStat = ({
   value,
   disabledValue,
@@ -495,10 +473,7 @@ export const WarnModal = ({
 
 import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { setUser } from "../store/userSlice";
-import {
-  ArrowUturnLeftIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { setCreateStage } from "../store/createStageSlice";
 export const SuccessAlert = ({ setOpen, message }) => {
   return (

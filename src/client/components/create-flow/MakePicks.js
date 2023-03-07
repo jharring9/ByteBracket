@@ -5,7 +5,6 @@ import {
   ErrorAlert,
   normalTransition,
   smoothScrollTop,
-  SpeedDial,
 } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
@@ -13,6 +12,7 @@ import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
 import { SingleSided, winPercent } from "../bracket-components/DynamicBracket";
 import { Transition } from "@headlessui/react";
 import ReactGA from "react-ga4";
+import { BEFORE_OPEN, AFTER_START } from "../App";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
@@ -135,7 +135,9 @@ export const MakePicks = () => {
     ReactGA.event({ action: "autopick", category: "bracket" });
   };
 
-  return (
+  return BEFORE_OPEN || AFTER_START ? (
+    <BracketNotActive before={BEFORE_OPEN} />
+  ) : (
     <Transition
       show={true}
       appear={true}
@@ -162,14 +164,20 @@ export const MakePicks = () => {
                 Make Your Picks: {bracket[region].name}
               </h1>
               <p className="text-center text-gray-600">
-                Choose a winner for each matchup in this region. You may also
-                choose for your algorithm to pick winners by clicking the purple
-                randomize button.
+                Select a winner for each matchup. Alternatively, you may choose
+                to simulate the matchups in this region using your head-to-head
+                algorithm.
                 <span className="xl:hidden">
                   {" "}
                   Swipe left and right to adjust the bracket view.
                 </span>
               </p>
+              <button
+                className="m-2 h-10 w-full rounded-lg border border-black bg-emerald-400 px-5 font-medium text-black text-white shadow-xl transition-colors duration-300 hover:bg-black hover:text-white"
+                onClick={autoComplete}
+              >
+                Simulate Region
+              </button>
             </div>
             <SingleSided rounds={bracket[region].rounds} />
             <div className="justify-center lg:flex">
@@ -183,7 +191,23 @@ export const MakePicks = () => {
           </div>
         </div>
       </div>
-      <SpeedDial action={autoComplete} />
     </Transition>
+  );
+};
+
+export const BracketNotActive = ({ before }) => {
+  return (
+    <div className="mx-auto max-w-7xl py-16 px-6 sm:py-24 lg:px-8">
+      <div className="text-center">
+        <p className="mt-1 text-xl font-bold tracking-tight text-gray-900 sm:text-2xl lg:text-3xl">
+          The bracket creation window is not open.
+        </p>
+        <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
+          {before
+            ? "The bracket creation window will open on March 13th. Check back then to make your picks! Until then, you can still select stats to use in your future brackets."
+            : "The bracket creation window has closed. Check back next year to make your picks! You can still view your existing brackets, join leagues, and modify stats."}
+        </p>
+      </div>
+    </div>
   );
 };
