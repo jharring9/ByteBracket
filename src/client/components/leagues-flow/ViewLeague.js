@@ -824,7 +824,7 @@ const ShareModal = ({ id, isPrivate, code, isOpen, setOpen }) => {
   const cancelButtonRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const link = `https://bytebracket.io/join/${id}${
-    isPrivate ? `?code=${code}` : ""
+    isPrivate ? `/${code}` : ""
   }`;
 
   const copyLink = async () => {

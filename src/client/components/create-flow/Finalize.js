@@ -111,7 +111,7 @@ export const Finalize = () => {
                   message={error}
                 />
               </Transition>
-              <div className="mx-auto max-w-xl space-y-4 mb-6">
+              <div className="mx-auto mb-6 max-w-xl space-y-4">
                 <h1 className="text-center text-center text-3xl font-bold text-gray-900">
                   Submit Your Bracket
                 </h1>

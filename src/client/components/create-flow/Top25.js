@@ -142,10 +142,10 @@ export const Top25 = () => {
                                     </div>
                                   </div>
                                   <div className="ml-2 h-10 w-10 flex-shrink-0">
-                                    {row.diff >= 10 && (
+                                    {row.diff >= 5 && (
                                       <TrendingUp className="h-5 w-5 sm:h-8 sm:w-8" />
                                     )}
-                                    {row.diff <= -10 && (
+                                    {row.diff <= -5 && (
                                       <TrendingDown className="h-5 w-5 sm:h-8 sm:w-8" />
                                     )}
                                   </div>
@@ -174,7 +174,7 @@ export const Top25 = () => {
                 <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                     <div className="overflow-hidden">
-                      <table className="min-w-full table-fixed divide-y divide-gray-300 sm:table-auto">
+                      <table className="w-full divide-y divide-gray-300">
                         <thead className="border-b-2 border-gray-500">
                           <tr>
                             <th
@@ -196,7 +196,7 @@ export const Top25 = () => {
                             <tr key={row.team}>
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 <div className="flex items-center">
-                                  <div className="h-10 w-10 flex-shrink-0">
+                                  <div className="w-10 flex-shrink-0">
                                     <img
                                       className="h-auto max-h-16 w-10"
                                       src={logos[row.team]}
@@ -212,10 +212,10 @@ export const Top25 = () => {
                                     </div>
                                   </div>
                                   <div className="ml-2 h-10 w-10 flex-shrink-0">
-                                    {row.diff >= 10 && (
+                                    {row.diff >= 0 && (
                                       <TrendingUp className="h-5 w-5 sm:h-8 sm:w-8" />
                                     )}
-                                    {row.diff <= -10 && (
+                                    {row.diff <= 0 && (
                                       <TrendingDown className="h-5 w-5 sm:h-8 sm:w-8" />
                                     )}
                                   </div>

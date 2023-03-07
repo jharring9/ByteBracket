@@ -164,16 +164,16 @@ export const MakePicks = () => {
                 Make Your Picks: {bracket[region].name}
               </h1>
               <p className="text-center text-gray-600">
-                Choose a winner for each matchup in this region. You may also
-                choose for your algorithm to pick winners by clicking the purple
-                randomize button.
+                Select a winner for each matchup. Alternatively, you may choose
+                to simulate the matchups in this region using your head-to-head
+                algorithm.
                 <span className="xl:hidden">
                   {" "}
                   Swipe left and right to adjust the bracket view.
                 </span>
               </p>
               <button
-                className="m-2 h-10 w-full rounded-lg border font-medium border-black bg-emerald-400 px-5 text-black text-white shadow-xl transition-colors duration-300 hover:bg-black hover:text-white"
+                className="m-2 h-10 w-full rounded-lg border border-black bg-emerald-400 px-5 font-medium text-black text-white shadow-xl transition-colors duration-300 hover:bg-black hover:text-white"
                 onClick={autoComplete}
               >
                 Simulate Region
