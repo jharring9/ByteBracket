@@ -3,38 +3,35 @@ import { LoadingWrapper } from "./shared";
 
 const people = [
   {
-    name: "Emma Dorsey",
-    role: "Senior Developer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
+    name: "Jack Harrington",
+    role: "Founder",
+    imageUrl: "/assets/jack.jpg",
+    // bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
     twitterUrl: "#",
     linkedinUrl: "#",
   },
   {
-    name: "Emma Dorsey",
-    role: "Senior Developer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
+    name: "Lucas Goldman",
+    role: "Founder",
+    imageUrl: "/assets/lucas.jpg",
+    // bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
     twitterUrl: "#",
     linkedinUrl: "#",
   },
   {
-    name: "Emma Dorsey",
-    role: "Senior Developer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
+    name: "Joel Dahan",
+    role: "Founder",
+    imageUrl: "/assets/joel.jpeg",
+    // bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
     twitterUrl: "#",
     linkedinUrl: "#",
   },
   {
-    name: "Emma Dorsey",
-    role: "Senior Developer",
+    name: "Cason Stone",
+    role: "Founder",
     imageUrl:
       "https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-    bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
+    // bio: "Praesentium iure error aliquam voluptas ut libero. Commodi placeat sit iure nulla officiis. Ut ex sit repellat tempora. Qui est accusamus exercitationem natus ut voluptas. Officiis velit eos ducimus.",
     twitterUrl: "#",
     linkedinUrl: "#",
   },
@@ -155,12 +152,12 @@ export const About = () => {
         <div className="relative px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-lg">
             <h1>
-              <span className="block text-center text-lg font-semibold text-indigo-600">
+              <div className="block text-center text-lg font-bold text-indigo-600">
                 Introducing
-              </span>
-              <span className="mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
+              </div>
+              <div className="mt-2 block text-center text-3xl font-extrabold leading-8 tracking-tight text-gray-900 sm:text-4xl">
                 ByteBracket
-              </span>
+              </div>
             </h1>
             <p className="mt-8 text-justify text-lg leading-8 text-gray-500">
               We wanted to create a tool that allows fans to combine their
@@ -182,8 +179,8 @@ export const About = () => {
             <h2 className="text-center">How it Works</h2>
             <div className="divide-y-4">
               <div>
-                <h3 className="text-xl font-semibold">
-                  Step One: Weighing the Statistics
+                <h3 className="text-xl font-bold">
+                  Step 1: Weighing the Statistics
                 </h3>
                 <p className="text-justify">
                   The user adjusts the slider according to the degree of
@@ -195,8 +192,8 @@ export const About = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-semibold">
-                  Step Two: Creating the Algorithm
+                <h3 className="text-xl font-bold">
+                  Step 2: Creating the Algorithm
                 </h3>
                 <p className="text-justify">
                   After the user gives their weights for each statistic, we
@@ -208,9 +205,7 @@ export const About = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-semibold">
-                  Step Three: Ranking the Field
-                </h3>
+                <h3 className="text-xl font-bold">Step 3: Ranking the Field</h3>
                 <p className="text-justify">
                   The rankings are done by simply sorting each team by their
                   cumulative score. Comparing each team head to head is slightly
@@ -219,8 +214,8 @@ export const About = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-semibold">
-                  Step Four: Simulating March Madness
+                <h3 className="text-xl font-bold">
+                  Step 4: Simulating March Madness
                 </h3>
                 <p className="text-justify">
                   If you choose to simulate your bracket, each game will be
@@ -246,7 +241,7 @@ export const About = () => {
               {people.map((person) => (
                 <li key={person.name}>
                   <img
-                    className="aspect-[3/2] w-full rounded-2xl object-cover"
+                    className="w-full rounded-2xl object-cover"
                     src={person.imageUrl}
                     alt=""
                   />
@@ -256,9 +251,9 @@ export const About = () => {
                   <p className="text-base leading-7 text-gray-600">
                     {person.role}
                   </p>
-                  <p className="mt-4 text-base leading-7 text-gray-600">
-                    {person.bio}
-                  </p>
+                  {/*<p className="mt-4 text-base leading-7 text-gray-600">*/}
+                  {/*  {person.bio}*/}
+                  {/*</p>*/}
                   <ul role="list" className="mt-6 flex gap-x-6">
                     <li>
                       <a
