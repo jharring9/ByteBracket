@@ -6,3 +6,27 @@
     font-family: loveloBold;
     src: url(./Lovelo-LineBold.woff2);
 }
+
+input[type=range]::-ms-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 100%;
+    background: #4338ca;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 100%;
+    background: #4338ca;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+input[type=range]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 100%;
+    background: #4338ca;
+    cursor: pointer;
+}

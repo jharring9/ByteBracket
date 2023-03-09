@@ -153,14 +153,14 @@ export const About = () => {
                 ByteBracket
               </div>
             </h1>
-            <p className="mt-8 text-justify text-lg leading-8 text-gray-500">
+            <p className="mt-8 text-center md:text-justify text-lg leading-8 text-gray-500">
               We wanted to create a tool that allows fans to combine their
               intuitive understanding of sports with cutting-edge analytical
               approaches to prediction. With that, ByteBracket was born with the
               aim of providing everyone with a custom data-driven sports
               prediction experience for free.
             </p>
-            <p className="mt-8 text-justify text-lg leading-8 text-gray-500">
+            <p className="mt-8 text-center md:text-justify text-lg leading-8 text-gray-500">
               With ByteBracket's formulaic approach to prediction, your
               basketball knowledge, and a little bit of luck, the world's
               first-ever perfect March Madness bracket is finally within reach.
