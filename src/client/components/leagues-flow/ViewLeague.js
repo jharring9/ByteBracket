@@ -713,7 +713,7 @@ const LeagueInformation = ({
                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
                 aria-hidden="true"
               />
-              Entries Per User: {entriesPerUser}
+              Your Max Entries: {entriesPerUser}
             </div>
             <div className="mt-2 flex items-center text-sm text-gray-700">
               <CalendarIcon
