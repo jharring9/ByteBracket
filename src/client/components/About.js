@@ -17,7 +17,7 @@ const people = [
   {
     name: "Joel Dahan",
     role: "Founder",
-    imageUrl: "/assets/joel.jpeg",
+    imageUrl: "/assets/joel.jpg",
     linkedinUrl: "https://www.linkedin.com/in/joel-dahan-9989851ba/",
   },
   {
