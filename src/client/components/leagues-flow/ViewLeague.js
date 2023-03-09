@@ -3,6 +3,7 @@ import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   classNames,
   ErrorAlert,
+  formatDate,
   LoadingWrapper,
   normalTransition,
   SuccessAlert,
@@ -26,12 +27,7 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ManageLeague } from "./ManageLeague";
 import { addLeague } from "../../store/userSlice";
@@ -41,9 +37,7 @@ export const ViewLeague = () => {
   /* Page state */
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [queryParams, _] = useSearchParams();
-  const urlCode = queryParams.get("code");
-  const { id: leagueId } = useParams();
+  const { id: leagueId, urlcode } = useParams();
   const { logos } = useSelector((state) => state.lambda);
   const { user } = useSelector((state) => state.user);
   const [manageLeague, setManageLeague] = useState(false);
@@ -77,10 +71,10 @@ export const ViewLeague = () => {
   }, [leagueId, user]);
 
   useEffect(() => {
-    if (isPrivate && urlCode) {
-      validateCode(urlCode);
+    if (isPrivate && urlcode) {
+      validateCode(urlcode);
     }
-  }, [isPrivate, urlCode]);
+  }, [isPrivate, urlcode]);
 
   useEffect(() => {
     if (
@@ -103,7 +97,7 @@ export const ViewLeague = () => {
     setIsPrivate(data.isPrivate);
     setEntries(rankTeamsWithTies(data.entries));
     setManager(data.managerId);
-    setCreationDate(data.created.substring(0, 10));
+    setCreationDate(formatDate(data.created));
     setCode(data.code);
     setMaxPerUser(data.entriesPerUser);
     setCloseDate(data.lockDate);
@@ -439,7 +433,10 @@ export const ViewLeague = () => {
 /**
  * Dropdown for adding an entry to the league.
  */
-const CreateEntryDropdown = ({ existingBracketAction, newEntryAction }) => {
+export const CreateEntryDropdown = ({
+  existingBracketAction,
+  newEntryAction,
+}) => {
   const items = [
     { name: "Enter Existing Bracket", action: existingBracketAction },
     { name: "Create New Bracket", action: newEntryAction },
@@ -527,7 +524,7 @@ const NoEntriesCard = ({ setEnterModal, setShareModal, getBrackets }) => {
   );
 };
 
-const EntryListItem = ({
+export const EntryListItem = ({
   entry,
   leagueId,
   isOpen,
@@ -720,7 +717,7 @@ const LeagueInformation = ({
                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
                 aria-hidden="true"
               />
-              Closes: {closeDate.substring(0, 10)}
+              Closes {formatDate(closeDate)}
             </div>
           </div>
         </div>
@@ -732,7 +729,7 @@ const LeagueInformation = ({
 /**
  * Modal to enter the code for private leagues.
  */
-const CodeModal = ({ isOpen, attemptEntry, codeError, navigate }) => {
+export const CodeModal = ({ isOpen, attemptEntry, codeError, navigate }) => {
   const inputRef = useRef(null);
   const [codeInput, setCodeInput] = useState("");
 
@@ -938,7 +935,7 @@ const ShareModal = ({ id, isPrivate, code, isOpen, setOpen }) => {
 /**
  * Modal for entering a league.
  */
-const EnterModal = ({ isOpen, setOpen, logos, brackets, onSubmit }) => {
+export const EnterModal = ({ isOpen, setOpen, logos, brackets, onSubmit }) => {
   const cancelButtonRef = useRef(null);
   const [selected, setSelected] = useState(-1);
 
@@ -1083,7 +1080,7 @@ const BracketSelectGridItem = ({ bracket, logos, onSelect, selected }) => {
 /**
  * Sorts teams by points (ties allowed).
  */
-const rankTeamsWithTies = (teams) => {
+export const rankTeamsWithTies = (teams) => {
   if (!teams) return [];
   teams.sort(function (a, b) {
     return b.points - a.points;

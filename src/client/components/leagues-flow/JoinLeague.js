@@ -9,7 +9,7 @@ export const JoinLeague = () => {
 
   useEffect(() => {
     if (user.username) {
-      navigate(`/leagues/${leagueId}${code ? `?code=${code}` : ""}`);
+      navigate(`/leagues/${leagueId}${code ? `/${code}` : ""}`);
     }
   }, [user, code]);
 
@@ -23,7 +23,7 @@ export const JoinLeague = () => {
           Please{" "}
           <Link
             to={`/login?return=leagues%2F${leagueId}${
-              code ? `?code=${code}` : ""
+              code ? `%2F${code}` : ""
             }`}
             className="font-medium text-indigo-600 hover:underline"
           >
@@ -32,7 +32,7 @@ export const JoinLeague = () => {
           or{" "}
           <Link
             to={`/register?return=leagues%2F${leagueId}${
-              code ? `?code=${code}` : ""
+              code ? `%2F${code}` : ""
             }`}
             className="font-medium text-indigo-600 hover:underline"
           >

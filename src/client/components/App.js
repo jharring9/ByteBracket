@@ -68,10 +68,13 @@ export default function App() {
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
           <Route path="/leagues" element={<Leagues />} />
-          <Route path="/leagues/:id" element={<ViewLeague />} />
+          <Route path="/leagues/:id/:urlcode?" element={<ViewLeague />} />
+          <Route
+            path="/leagues/snapback/:urlcode?"
+            element={<SnapBackLeague />}
+          />
+          <Route path="/join/:id/:code?" element={<JoinLeague />} />
           <Route path="/newleague" element={<CreateLeague />} />
-          <Route path="/join/:id" element={<JoinLeague />} />
-          <Route path="/join/:id/:code" element={<JoinLeague />} />
           <Route path="/bracket/:user/:id" element={<ViewBracket />} />
           <Route
             path="/auth/callback/google"

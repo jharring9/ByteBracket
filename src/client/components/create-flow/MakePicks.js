@@ -173,7 +173,7 @@ export const MakePicks = () => {
                 </span>
               </p>
               <button
-                className="m-2 h-10 w-full rounded-lg border border-black bg-emerald-400 px-5 font-medium text-black text-white shadow-xl transition-colors duration-300 hover:bg-black hover:text-white"
+                className="m-2 mx-auto h-10 w-full rounded-lg border border-black bg-emerald-400 px-5 font-medium text-black text-white shadow-xl transition-colors duration-300 hover:bg-black hover:text-white"
                 onClick={autoComplete}
               >
                 Simulate Region
