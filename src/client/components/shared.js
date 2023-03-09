@@ -228,7 +228,11 @@ export const BracketArt = ({ mounted }) => (
           enterFrom="opacity-0 translate-x-4"
           enterTo="opacity-100 translate-y-0"
         >
-          <img className="w-full" src="/assets/bracket.png" alt="" />
+          <img
+            className="w-full"
+            src="https://bytebracket-webassets.s3.us-east-1.amazonaws.com/bracket.png"
+            alt=""
+          />
         </Transition>
       </div>
     </div>
@@ -735,4 +739,32 @@ export const InfoPopover = ({ name, details }) => {
       </>
     </Popover>
   );
+};
+
+/**
+ * Format ISO string date into format like 'March 16th'
+ */
+export const formatDate = (isoDate) => {
+  const date = new Date(isoDate);
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
+  let suffix;
+  switch (day) {
+    case 1:
+    case 21:
+    case 31:
+      suffix = "st";
+      break;
+    case 2:
+    case 22:
+      suffix = "nd";
+      break;
+    case 3:
+    case 23:
+      suffix = "rd";
+      break;
+    default:
+      suffix = "th";
+  }
+  return `${month} ${day}${suffix}`;
 };

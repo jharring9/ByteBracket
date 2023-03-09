@@ -99,7 +99,7 @@ export const SelectStats = () => {
                 message={error}
               />
             </Transition>
-            <div className="mx-auto max-w-xl space-y-4 lg:col-span-3">
+            <div className="mx-auto max-w-xl space-y-4 lg:col-span-3 mb-4 sm:mb-0">
               <h1 className="text-center text-center text-4xl font-bold text-gray-900">
                 Build Your Algorithm
               </h1>
