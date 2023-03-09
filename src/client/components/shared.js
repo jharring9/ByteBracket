@@ -228,7 +228,11 @@ export const BracketArt = ({ mounted }) => (
           enterFrom="opacity-0 translate-x-4"
           enterTo="opacity-100 translate-y-0"
         >
-          <img className="w-full" src="/assets/bracket.png" alt="" />
+          <img
+            className="w-full"
+            src="https://bytebracket-webassets.s3.us-east-1.amazonaws.com/bracket.png"
+            alt=""
+          />
         </Transition>
       </div>
     </div>

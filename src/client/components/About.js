@@ -1,6 +1,37 @@
 import React, { useEffect } from "react";
 import { LoadingWrapper } from "./shared";
 
+const people = [
+  {
+    name: "Lucas Goldman",
+    role: "Founder",
+    imageUrl:
+      "https://bytebracket-webassets.s3.us-east-1.amazonaws.com/lucas.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/lucas-goldman/",
+  },
+  {
+    name: "Jack Harrington",
+    role: "Founder",
+    imageUrl:
+      "https://bytebracket-webassets.s3.us-east-1.amazonaws.com/jack.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/jharrington22/",
+  },
+  {
+    name: "Joel Dahan",
+    role: "Founder",
+    imageUrl:
+      "https://bytebracket-webassets.s3.us-east-1.amazonaws.com/joel.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/joel-dahan-9989851ba/",
+  },
+  {
+    name: "Cason Stone",
+    role: "Founder",
+    imageUrl:
+      "https://bytebracket-webassets.s3.us-east-1.amazonaws.com/cason.jpg",
+    linkedinUrl: "https://www.linkedin.com/in/cason-stone-3761421b0/",
+  },
+];
+
 export const About = () => {
   useEffect(() => {
     document.title = "About - ByteBracket";
@@ -113,83 +144,134 @@ export const About = () => {
           </div>
         </div>
         <div className="relative px-6 lg:px-8">
-          <div className="mx-auto max-w-prose text-lg">
+          <div className="mx-auto max-w-3xl text-lg">
             <h1>
-              <span className="block text-center text-lg font-semibold text-indigo-600">
+              <div className="block text-center text-lg font-bold text-indigo-600">
                 Introducing
-              </span>
-              <span className="mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">
+              </div>
+              <div className="mt-2 block text-center text-3xl font-extrabold leading-8 tracking-tight text-gray-900 sm:text-4xl">
                 ByteBracket
-              </span>
+              </div>
             </h1>
-            <p className="mt-8 text-xl leading-8 text-gray-500">
-              Aliquet nec orci mattis amet quisque ullamcorper neque, nibh sem.
-              At arcu, sit dui mi, nibh dui, diam eget aliquam. Quisque id at
-              vitae feugiat egestas ac. Diam nulla orci at in viverra
-              scelerisque eget. Eleifend egestas fringilla sapien.
+            <p className="mt-8 text-justify text-lg leading-8 text-gray-500">
+              We wanted to create a tool that allows fans to combine their
+              intuitive understanding of sports with cutting-edge analytical
+              approaches to prediction. With that, ByteBracket was born with the
+              aim of providing everyone with a custom data-driven sports
+              prediction experience for free.
+            </p>
+            <p className="mt-8 text-justify text-lg leading-8 text-gray-500">
+              With ByteBracket's formulaic approach to prediction, your
+              basketball knowledge, and a little bit of luck, the world's
+              first-ever perfect March Madness bracket is finally within reach.
+              Our algorithm empowers you to put your understanding of the game
+              to the test, arming you with the firepower to achieve the
+              impossible.
             </p>
           </div>
-          <div className="prose prose-lg prose-indigo mx-auto mt-6 text-gray-500">
-            <p>
-              Faucibus commodo massa rhoncus, volutpat.{" "}
-              <strong>Dignissim</strong> sed <strong>eget risus enim</strong>.
-              Mattis mauris semper sed amet vitae sed turpis id. Id dolor
-              praesent donec est. Odio penatibus risus viverra tellus varius sit
-              neque erat velit. Faucibus commodo massa rhoncus, volutpat.
-              Dignissim sed eget risus enim.{" "}
-              <a href="#">Mattis mauris semper</a> sed amet vitae sed turpis id.
+          <div className="prose prose-lg prose-indigo mx-auto mt-8 max-w-3xl text-gray-500">
+            <h2 className="text-center">How it Works</h2>
+            <div className="divide-y-4">
+              <div>
+                <h3 className="text-xl font-bold">
+                  Step 1: Weighing the Statistics
+                </h3>
+                <p className="text-justify">
+                  The user adjusts the slider according to the degree of
+                  importance they give each statistic from 0 to 10. These
+                  weights are relative to the weight of the other statistics, so
+                  giving every statistic a 10 is equivalent to giving each
+                  statistic a 1. The pie chart reflects the percentage strength
+                  that each statistic has in the algorithm.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">
+                  Step 2: Creating the Algorithm
+                </h3>
+                <p className="text-justify">
+                  After the user gives their weights for each statistic, we
+                  calculate the relative performance of all teams in each
+                  statistical category. The weights are then applied to these
+                  relative performances and combined to give each team their
+                  cumulative score. This cumulative score is used to rank each
+                  team and compare them head to head.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">Step 3: Ranking the Field</h3>
+                <p className="text-justify">
+                  The rankings are done by simply sorting each team by their
+                  cumulative score. Comparing each team head to head is slightly
+                  more involved, and uses a custom formula that we created based
+                  on the differences between the two teams in cumulative score.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">
+                  Step 4: Simulating March Madness
+                </h3>
+                <p className="text-justify">
+                  If you choose to simulate your bracket, each game will be
+                  simulated based on the displayed winning percentages that each
+                  team has, which are generated based on your bracket. The
+                  simulation accounts for upsets by including randomness in the
+                  calculation.
+                </p>
+              </div>
+            </div>
+            <h2 className="text-center">The Team</h2>
+            <p className="text-justify">
+              The four of us are computer science students in our final few
+              months studying at Vanderbilt. We all are sports analytics
+              fanatics and hope to improve everyone’s bracket creation process.
             </p>
-            <ul role="list">
-              <li>Quis elit egestas venenatis mattis dignissim.</li>
-              <li>
-                Cras cras lobortis vitae vivamus ultricies facilisis tempus.
-              </li>
-              <li>Orci in sit morbi dignissim metus diam arcu pretium.</li>
+          </div>
+          <div className="mx-auto mt-8 max-w-3xl">
+            <ul
+              role="list"
+              className="mx-auto mt-4 grid w-fit grid-cols-1 gap-x-6 gap-y-20 sm:grid-cols-2 lg:mx-0 lg:gap-x-8 xl:col-span-2"
+            >
+              {people.map((person) => (
+                <li key={person.name}>
+                  <img
+                    className="w-full rounded-2xl object-cover"
+                    src={person.imageUrl}
+                    alt=""
+                  />
+                  <h3 className="mt-6 text-lg font-semibold leading-8 text-gray-900">
+                    {person.name}
+                  </h3>
+                  <p className="text-base leading-7 text-gray-600">
+                    {person.role}
+                  </p>
+                  <ul role="list" className="mt-6 flex gap-x-6">
+                    <li>
+                      <a
+                        href={person.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-gray-500"
+                      >
+                        <span className="sr-only">LinkedIn</span>
+                        <svg
+                          className="h-5 w-5"
+                          aria-hidden="true"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              ))}
             </ul>
-            <p>
-              Quis semper vulputate aliquam venenatis egestas sagittis quisque
-              orci. Donec commodo sit viverra aliquam porttitor ultrices gravida
-              eu. Tincidunt leo, elementum mattis elementum ut nisl, justo,
-              amet, mattis. Nunc purus, diam commodo tincidunt turpis. Amet,
-              duis sed elit interdum dignissim.
-            </p>
-            <h2>From beginner to expert in 30 days</h2>
-            <p>
-              Id orci tellus laoreet id ac. Dolor, aenean leo, ac etiam
-              consequat in. Convallis arcu ipsum urna nibh. Pharetra, euismod
-              vitae interdum mauris enim, consequat vulputate nibh. Maecenas
-              pellentesque id sed tellus mauris, ultrices mauris. Tincidunt enim
-              cursus ridiculus mi. Pellentesque nam sed nullam sed diam turpis
-              ipsum eu a sed convallis diam.
-            </p>
-            <blockquote>
-              <p>
-                Sagittis scelerisque nulla cursus in enim consectetur quam.
-                Dictum urna sed consectetur neque tristique pellentesque.
-                Blandit amet, sed aenean erat arcu morbi.
-              </p>
-            </blockquote>
-            <p>
-              Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus
-              enim. Mattis mauris semper sed amet vitae sed turpis id. Id dolor
-              praesent donec est. Odio penatibus risus viverra tellus varius sit
-              neque erat velit.
-            </p>
-            <h2>Everything you need to get up and running</h2>
-            <p>
-              Purus morbi dignissim senectus mattis <a href="#">adipiscing</a>.
-              Amet, massa quam varius orci dapibus volutpat cras. In amet eu
-              ridiculus leo sodales cursus tristique. Tincidunt sed tempus ut
-              viverra ridiculus non molestie. Gravida quis fringilla amet eget
-              dui tempor dignissim. Facilisis auctor venenatis varius nunc,
-              congue erat ac. Cras fermentum convallis quam.
-            </p>
-            <p>
-              Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus
-              enim. Mattis mauris semper sed amet vitae sed turpis id. Id dolor
-              praesent donec est. Odio penatibus risus viverra tellus varius sit
-              neque erat velit.
-            </p>
           </div>
         </div>
       </div>
