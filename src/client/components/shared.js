@@ -630,50 +630,27 @@ export const ValidatedInput = ({
   );
 };
 
-export const oauth = async (provider, dispatch) => {
+export const oauth = async (provider) => {
   await fetch(`/v1/oauth/${provider}`)
     .then(async (res) => await res.text())
     .then((address) => {
-      openSignInWindow(address, "sso-popup", dispatch);
+      openSignInWindow(address);
     });
 };
 
 let windowObjectReference = null;
 let previousUrl = null;
-let processing = false;
 
-const openSignInWindow = (url, name, dispatch) => {
-  window.removeEventListener("message", processLogin);
-  const strWindowFeatures =
-    "toolbar=no, menubar=no, width=600, height=700, top=100, left=100";
+const openSignInWindow = (url) => {
   if (windowObjectReference === null || windowObjectReference.closed) {
-    windowObjectReference = window.open(url, name, strWindowFeatures);
+    windowObjectReference = window.open(url);
   } else if (previousUrl !== url) {
-    windowObjectReference = window.open(url, name, strWindowFeatures);
+    windowObjectReference = window.open(url);
     windowObjectReference.focus();
   } else {
     windowObjectReference.focus();
   }
-  window.addEventListener(
-    "message",
-    (event) => processLogin(event, dispatch),
-    false
-  );
   previousUrl = url;
-};
-
-const processLogin = async (event, dispatch) => {
-  if (processing) return;
-  processing = true;
-  const { provider, code } = Object.fromEntries(
-    new URLSearchParams(event.data)
-  );
-  const res = await fetch(`/v1/oauth/${provider}/process?code=${code}`);
-  const data = await res.json();
-  if (res.ok) {
-    dispatch(setUser(data));
-  }
-  processing = false;
 };
 
 export const LoadingWrapper = ({ children, isLoading }) => {
@@ -767,4 +744,15 @@ export const formatDate = (isoDate) => {
       suffix = "th";
   }
   return `${month} ${day}${suffix}`;
+};
+
+export const checkSession = async (dispatch) => {
+  const res = await fetch("/v1/session", {
+    method: "GET",
+    credentials: "include",
+  });
+  if (res.ok) {
+    const user = await res.json();
+    dispatch(setUser(user));
+  }
 };

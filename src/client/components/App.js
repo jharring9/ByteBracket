@@ -12,12 +12,11 @@ import { Logout } from "./Logout";
 import { Register } from "./Register";
 import { Account } from "./Account";
 import { About } from "./About";
-import { setUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { ViewBracket } from "./ViewBracket";
 import { AcceptOauthCallback } from "./AcceptOauthCallback";
 import { ViewLeague } from "./leagues-flow/ViewLeague";
-import { fetchImages } from "./shared";
+import { checkSession, fetchImages } from "./shared";
 import { Leagues } from "./Leagues";
 import { JoinLeague } from "./leagues-flow/JoinLeague";
 import { PrivacyPolicy } from "./PrivacyPolicy";
@@ -41,17 +40,7 @@ export default function App() {
   ]);
 
   useEffect(() => {
-    const checkSession = async () => {
-      const res = await fetch("/v1/session", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (res.ok) {
-        const user = await res.json();
-        dispatch(setUser(user));
-      }
-    };
-    checkSession();
+    checkSession(dispatch);
     fetchImages(dispatch);
   }, []);
 

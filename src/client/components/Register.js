@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
+  checkSession,
   ErrorAlert,
   Facebook,
   Google,
@@ -29,6 +30,7 @@ export const Register = () => {
   const [lastError, setLastError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const loginInterval = useRef();
 
   useEffect(() => {
     if (user.username) {
@@ -38,6 +40,12 @@ export const Register = () => {
 
   useEffect(() => {
     document.title = "Register - ByteBracket";
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearInterval(loginInterval.current);
+    };
   }, []);
 
   const onRegister = async (ev) => {
@@ -80,6 +88,11 @@ export const Register = () => {
     } else {
       setError(data.error);
     }
+  };
+
+  const handleOauth = (provider) => {
+    oauth(provider);
+    loginInterval.current = setInterval(() => checkSession(dispatch), 1000);
   };
 
   return (
@@ -184,7 +197,7 @@ export const Register = () => {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <div
-                  onClick={() => oauth("facebook", dispatch)}
+                  onClick={() => handleOauth("facebook")}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Facebook />
@@ -192,7 +205,7 @@ export const Register = () => {
               </div>
               <div>
                 <div
-                  onClick={() => oauth("google", dispatch)}
+                  onClick={() => handleOauth("google")}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Google />

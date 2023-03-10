@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
+  checkSession,
   ErrorAlert,
   Facebook,
   Google,
@@ -23,6 +24,7 @@ export const Login = () => {
   const [error, setError] = useState("");
   const [usernameError, setUsernameError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const loginInterval = useRef();
 
   useEffect(() => {
     if (user.username) {
@@ -32,6 +34,12 @@ export const Login = () => {
 
   useEffect(() => {
     document.title = "Login - ByteBracket";
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearInterval(loginInterval.current);
+    };
   }, []);
 
   const onLogin = async (ev) => {
@@ -64,6 +72,11 @@ export const Login = () => {
     } else {
       setError(data.error);
     }
+  };
+
+  const handleOauth = (provider) => {
+    oauth(provider);
+    loginInterval.current = setInterval(() => checkSession(dispatch), 1000);
   };
 
   return (
@@ -168,7 +181,7 @@ export const Login = () => {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div>
                 <div
-                  onClick={() => oauth("facebook", dispatch)}
+                  onClick={() => handleOauth("facebook")}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Facebook />
@@ -176,7 +189,7 @@ export const Login = () => {
               </div>
               <div>
                 <div
-                  onClick={() => oauth("google", dispatch)}
+                  onClick={() => handleOauth("google")}
                   className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
                 >
                   <Google />
