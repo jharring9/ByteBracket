@@ -9,13 +9,6 @@ import {CopyToClipboard} from "react-copy-to-clipboard/src";
 import html2canvas from "html2canvas";
 import downloadjs from "downloadjs";
 
-
-// const savePng = async () => {
-//   const canvas = await html2canvas(document.body);
-//   const dataURL = canvas.toDataURL('image/png');
-//   downloadjs(dataURL, 'download.png', 'image/png');
-// };
-
 export const ViewBracket = () => {
   const url = window.location.href
   const dispatch = useDispatch();
