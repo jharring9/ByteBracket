@@ -28,6 +28,7 @@ import {
   CreateEntryDropdown,
   EnterModal,
   EntryListItem,
+  MyEntryListItem,
   rankTeamsWithTies,
 } from "../ViewLeague";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
@@ -51,6 +52,7 @@ export const SnapBackLeague = () => {
   const [leagueName, setLeagueName] = useState("");
   const [manager, setManager] = useState("");
   const [entries, setEntries] = useState([]);
+  const [myEntries, setMyEntries] = useState([]);
   const [code, setCode] = useState("");
   const [maxPerUser, setMaxPerUser] = useState(0);
   const [closeDate, setCloseDate] = useState(new Date().toISOString());
@@ -93,7 +95,21 @@ export const SnapBackLeague = () => {
     setCloseDate(data.lockDate);
     setLeagueOpen(new Date(data.lockDate) > new Date());
     setCodeModal(false);
+    await getTopEntries();
+    await getMyEntries();
     setLoading(false);
+  };
+
+  const getTopEntries = async () => {
+    const response = await fetch(`/v1/league/snapback/top`);
+    const data = await response.json();
+    setEntries(data);
+  };
+
+  const getMyEntries = async () => {
+    const response = await fetch(`/v1/league/snapback/my`);
+    const data = await response.json();
+    setMyEntries(data);
   };
 
   const validateCode = async (codeInput) => {
@@ -216,27 +232,63 @@ export const SnapBackLeague = () => {
   };
 
   /**
-   * Displays the league entries.
+   * Displays the top entries.
    */
-  const LeagueEntries = () =>
-    entries.length > 0 ? (
+  const TopEntries = () =>
+    entries.length > 0 && (
       <main className="pt-8 pb-16">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="px-4 sm:px-0">
-            <h2 className="text-2xl font-bold text-gray-900">Entries</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Top Performing Entries
+            </h2>
           </div>
           <ul
             role="list"
             className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
           >
-            {entries.map((entry) => (
-              <EntryListItem
+            {leagueOpen ? (
+              <p>
+                Other users' bracket entries will appear once this league has
+                locked.
+              </p>
+            ) : (
+              entries.map((entry) => (
+                <EntryListItem
+                  key={entry.id}
+                  entry={entry}
+                  leagueId="snapback"
+                  isOpen={leagueOpen}
+                  logos={logos}
+                  navigate={navigate}
+                />
+              ))
+            )}
+          </ul>
+        </div>
+      </main>
+    );
+
+  /**
+   * Displays current user's entries.
+   */
+  const MyEntries = () =>
+    entries.length > 0 && (
+      <main className="pt-8 pb-16">
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0">
+            <h2 className="text-2xl font-bold text-gray-900">Your Entries</h2>
+          </div>
+          <ul
+            role="list"
+            className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
+          >
+            {myEntries.map((entry) => (
+              <MyEntryListItem
                 key={entry.id}
                 entry={entry}
-                leagueId="snapback"
                 isOpen={leagueOpen}
                 logos={logos}
-                username={user.username}
                 navigate={navigate}
                 removeBracket={removeBracket}
               />
@@ -244,8 +296,6 @@ export const SnapBackLeague = () => {
           </ul>
         </div>
       </main>
-    ) : (
-      <NoEntriesCard setEnterModal={setEnterModal} getBrackets={getBrackets} />
     );
 
   return (
@@ -385,7 +435,6 @@ export const SnapBackLeague = () => {
               <ManageLeague
                 id="snapback"
                 name={leagueName}
-                maxPerUser={maxPerUser}
                 isPrivate={true}
                 joinCode={code}
                 lockDate={closeDate}
@@ -393,7 +442,16 @@ export const SnapBackLeague = () => {
                 onSave={() => getLeague()}
               />
             ) : (
-              <LeagueEntries />
+              <>
+                <MyEntries />
+                {myEntries.length === 0 && leagueOpen && (
+                  <NoEntriesCard
+                    setEnterModal={setEnterModal}
+                    getBrackets={getBrackets}
+                  />
+                )}
+                <TopEntries />
+              </>
             )}
           </div>
           <div className="flex-0 hidden w-1/3 lg:block">
@@ -420,7 +478,7 @@ const NoEntriesCard = ({ setEnterModal, getBrackets }) => {
     <div className="mx-auto max-w-7xl py-16 px-6 sm:py-24 lg:px-8">
       <div className="text-center">
         <p className="mt-1 text-xl font-bold tracking-tight text-gray-900 sm:text-2xl lg:text-3xl">
-          There are no entries in this league
+          You have no entries in this league.
         </p>
         <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
           <span

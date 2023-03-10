@@ -13,7 +13,6 @@ import ReactGA from "react-ga4";
 export const ManageLeague = ({
   id,
   name,
-  maxPerUser,
   isPrivate,
   joinCode,
   lockDate,
@@ -23,12 +22,10 @@ export const ManageLeague = ({
   const { user } = useSelector((state) => state.user);
 
   const [leagueName, setLeagueName] = useState(name);
-  const [maxEntriesPerUser, setMaxEntriesPerUser] = useState(maxPerUser);
   const [code, setCode] = useState(joinCode);
   const [closeDate, setCloseDate] = useState(lockDate);
 
   const [leagueNameError, setLeagueNameError] = useState(null);
-  const [maxEntriesPerUserError, setMaxEntriesPerUserError] = useState(null);
   const [codeError, setCodeError] = useState(null);
 
   const [error, setError] = useState(null);
@@ -40,11 +37,6 @@ export const ManageLeague = ({
       setLeagueNameError("League name is required");
       return;
     } else setLeagueNameError(null);
-
-    if (!maxEntriesPerUser || maxEntriesPerUser < 1) {
-      setMaxEntriesPerUserError("Max entries per user must be greater than 0");
-      return;
-    } else setMaxEntriesPerUserError(null);
 
     if (isPrivate && (!code || code.trim().length === 0)) {
       setCodeError("League code is required for private leagues");
@@ -58,7 +50,6 @@ export const ManageLeague = ({
       },
       body: JSON.stringify({
         name: leagueName,
-        entriesPerUser: maxEntriesPerUser,
         lockDate: closeDate,
         code: code,
       }),
@@ -121,17 +112,7 @@ export const ManageLeague = ({
                   disabled={!isPrivate}
                 />
               </div>
-              <div className="col-span-12 sm:col-span-6">
-                <ValidatedInput
-                  inputName="Max Entries per User"
-                  popoverInfo="This is the maximum number of entries that a user can have in your league."
-                  type="number"
-                  value={maxEntriesPerUser}
-                  setValue={setMaxEntriesPerUser}
-                  errorMsg={maxEntriesPerUserError}
-                />
-              </div>
-              <div className="col-span-12 sm:col-span-6">
+              <div className="col-span-12">
                 <InfoPopover
                   name="League Lock Date"
                   details="Final date that users will be able to add/remove entries. After this date, other users' brackets will be viewable."

@@ -220,7 +220,7 @@ export const LeagueList = ({ title, leagues, paginate }) => {
                       <td className="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500">
                         {league.entryCount}
                       </td>
-                      <td className="hidden whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500 md:block">
+                      <td className="hidden whitespace-nowrap px-6 py-4 text-left text-sm text-gray-500 md:block">
                         <span className="inline-flex items-center rounded-full px-2.5 py-0.5">
                           {league.managerId}
                         </span>

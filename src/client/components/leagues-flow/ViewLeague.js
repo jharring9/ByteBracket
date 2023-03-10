@@ -53,6 +53,7 @@ export const ViewLeague = () => {
   const [leagueName, setLeagueName] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
   const [entries, setEntries] = useState([]);
+  const [myEntries, setMyEntries] = useState([]);
   const [manager, setManager] = useState("");
   const [creationDate, setCreationDate] = useState("");
 
@@ -95,7 +96,6 @@ export const ViewLeague = () => {
     const data = await response.json();
     setLeagueName(data.name);
     setIsPrivate(data.isPrivate);
-    setEntries(rankTeamsWithTies(data.entries));
     setManager(data.managerId);
     setCreationDate(formatDate(data.created));
     setCode(data.code);
@@ -103,7 +103,21 @@ export const ViewLeague = () => {
     setCloseDate(data.lockDate);
     setLeagueOpen(new Date(data.lockDate) > new Date());
     setCodeModal(false);
+    await getTopEntries();
+    await getMyEntries();
     setLoading(false);
+  };
+
+  const getTopEntries = async () => {
+    const response = await fetch(`/v1/league/${leagueId}/top`);
+    const data = await response.json();
+    setEntries(data);
+  };
+
+  const getMyEntries = async () => {
+    const response = await fetch(`/v1/league/${leagueId}/my`);
+    const data = await response.json();
+    setMyEntries(data);
   };
 
   const validateCode = async (codeInput) => {
@@ -202,27 +216,63 @@ export const ViewLeague = () => {
   };
 
   /**
-   * Displays the league entries.
+   * Displays the top entries.
    */
-  const LeagueEntries = () =>
-    entries.length > 0 ? (
+  const TopEntries = () =>
+    entries.length > 0 && (
       <main className="pt-8 pb-16">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="px-4 sm:px-0">
-            <h2 className="text-2xl font-bold text-gray-900">Entries</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Top Performing Entries
+            </h2>
           </div>
           <ul
             role="list"
             className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
           >
-            {entries.map((entry) => (
-              <EntryListItem
+            {leagueOpen ? (
+              <p>
+                Other users' bracket entries will appear once this league has
+                locked.
+              </p>
+            ) : (
+              entries.map((entry) => (
+                <EntryListItem
+                  key={entry.id}
+                  entry={entry}
+                  leagueId={leagueId}
+                  isOpen={leagueOpen}
+                  logos={logos}
+                  navigate={navigate}
+                />
+              ))
+            )}
+          </ul>
+        </div>
+      </main>
+    );
+
+  /**
+   * Displays current user's entries.
+   */
+  const MyEntries = () =>
+    entries.length > 0 && (
+      <main className="pt-8 pb-16">
+        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0">
+            <h2 className="text-2xl font-bold text-gray-900">Your Entries</h2>
+          </div>
+          <ul
+            role="list"
+            className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
+          >
+            {myEntries.map((entry) => (
+              <MyEntryListItem
                 key={entry.id}
                 entry={entry}
-                leagueId={leagueId}
                 isOpen={leagueOpen}
                 logos={logos}
-                username={user.username}
                 navigate={navigate}
                 removeBracket={removeBracket}
               />
@@ -230,12 +280,6 @@ export const ViewLeague = () => {
           </ul>
         </div>
       </main>
-    ) : (
-      <NoEntriesCard
-        setEnterModal={setEnterModal}
-        setShareModal={setShareModal}
-        getBrackets={getBrackets}
-      />
     );
 
   return (
@@ -405,7 +449,6 @@ export const ViewLeague = () => {
               <ManageLeague
                 id={leagueId}
                 name={leagueName}
-                maxPerUser={maxPerUser}
                 isPrivate={isPrivate}
                 joinCode={code}
                 lockDate={closeDate}
@@ -413,7 +456,17 @@ export const ViewLeague = () => {
                 onSave={() => getLeague()}
               />
             ) : (
-              <LeagueEntries />
+              <>
+                <MyEntries />
+                {myEntries.length === 0 && leagueOpen && (
+                  <NoEntriesCard
+                    setEnterModal={setEnterModal}
+                    setShareModal={setShareModal}
+                    getBrackets={getBrackets}
+                  />
+                )}
+                <TopEntries />
+              </>
             )}
           </div>
           <LeagueInformation
@@ -496,7 +549,7 @@ const NoEntriesCard = ({ setEnterModal, setShareModal, getBrackets }) => {
     <div className="mx-auto max-w-7xl py-16 px-6 sm:py-24 lg:px-8">
       <div className="text-center">
         <p className="mt-1 text-xl font-bold tracking-tight text-gray-900 sm:text-2xl lg:text-3xl">
-          There are no entries in this league
+          You have no entries in this league.
         </p>
         <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
           <span
@@ -515,7 +568,7 @@ const NoEntriesCard = ({ setEnterModal, setShareModal, getBrackets }) => {
             }}
             className="cursor-pointer font-medium text-indigo-600 hover:underline"
           >
-            share your league
+            share this league
           </span>{" "}
           to get started.
         </p>
@@ -524,27 +577,9 @@ const NoEntriesCard = ({ setEnterModal, setShareModal, getBrackets }) => {
   );
 };
 
-export const EntryListItem = ({
-  entry,
-  leagueId,
-  isOpen,
-  logos,
-  username,
-  navigate,
-  removeBracket,
-}) => {
-  const [showModal, setShowModal] = useState(false);
-
+export const EntryListItem = ({ entry, leagueId, isOpen, logos, navigate }) => {
   return (
     <li>
-      <WarnModal
-        open={showModal}
-        setOpen={setShowModal}
-        header="Remove bracket"
-        content="Are you sure you want to remove this bracket from the league? The bracket will not be deleted from your account."
-        cta="Remove"
-        onComplete={() => removeBracket(entry.id)}
-      />
       <div
         className={classNames(
           isOpen ? "cursor-auto" : "cursor-pointer",
@@ -562,24 +597,22 @@ export const EntryListItem = ({
             }
             className="flex min-w-0 flex-1 items-center"
           >
-            {!isOpen && (
-              <>
-                <div className="w-4 md:w-10">
-                  <h1 className="text-xl font-bold group-hover:text-gray-500">
-                    {entry.rank}
-                  </h1>
+            <>
+              <div className="w-4 md:w-10">
+                <h1 className="text-xl font-bold group-hover:text-gray-500">
+                  {entry.rank}
+                </h1>
+              </div>
+              <div className="w-16">
+                <div className="flex items-center">
+                  <img
+                    className="mr-3 h-12 group-hover:opacity-75"
+                    src={logos[entry.winnerName]}
+                    alt="winner logo"
+                  />
                 </div>
-                <div className="w-16">
-                  <div className="flex items-center">
-                    <img
-                      className="mr-3 h-12 group-hover:opacity-75"
-                      src={logos[entry.winnerName]}
-                      alt="winner logo"
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+              </div>
+            </>
             <div className="grid min-w-0 flex-1 grid-cols-2 px-4 md:gap-4">
               <div>
                 <p className="md:text-md truncate text-sm font-medium text-purple-600 lg:text-lg">
@@ -606,17 +639,84 @@ export const EntryListItem = ({
             </div>
           </div>
           <div>
+            <ChevronRightIcon
+              className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};
+
+export const MyEntryListItem = ({
+  entry,
+  isOpen,
+  logos,
+  navigate,
+  removeBracket,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <li>
+      <WarnModal
+        open={showModal}
+        setOpen={setShowModal}
+        header="Remove bracket"
+        content="Are you sure you want to remove this bracket from the league? The bracket will not be deleted from your account."
+        cta="Remove"
+        onComplete={() => removeBracket(entry.id)}
+      />
+      <div className="group block cursor-pointer">
+        <div className="flex items-center py-5 px-4 sm:py-6 sm:px-0">
+          <div
+            onClick={() => navigate(`/bracket/${entry.username}/${entry.id}`)}
+            className="flex min-w-0 flex-1 items-center"
+          >
+            <>
+              <div className="w-4 md:w-10">
+                <h1 className="text-xl font-bold group-hover:text-gray-500">
+                  {entry.rank}
+                </h1>
+              </div>
+              <div className="w-16">
+                <div className="flex items-center">
+                  <img
+                    className="mr-3 h-12 group-hover:opacity-75"
+                    src={logos[entry.winnerName]}
+                    alt="winner logo"
+                  />
+                </div>
+              </div>
+            </>
+            <div className="grid min-w-0 flex-1 grid-cols-2 px-4 md:gap-4">
+              <div>
+                <p className="md:text-md truncate text-sm font-medium text-purple-600 lg:text-lg">
+                  {entry.name}
+                </p>
+                <p className="mt-2 flex items-center text-sm text-gray-500">
+                  <UserIcon
+                    className="mr-1.5 hidden h-5 w-5 flex-shrink-0 text-gray-400 sm:block"
+                    aria-hidden="true"
+                  />
+                  <span className="truncate">Your Bracket</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
             {isOpen ? (
-              <div className="mr-5 w-4 sm:mr-0 md:w-10">
-                {entry.username === username && (
-                  <button
-                    title="Remove this bracket from the league"
-                    onClick={() => setShowModal(true)}
-                    className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-0.5 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white"
-                  >
-                    <XMarkIcon className="h-6 w-6" />
-                  </button>
-                )}
+              <div className="w-24 sm:mr-0">
+                <button
+                  title="Remove this bracket from the league"
+                  onClick={() => setShowModal(true)}
+                  className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-0.5 px-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white"
+                >
+                  Remove
+                  <XMarkIcon className="ml-1 h-6 w-6" />
+                </button>
               </div>
             ) : (
               <ChevronRightIcon
@@ -1010,6 +1110,7 @@ export const EnterModal = ({ isOpen, setOpen, logos, brackets, onSubmit }) => {
                       >
                         {brackets.map((bracket, index) => (
                           <BracketSelectGridItem
+                            key={index}
                             bracket={bracket}
                             logos={logos}
                             onSelect={() => {
