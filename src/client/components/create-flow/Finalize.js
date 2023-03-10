@@ -61,12 +61,14 @@ export const Finalize = () => {
       }),
     });
     if (res.ok) {
+      const data = await res.json()
       ReactGA.event({ action: "createbracket", category: "bracket" });
       dispatch(resetStats);
       dispatch(clearTop25);
       dispatch(resetBracket);
       dispatch(setCreateStage(1));
-      navigate("/account");
+      navigate(`/bracket/${user.username}/${data.id}`);
+      console.log(data);
     } else {
       const data = await res.json();
       setError(data.error);

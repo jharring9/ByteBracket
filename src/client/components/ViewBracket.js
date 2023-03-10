@@ -5,8 +5,19 @@ import { useDispatch } from "react-redux";
 import { setField } from "../store/lambdaSlice";
 import { BackButton, fetchImages } from "./shared";
 import { Transition } from "@headlessui/react";
+import {CopyToClipboard} from "react-copy-to-clipboard/src";
+import html2canvas from "html2canvas";
+import downloadjs from "downloadjs";
+
+
+// const savePng = async () => {
+//   const canvas = await html2canvas(document.body);
+//   const dataURL = canvas.toDataURL('image/png');
+//   downloadjs(dataURL, 'download.png', 'image/png');
+// };
 
 export const ViewBracket = () => {
+  const url = window.location.href
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [bracket, setBracket] = useState([]);
@@ -65,6 +76,12 @@ export const ViewBracket = () => {
     document.title = "View Bracket - ByteBracket";
   }, []);
 
+  async function savePng(props) {
+    const canvas = await html2canvas(document.body);
+    const dataURL = canvas.toDataURL('image/png');
+    downloadjs(dataURL, `${user}/bracket/${id}.png`, 'image/png');
+  }
+
   return (
     <Transition
       show={loaded}
@@ -81,6 +98,10 @@ export const ViewBracket = () => {
                 {name}
               </h1>
               <p className="text-center text-gray-600">Created by {user}</p>
+              <CopyToClipboard text={url}>
+                <button className={"m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"}>Copy URL to the clipboard</button>
+              </CopyToClipboard>
+              <button onClick={() => savePng()} className={"m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"}>Download Bracket</button>
             </div>
             <ReadOnlyBracket
               regions={bracket}
