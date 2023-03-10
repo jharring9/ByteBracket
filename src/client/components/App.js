@@ -27,7 +27,7 @@ import { SnapBackLeague } from "./leagues-flow/sponsored-leagues/SnapbackSports"
 ReactGA.initialize("G-GR6LZND73X");
 
 /* Bracket Creation */
-export const BEFORE_OPEN = false;
+export const BEFORE_OPEN = true;
 export const AFTER_START = false;
 
 export default function App() {
