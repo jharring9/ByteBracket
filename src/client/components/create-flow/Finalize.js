@@ -90,14 +90,14 @@ export const Finalize = ({ league }) => {
         return;
       }
     }
-
     if (submitResponse.ok) {
+      const data = await submitResponse.json();
       ReactGA.event({ action: "createbracket", category: "bracket" });
       dispatch(resetStats);
       dispatch(clearTop25);
       dispatch(resetBracket);
       dispatch(setCreateStage(1));
-      navigate("/account");
+      navigate(`/bracket/${user.username}/${data.id}`);
     } else {
       const data = await submitResponse.json();
       setError(data.error);

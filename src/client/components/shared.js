@@ -3,6 +3,7 @@ import {
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
   InformationCircleIcon,
+  LinkIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { CheckIcon } from "@heroicons/react/24/solid";
@@ -94,6 +95,20 @@ export const SaveButton = ({ onClick, loading }) => (
           <ChevronRightIcon className="-mr-2 h-6 w-6 stroke-2" />
         </>
       )}
+    </div>
+  </button>
+);
+
+export const ShareButton = ({ onClick }) => (
+  <button
+    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"
+    onClick={onClick}
+  >
+    <div className="flex justify-center lg:w-24">
+      <>
+        Share
+        <LinkIcon className="-mr-2 ml-1 h-6 w-6 stroke-2" />
+      </>
     </div>
   </button>
 );
