@@ -13,7 +13,8 @@ export const Top25 = () => {
   const dispatch = useDispatch();
   const { top25, logos } = useSelector((state) => state.lambda);
   const [loading, setLoading] = useState(false);
-  const [biggestMovers, setBiggestMovers] = useState([]);
+  const [mostOverrated, setMostOverrated] = useState([]);
+  const [mostUnderrated, setMostUnderrated] = useState([]);
 
   /**
    * Handle user clicking the back button (return to select stats page).
@@ -56,13 +57,20 @@ export const Top25 = () => {
    * Calculate the biggest movers in the top 25.
    */
   useEffect(() => {
-    const biggestMovers = [...top25]
+    const mostUnderrated = [...top25]
       .sort((a, b) => {
-        return Math.abs(a.diff) - Math.abs(b.diff);
+        return a.diff - b.diff;
       })
-      .slice(-5)
+      .slice(-3)
       .reverse();
-    setBiggestMovers(biggestMovers);
+    setMostUnderrated(mostUnderrated);
+    const mostOverrated = [...top25]
+        .sort((a, b) => {
+          return b.diff - a.diff;
+        })
+        .slice(-3)
+        .reverse();
+    setMostOverrated(mostOverrated);
   }, [top25]);
 
   return (
@@ -92,7 +100,7 @@ export const Top25 = () => {
                               scope="col"
                               className="py-3.5 pl-2 pr-2 text-center text-sm font-semibold text-gray-900 sm:pl-6"
                             >
-                              Rank
+                              Your Rank
                             </th>
                             <th
                               scope="col"
@@ -168,9 +176,9 @@ export const Top25 = () => {
             </div>
             <div className="mt-8 lg:col-span-2 lg:mt-0">
               <div className="text-center">
-                <h1 className="text-3xl font-bold">Biggest Movers</h1>
+                <h1 className="text-3xl font-bold"> Most Underrated Teams</h1>
               </div>
-              <div className="mt-2 flex flex-col lg:mt-5">
+              <div className="mt-2 flex flex-col lg:mt-5 pb-16">
                 <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                     <div className="overflow-hidden">
@@ -192,7 +200,7 @@ export const Top25 = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
-                          {biggestMovers.map((row) => (
+                          {mostUnderrated.map((row) => (
                             <tr key={row.team}>
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 <div className="flex items-center">
@@ -226,6 +234,71 @@ export const Top25 = () => {
                               </td>
                             </tr>
                           ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center">
+                <h1 className="text-3xl font-bold"> Most Overrated Teams</h1>
+              </div>
+              <div className="mt-2 flex flex-col lg:mt-5">
+                <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div className="overflow-hidden">
+                      <table className="w-full divide-y divide-gray-300">
+                        <thead className="border-b-2 border-gray-500">
+                        <tr>
+                          <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Team
+                          </th>
+                          <th
+                              scope="col"
+                              className="pl-3 pr-4 text-center text-sm font-semibold text-gray-900 sm:pr-6"
+                          >
+                            Difference
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                        {mostOverrated.map((row) => (
+                            <tr key={row.team}>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <div className="flex items-center">
+                                  <div className="w-10 flex-shrink-0">
+                                    <img
+                                        className="h-auto max-h-16 w-10"
+                                        src={logos[row.team]}
+                                        alt="team logo"
+                                    />
+                                  </div>
+                                  <div className="ml-4">
+                                    <div className="text-center font-medium text-gray-900">
+                                      {row.team}
+                                    </div>
+                                    <div className="text-gray-500">
+                                      {row.W}-{row.L}
+                                    </div>
+                                  </div>
+                                  <div className="ml-2 h-10 w-10 flex-shrink-0">
+                                    {row.diff >= 0 && (
+                                        <TrendingUp className="h-5 w-5 sm:h-8 sm:w-8" />
+                                    )}
+                                    {row.diff <= 0 && (
+                                        <TrendingDown className="h-5 w-5 sm:h-8 sm:w-8" />
+                                    )}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="whitespace-nowrap px-2 py-4 text-center text-lg text-gray-500 sm:border-l-2 sm:border-gray-500">
+                                {row.diff}
+                              </td>
+                            </tr>
+                        ))}
                         </tbody>
                       </table>
                     </div>
