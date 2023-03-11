@@ -101,7 +101,7 @@ export const SaveButton = ({ onClick, loading }) => (
 
 export const ShareButton = ({ onClick }) => (
   <button
-    className="m-2 h-10 w-full rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-auto"
+    className="m-2 flex h-10 w-full items-center justify-center rounded-lg border border-black bg-indigo-700 px-5 font-medium text-white shadow-xl transition-colors duration-150 hover:bg-indigo-600 lg:w-64"
     onClick={onClick}
   >
     <div className="flex justify-center lg:w-24">

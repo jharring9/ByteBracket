@@ -4,12 +4,16 @@ import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useWindowSize } from "./useWindowSize";
+import { ShareButton } from "../shared";
 
 export const ReadOnlyBracket = ({
   regions,
   champion,
   master,
   masterChampion,
+  bracketName,
+  bracketCreator,
+  onShare,
 }) => {
   const isResponsive = useWindowSize(1300);
   const rounds = createRounds(regions, isResponsive);
@@ -86,6 +90,9 @@ export const ReadOnlyBracket = ({
                   champion={champion}
                   masterRounds={master}
                   masterChampion={masterChampion}
+                  bracketName={bracketName}
+                  bracketCreator={bracketCreator}
+                  onShare={onShare}
                 />
               ))}
             </SeedsList>
@@ -105,6 +112,9 @@ export const RenderSeedComponent = ({
   champion,
   masterRounds,
   masterChampion,
+  bracketName,
+  bracketCreator,
+  onShare,
 }) => {
   const { logos, field } = useSelector((state) => state.lambda);
 
@@ -188,6 +198,18 @@ export const RenderSeedComponent = ({
   if (!mobile && roundIdx === 5) {
     return (
       <>
+        {bracketName && bracketCreator && (
+          <div className="absolute top-10 flex items-center justify-center">
+            <div className="mx-auto hidden max-w-xl space-y-4 xl:block">
+              <h1 className="text-center text-center text-3xl font-bold text-gray-900">
+                {bracketName}
+              </h1>
+              <p className="text-center text-gray-600">
+                Created by {bracketCreator}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="absolute top-36 flex items-center justify-center">
           {typeof champion === "number" && (
             <img
@@ -211,6 +233,32 @@ export const RenderSeedComponent = ({
             </div>
           </div>
         </ChampionshipSeed>
+        <div className="absolute bottom-52 flex items-center justify-center">
+          <div className="z-10 flex h-32 w-32 flex-col items-center justify-center rounded-full bg-yellow-300">
+            <img
+              src="https://bytebracket-webassets.s3.amazonaws.com/SnapbackSports-Logos-02.png"
+              alt="Snapback Sports Logo"
+              className="mx-auto h-24"
+            />
+          </div>
+          <div className="-ml-6 flex h-32 w-32 flex-col items-center justify-center rounded-full bg-indigo-700">
+            <h1
+              className="mt-6 text-8xl text-white"
+              style={{ fontFamily: "loveloBold" }}
+            >
+              B
+            </h1>
+          </div>
+        </div>
+        {onShare && (
+          <div className="absolute bottom-20 flex items-center justify-center">
+            <div className="mb-4 flex w-full justify-center">
+              <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
+                <ShareButton onClick={onShare} />
+              </div>
+            </div>
+          </div>
+        )}
       </>
     );
   } else {

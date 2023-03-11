@@ -100,26 +100,15 @@ export const ViewBracket = () => {
       <div className="mx-auto mt-4 w-screen px-4 pb-10 sm:px-6 lg:px-8">
         <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
           <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg">
-            <div className="mx-auto hidden max-w-xl space-y-4 xl:block">
-              <h1 className="text-center text-center text-3xl font-bold text-gray-900">
-                {name}
-              </h1>
-              <p className="text-center text-gray-600">Created by {user}</p>
-            </div>
             <ReadOnlyBracket
               regions={bracket}
               champion={champion}
               master={masterBracket}
               masterChampion={masterChampion}
+              bracketName={name}
+              bracketCreator={user}
+              onShare={() => setShareModal(true)}
             />
-            <div className="mb-4 hidden w-screen justify-center xl:flex">
-              <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
-                <BackButton onClick={() => navigate(-1)} />
-              </div>
-              <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
-                <ShareButton onClick={() => setShareModal(true)} />
-              </div>
-            </div>
           </div>
         </div>
       </div>
