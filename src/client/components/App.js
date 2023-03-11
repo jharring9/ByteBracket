@@ -22,6 +22,7 @@ import { JoinLeague } from "./leagues-flow/JoinLeague";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { CreateLeague } from "./leagues-flow/CreateLeague";
 import { SnapBackLeague } from "./leagues-flow/sponsored-leagues/SnapbackSports";
+import { SnapbackLanding } from "./leagues-flow/sponsored-leagues/SnapbackLanding";
 
 /* Google Analytics */
 ReactGA.initialize("G-GR6LZND73X");
@@ -75,6 +76,7 @@ export default function App() {
             element={<AcceptOauthCallback provider="facebook" />}
           />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/snapback" element={<SnapbackLanding />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer navigation={navigation} />

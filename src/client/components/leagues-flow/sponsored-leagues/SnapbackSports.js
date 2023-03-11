@@ -269,7 +269,7 @@ export const SnapBackLeague = () => {
    * Displays current user's entries.
    */
   const MyEntries = () =>
-    entries.length > 0 && (
+    myEntries.length > 0 && (
       <main className="pt-8 pb-16">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="px-4 sm:px-0">
