@@ -5,25 +5,25 @@ const people = [
   {
     name: "Lucas Goldman",
     role: "Founder",
-    imageUrl: "/assets/lucas.jpg",
+    imageUrl: "https://bytebracket-webassets.s3.amazonaws.com/lucas.jpg",
     linkedinUrl: "https://www.linkedin.com/in/lucas-goldman/",
   },
   {
     name: "Jack Harrington",
     role: "Founder",
-    imageUrl: "/assets/jack.jpg",
+    imageUrl: "https://bytebracket-webassets.s3.amazonaws.com/jack.jpg",
     linkedinUrl: "https://www.linkedin.com/in/jharrington22/",
   },
   {
     name: "Joel Dahan",
     role: "Founder",
-    imageUrl: "/assets/joel.jpg",
+    imageUrl: "https://bytebracket-webassets.s3.amazonaws.com/joel.jpg",
     linkedinUrl: "https://www.linkedin.com/in/joel-dahan-9989851ba/",
   },
   {
     name: "Cason Stone",
     role: "Founder",
-    imageUrl: "/assets/cason.jpg",
+    imageUrl: "https://bytebracket-webassets.s3.amazonaws.com/cason.jpg",
     linkedinUrl: "https://www.linkedin.com/in/cason-stone-3761421b0/",
   },
   // More people...

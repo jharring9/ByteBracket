@@ -27,7 +27,7 @@ import { SnapBackLeague } from "./leagues-flow/sponsored-leagues/SnapbackSports"
 ReactGA.initialize("G-GR6LZND73X");
 
 /* Bracket Creation */
-export const BEFORE_OPEN = true;
+export const BEFORE_OPEN = false;
 export const AFTER_START = false;
 
 export default function App() {
@@ -51,7 +51,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/create/:league?" element={<Create />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signout" element={<Logout />} />
           <Route path="/register" element={<Register />} />

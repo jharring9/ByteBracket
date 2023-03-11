@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export const NotFound = () => {
@@ -7,7 +7,7 @@ export const NotFound = () => {
 
   useEffect(() => {
     document.title = "Page Not Found - ByteBracket";
-  }, [])
+  }, []);
 
   return (
     <div className="min-h-full bg-white py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">

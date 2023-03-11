@@ -39,7 +39,7 @@ export const ViewLeague = () => {
   const navigate = useNavigate();
   const { id: leagueId, urlcode } = useParams();
   const { logos } = useSelector((state) => state.lambda);
-  const { user } = useSelector((state) => state.user);
+  const { user, fetched } = useSelector((state) => state.user);
   const [manageLeague, setManageLeague] = useState(false);
   const [loading, setLoading] = useState(true);
   const [brackets, setBrackets] = useState([]);
@@ -65,11 +65,12 @@ export const ViewLeague = () => {
   const [enterModal, setEnterModal] = useState(false);
 
   useEffect(() => {
-    if (!user.username) {
-      navigate(`/join/${leagueId}`);
+    if (fetched) {
+      if (!user.username) {
+        navigate(`/join/${leagueId}`);
+      } else getLeague();
     }
-    getLeague();
-  }, [leagueId, user]);
+  }, [fetched, user]);
 
   useEffect(() => {
     if (isPrivate && urlcode) {
@@ -156,7 +157,7 @@ export const ViewLeague = () => {
    * Enters a bracket into the league.
    */
   const enterBracket = async (id) => {
-    if (entries.some((entry) => entry.id === id)) {
+    if (myEntries && myEntries.some((entry) => entry.id === id)) {
       setError("You have already entered this bracket.");
       return;
     }
@@ -165,8 +166,7 @@ export const ViewLeague = () => {
       return;
     }
 
-    const userEntries = entries.filter((e) => e.username === user.username);
-    if (userEntries.length >= maxPerUser) {
+    if (myEntries && myEntries.length >= maxPerUser) {
       setError(
         "You have reached the maximum number of entries for this league."
       );
@@ -232,7 +232,7 @@ export const ViewLeague = () => {
             className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
           >
             {leagueOpen ? (
-              <p>
+              <p className="mt-2 px-4 sm:mt-0 sm:px-0">
                 Other users' bracket entries will appear once this league has
                 locked.
               </p>

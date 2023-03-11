@@ -39,7 +39,7 @@ export const SnapBackLeague = () => {
   const navigate = useNavigate();
   const { urlcode } = useParams();
   const { logos } = useSelector((state) => state.lambda);
-  const { user } = useSelector((state) => state.user);
+  const { user, fetched } = useSelector((state) => state.user);
   const [manageLeague, setManageLeague] = useState(false);
   const [loading, setLoading] = useState(true);
   const [brackets, setBrackets] = useState([]);
@@ -59,13 +59,6 @@ export const SnapBackLeague = () => {
   const [enterModal, setEnterModal] = useState(false);
 
   useEffect(() => {
-    if (!user.username) {
-      navigate("/join/snapback");
-    }
-    getLeague();
-  }, [user]);
-
-  useEffect(() => {
     if (urlcode) {
       validateCode(urlcode);
     }
@@ -73,12 +66,16 @@ export const SnapBackLeague = () => {
 
   useEffect(() => {
     if (
-      manager !== user.username &&
-      (!user.leagues || !user.leagues.includes("snapback"))
+      fetched &&
+      (!user.username ||
+        (manager !== user.username &&
+          (!user.leagues || !user.leagues.includes("snapback"))))
     ) {
-      setCodeModal(true);
+      navigate("/snapback");
+    } else {
+      getLeague();
     }
-  }, [manager, user]);
+  }, [manager, user, fetched]);
 
   useEffect(() => {
     document.title = "SnapBack Sports - Bracket Challenge";
@@ -146,7 +143,7 @@ export const SnapBackLeague = () => {
    * Enters a bracket into the league.
    */
   const enterBracket = async (id) => {
-    if (entries.some((entry) => entry.id === id)) {
+    if (myEntries && myEntries.some((entry) => entry.id === id)) {
       setError("You have already entered this bracket.");
       return;
     }
@@ -157,8 +154,7 @@ export const SnapBackLeague = () => {
       return;
     }
 
-    const userEntries = entries.filter((e) => e.username === user.username);
-    if (userEntries.length >= maxPerUser) {
+    if (myEntries && myEntries.length >= maxPerUser) {
       setError(
         "You have reached the maximum number of entries for the SnapBack league."
       );
@@ -248,7 +244,7 @@ export const SnapBackLeague = () => {
             className="mt-5 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0"
           >
             {leagueOpen ? (
-              <p>
+              <p className="mt-2 px-4 sm:mt-0 sm:px-0">
                 Other users' bracket entries will appear once this league has
                 locked.
               </p>

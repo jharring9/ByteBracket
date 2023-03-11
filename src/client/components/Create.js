@@ -6,10 +6,12 @@ import { Finalize } from "./create-flow/Finalize";
 import { fetchImages, ProgressBar } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { Review } from "./create-flow/Review";
+import { useParams } from "react-router-dom";
 
 export const Create = () => {
   const dispatch = useDispatch();
   const { value: stage } = useSelector((state) => state.createStage);
+  const { league } = useParams();
 
   /**
    * Preload all images.
@@ -26,7 +28,7 @@ export const Create = () => {
       {stage === 2 && <Top25 />}
       {stage === 3 && <MakePicks />}
       {stage === 4 && <Review />}
-      {stage === 5 && <Finalize />}
+      {stage === 5 && <Finalize league={league} />}
     </div>
   );
 };

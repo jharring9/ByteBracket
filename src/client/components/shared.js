@@ -754,5 +754,7 @@ export const checkSession = async (dispatch) => {
   if (res.ok) {
     const user = await res.json();
     dispatch(setUser(user));
+  } else {
+    dispatch(setUser({}));
   }
 };

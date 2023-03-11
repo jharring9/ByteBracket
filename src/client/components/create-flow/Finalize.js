@@ -14,8 +14,9 @@ import {
 import { setCreateStage } from "../../store/createStageSlice";
 import { Transition } from "@headlessui/react";
 import ReactGA from "react-ga4";
+import { addLeague } from "../../store/userSlice";
 
-export const Finalize = () => {
+export const Finalize = ({ league }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
@@ -46,7 +47,7 @@ export const Finalize = () => {
       setLoading(false);
       return;
     } else setNameError(null);
-    const res = await fetch(`/v1/${user.username}/bracket`, {
+    const submitResponse = await fetch(`/v1/${user.username}/bracket`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -60,7 +61,37 @@ export const Finalize = () => {
         stats: stats,
       }),
     });
-    if (res.ok) {
+    if (!submitResponse.ok) {
+      const data = await submitResponse.json();
+      setError(data.error);
+      return;
+    }
+    if (league) {
+      dispatch(addLeague(league));
+      const bracketId = (await submitResponse.json()).id;
+      const enterBracketResponse = await fetch(`/v1/league/${league}`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          bracketId: bracketId,
+          username: user.username,
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      if (enterBracketResponse.ok) {
+        ReactGA.event({ action: "createbracket", category: "bracket" });
+        dispatch(resetStats);
+        dispatch(clearTop25);
+        dispatch(resetBracket);
+        dispatch(setCreateStage(1));
+        navigate(`/leagues/${league}`);
+        return;
+      }
+    }
+
+    if (submitResponse.ok) {
       ReactGA.event({ action: "createbracket", category: "bracket" });
       dispatch(resetStats);
       dispatch(clearTop25);
@@ -68,7 +99,7 @@ export const Finalize = () => {
       dispatch(setCreateStage(1));
       navigate("/account");
     } else {
-      const data = await res.json();
+      const data = await submitResponse.json();
       setError(data.error);
     }
     setLoading(false);
@@ -155,14 +186,14 @@ export const Finalize = () => {
             <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
               Please{" "}
               <Link
-                to="/login?return=create"
+                to={`/login?return=create${league ? `%2F${league}` : ""}`}
                 className="font-medium text-indigo-600 hover:underline"
               >
                 log in
               </Link>{" "}
               or{" "}
               <Link
-                to="/register?return=create"
+                to={`/register?return=create${league ? `%2F${league}` : ""}`}
                 className="font-medium text-indigo-600 hover:underline"
               >
                 create a free account
