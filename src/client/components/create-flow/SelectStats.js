@@ -28,12 +28,12 @@ export const SelectStats = () => {
     { title: "SOS", value: stats.sos, color: "#FDDA0D" },
     { title: "PPG", value: stats.ppg, color: "#add45c" },
     { title: "OPPG", value: stats.oppg, color: "#56c785" },
-    { title: "FG%", value: stats.fg, color: "#00baad" },
+    { title: "Big Wins", value: stats.Quad1, color: "#00baad" },
     { title: "3P%", value: stats.tpm, color: "#2b7b9b" },
     { title: "FTM", value: stats.ft, color: "#3e3d6b" },
     { title: "TO", value: stats.to, color: "#c70039" },
     { title: "TOF", value: stats.stlblk, color: "#ff5833" },
-    { title: "Big Wins", value: stats.Quad1, color: "#ff8c19" },
+    { title: "KenPom Eff", value: stats.kenpom, color: "#ff8c19" },
   ];
 
   const celebStats = {
@@ -42,24 +42,24 @@ export const SelectStats = () => {
       sos: 10,
       ppg: 3,
       oppg: 3,
-      fg: 2,
       ft: 5,
       tpm: 6,
       stlblk: 2,
       to: 1,
       Quad1: 9,
+      kenpom: 10,
     },
     "Snapback Jack": {
-      wl: 10,
-      sos: 9,
-      ppg: 4,
-      oppg: 2,
-      fg: 1,
-      ft: 7,
-      tpm: 3,
-      stlblk: 2,
-      to: 1,
+      wl: 3,
+      sos: 8,
+      ppg: 6,
+      oppg: 8,
+      ft: 6,
+      tpm: 5,
+      stlblk: 5,
+      to: 7,
       Quad1: 9,
+      kenpom: 8,
     },
   };
 
@@ -74,12 +74,12 @@ export const SelectStats = () => {
         SOS: stats.sos,
         PPG: stats.ppg,
         OPPG: stats.oppg,
-        "FG%": stats.fg,
+        Quad1: stats.Quad1,
         "3PM": stats.tpm,
         FTM: stats.ft,
         TO: stats.to,
         "STL/BLK": stats.stlblk,
-        "Big Wins": stats.Quad1,
+        "kenpom": stats.kenpom,
       }),
       method: "POST",
       credentials: "include",
@@ -182,10 +182,10 @@ export const SelectStats = () => {
                 setValue={(val) => dispatch(setStats({ ...stats, oppg: val }))}
               />
               <StatSelection
-                name="Field Goal %"
-                details="The percentage of their shots that go in, or how efficient they are."
-                value={stats.fg}
-                setValue={(val) => dispatch(setStats({ ...stats, fg: val }))}
+                name="Big Wins"
+                details="The total number of significant (Quad 1) wins that a team has."
+                value={stats.Quad1}
+                setValue={(val) => dispatch(setStats({ ...stats, Quad1: val }))}
               />
             </div>
             <div className="md:order-2 lg:order-3">
@@ -216,10 +216,12 @@ export const SelectStats = () => {
                 }
               />
               <StatSelection
-                name="Big Wins"
-                details="The total number of significant (Quad 1) wins that a team has."
-                value={stats.Quad1}
-                setValue={(val) => dispatch(setStats({ ...stats, Quad1: val }))}
+                name="Advanced: KenPom Efficiency"
+                details="Ken Pomeroy adjusted efficiency margin, a combination of how efficient a team's offense and defense is."
+                value={stats.kenpom}
+                setValue={(val) =>
+                  dispatch(setStats({ ...stats, kenpom: val }))
+                }
               />
             </div>
             <div className="align-middle md:order-3 lg:order-2">
