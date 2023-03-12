@@ -77,10 +77,10 @@ export const lambdaSlice = createSlice({
 
 const generateBracket = () => {
   const regions = [
-    { name: "East Region", rounds: [] },
-    { name: "West Region", rounds: [] },
     { name: "South Region", rounds: [] },
+    { name: "East Region", rounds: [] },
     { name: "Midwest Region", rounds: [] },
+    { name: "West Region", rounds: [] },
     {
       name: "Final Four & Championship",
       rounds: [

@@ -27,10 +27,12 @@ export const Leagues = () => {
       if (user.username) {
         await fetch("/v1/leagues/public")
           .then(async (res) => await res.json())
-          .then((data) => setPublicLeagues(data));
+          .then((data) => setPublicLeagues(data))
+          .catch((err) => console.log(err));
         await fetch("/v1/leagues/my")
           .then(async (res) => await res.json())
-          .then((data) => setYourLeagues(data));
+          .then((data) => setYourLeagues(data))
+          .catch((err) => console.log(err));
       }
       setLoading(false);
     };
