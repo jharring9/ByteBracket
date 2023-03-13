@@ -371,7 +371,7 @@ export const SnapBackLeague = () => {
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
-                  {entries.length} entries
+                  200+ entries
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
                   <CalendarIcon
@@ -452,7 +452,6 @@ export const SnapBackLeague = () => {
           </div>
           <div className="flex-0 hidden w-1/3 lg:block">
             <LeagueInformation
-              entries={entries}
               entriesPerUser={maxPerUser}
               closeDate={closeDate}
             />
@@ -496,7 +495,7 @@ const NoEntriesCard = ({ setEnterModal, getBrackets }) => {
 /**
  * Displays the league information in a side panel.
  */
-const LeagueInformation = ({ entries, entriesPerUser, closeDate }) => {
+const LeagueInformation = ({ entriesPerUser, closeDate }) => {
   return (
     <div className="m-6 overflow-hidden rounded-lg bg-white shadow">
       <div className="px-4 py-5 sm:px-6">
@@ -527,7 +526,7 @@ const LeagueInformation = ({ entries, entriesPerUser, closeDate }) => {
               className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
               aria-hidden="true"
             />
-            {entries.length} brackets entered
+            200+ brackets entered
           </div>
         </div>
         <div className="relative mt-6">

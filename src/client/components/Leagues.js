@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 export const Leagues = () => {
   const { user } = useSelector((state) => state.user);
-  const [publicLeagues, setPublicLeagues] = useState([]);
+  // const [publicLeagues, setPublicLeagues] = useState([]);
   const [yourLeagues, setYourLeagues] = useState([]);
   const [loading, setLoading] = useState(true);
   const sponsoredLeagues = [
@@ -25,10 +25,10 @@ export const Leagues = () => {
   useEffect(() => {
     const getLeagues = async () => {
       if (user.username) {
-        await fetch("/v1/leagues/public")
-          .then(async (res) => await res.json())
-          .then((data) => setPublicLeagues(data))
-          .catch((err) => console.log(err));
+        // await fetch("/v1/leagues/public")
+        //   .then(async (res) => await res.json())
+        //   .then((data) => setPublicLeagues(data))
+        //   .catch((err) => console.log(err));
         await fetch("/v1/leagues/my")
           .then(async (res) => await res.json())
           .then((data) => setYourLeagues(data))
@@ -67,11 +67,11 @@ export const Leagues = () => {
         title="Sponsored Leagues"
       />
       <LeagueList leagues={yourLeagues} title="Your Leagues" paginate={false} />
-      <LeagueList
-        leagues={publicLeagues}
-        title="Public Leagues"
-        paginate={false}
-      />
+      {/*<LeagueList*/}
+      {/*  leagues={publicLeagues}*/}
+      {/*  title="Public Leagues"*/}
+      {/*  paginate={false}*/}
+      {/*/>*/}
     </LoadingWrapper>
   ) : (
     <NotLoggedInCard />
@@ -110,7 +110,6 @@ export const LeagueList = ({ title, leagues, paginate }) => {
                       <span className="text-md truncate font-bold">
                         {league.name}
                       </span>
-                      <span>{league.entryCount} entries</span>
                       <time dateTime={league.lockDate}>
                         Locks {formatDate(league.lockDate)}
                       </time>
@@ -179,12 +178,6 @@ export const LeagueList = ({ title, leagues, paginate }) => {
                     {leagues.length !== 0 && (
                       <>
                         <th
-                          className="bg-gray-50 px-6 py-3 text-right text-sm font-semibold text-gray-900"
-                          scope="col"
-                        >
-                          Entries
-                        </th>
-                        <th
                           className="hidden bg-gray-50 px-6 py-3 text-left text-sm font-semibold text-gray-900 md:block"
                           scope="col"
                         >
@@ -218,9 +211,6 @@ export const LeagueList = ({ title, leagues, paginate }) => {
                             </p>
                           </Link>
                         </div>
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-center text-sm text-gray-500">
-                        {league.entryCount}
                       </td>
                       <td className="hidden whitespace-nowrap px-6 py-4 text-left text-sm text-gray-500 md:block">
                         <span className="inline-flex items-center rounded-full px-2.5 py-0.5">

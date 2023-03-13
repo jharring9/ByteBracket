@@ -369,7 +369,7 @@ export const ViewLeague = () => {
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
-                  {entries.length} entries
+                  {entries.length >= 25 ? "25+" : entries.length} entries
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
                   <KeyIcon
@@ -774,7 +774,7 @@ const LeagueInformation = ({
                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
                 aria-hidden="true"
               />
-              {entries.length} brackets entered
+              {entries.length >= 25 ? "25+" : entries.length} brackets entered
             </div>
             <div className="mt-2 flex items-center text-sm text-gray-700">
               <KeyIcon
