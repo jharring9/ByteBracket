@@ -606,7 +606,7 @@ export const EntryListItem = ({ entry, leagueId, isOpen, logos, navigate }) => {
                   #{entry.rank}
                 </h1>
               </div>
-              <div className="w-16">
+              <div className="ml-6 w-16">
                 <div className="flex items-center">
                   <img
                     className="mr-3 h-12 group-hover:opacity-75"
@@ -684,7 +684,7 @@ export const MyEntryListItem = ({
                   #{entry.rank}
                 </h1>
               </div>
-              <div className="ml-4 w-16">
+              <div className="ml-6 w-16">
                 <div className="flex items-center">
                   <img
                     className="mr-3 h-12 group-hover:opacity-75"
