@@ -32,6 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ManageLeague } from "./ManageLeague";
 import { addLeague } from "../../store/userSlice";
 import ReactGA from "react-ga4";
+import { AFTER_START } from "../App";
 
 export const ViewLeague = () => {
   /* Page state */
@@ -52,6 +53,7 @@ export const ViewLeague = () => {
   /* League information */
   const [leagueName, setLeagueName] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
+  const [entryCount, setEntryCount] = useState(0);
   const [entries, setEntries] = useState([]);
   const [myEntries, setMyEntries] = useState([]);
   const [manager, setManager] = useState("");
@@ -100,9 +102,10 @@ export const ViewLeague = () => {
     setManager(data.managerId);
     setCreationDate(formatDate(data.created));
     setCode(data.code);
+    setEntryCount(data.entries);
     setMaxPerUser(data.entriesPerUser);
     setCloseDate(data.lockDate);
-    setLeagueOpen(new Date(data.lockDate) > new Date());
+    setLeagueOpen(!AFTER_START);
     setCodeModal(false);
     await getTopEntries();
     await getMyEntries();
@@ -112,7 +115,7 @@ export const ViewLeague = () => {
   const getTopEntries = async () => {
     const response = await fetch(`/v1/league/${leagueId}/top`);
     const data = await response.json();
-    setEntries(data);
+    setEntries(rankTeamsWithTies(data));
   };
 
   const getMyEntries = async () => {
@@ -369,7 +372,7 @@ export const ViewLeague = () => {
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
-                  {entries.length >= 25 ? "25+" : entries.length} entries
+                  {entryCount} entries
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
                   <KeyIcon
@@ -471,7 +474,7 @@ export const ViewLeague = () => {
           </div>
           <LeagueInformation
             isPrivate={isPrivate}
-            entries={entries}
+            entryCount={entryCount}
             manager={manager}
             creationDate={creationDate}
             entriesPerUser={maxPerUser}
@@ -598,12 +601,12 @@ export const EntryListItem = ({ entry, leagueId, isOpen, logos, navigate }) => {
             className="flex min-w-0 flex-1 items-center"
           >
             <>
-              <div className="w-4 md:w-10">
+              <div className="w-6 md:w-10">
                 <h1 className="text-xl font-bold group-hover:text-gray-500">
-                  {entry.rank}
+                  #{entry.rank}
                 </h1>
               </div>
-              <div className="w-16">
+              <div className="ml-6 w-16">
                 <div className="flex items-center">
                   <img
                     className="mr-3 h-12 group-hover:opacity-75"
@@ -673,15 +676,15 @@ export const MyEntryListItem = ({
         <div className="flex items-center py-5 px-4 sm:py-6 sm:px-0">
           <div
             onClick={() => navigate(`/bracket/${entry.username}/${entry.id}`)}
-            className="flex min-w-0 flex-1 items-center"
+            className="flex grow items-center"
           >
             <>
-              <div className="w-4 md:w-10">
+              <div className="w-10">
                 <h1 className="text-xl font-bold group-hover:text-gray-500">
-                  {entry.rank}
+                  #{entry.rank}
                 </h1>
               </div>
-              <div className="w-16">
+              <div className="ml-6 w-16">
                 <div className="flex items-center">
                   <img
                     className="mr-3 h-12 group-hover:opacity-75"
@@ -704,27 +707,37 @@ export const MyEntryListItem = ({
                   <span className="truncate">Your Bracket</span>
                 </p>
               </div>
+              <div>
+                <div>
+                  <h2 className="flex justify-center text-xl font-bold text-gray-900">
+                    {entry.points}
+                  </h2>
+                  <h6 className="flex items-center justify-center text-sm text-gray-900">
+                    points
+                  </h6>
+                </div>
+              </div>
             </div>
           </div>
-          <div>
-            {isOpen ? (
-              <div className="w-24 sm:mr-0">
-                <button
-                  title="Remove this bracket from the league"
-                  onClick={() => setShowModal(true)}
-                  className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-0.5 px-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white"
-                >
-                  Remove
-                  <XMarkIcon className="ml-1 h-6 w-6" />
-                </button>
-              </div>
-            ) : (
+          {isOpen ? (
+            <div className="sm:mr-0">
+              <button
+                title="Remove this bracket from the league"
+                onClick={() => setShowModal(true)}
+                className="mr-2 inline-flex items-center rounded-lg border border-red-700 p-0.5 px-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white"
+              >
+                Remove
+                <XMarkIcon className="ml-1 h-6 w-6" />
+              </button>
+            </div>
+          ) : (
+            <div>
               <ChevronRightIcon
                 className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
                 aria-hidden="true"
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </li>
@@ -736,7 +749,7 @@ export const MyEntryListItem = ({
  */
 const LeagueInformation = ({
   isPrivate,
-  entries,
+  entryCount,
   manager,
   creationDate,
   entriesPerUser,
@@ -774,7 +787,7 @@ const LeagueInformation = ({
                 className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
                 aria-hidden="true"
               />
-              {entries.length >= 25 ? "25+" : entries.length} brackets entered
+              {entryCount} brackets entered
             </div>
             <div className="mt-2 flex items-center text-sm text-gray-700">
               <KeyIcon

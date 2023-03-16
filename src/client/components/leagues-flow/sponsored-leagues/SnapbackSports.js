@@ -32,6 +32,7 @@ import {
   rankTeamsWithTies,
 } from "../ViewLeague";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { AFTER_START } from "../../App";
 
 export const SnapBackLeague = () => {
   /* Page state */
@@ -53,6 +54,7 @@ export const SnapBackLeague = () => {
   const [manager, setManager] = useState("");
   const [entries, setEntries] = useState([]);
   const [myEntries, setMyEntries] = useState([]);
+  const [entryCount, setEntryCount] = useState(0);
   const [code, setCode] = useState("");
   const [maxPerUser, setMaxPerUser] = useState(0);
   const [closeDate, setCloseDate] = useState(new Date().toISOString());
@@ -86,11 +88,11 @@ export const SnapBackLeague = () => {
     const data = await response.json();
     setLeagueName(data.name);
     setManager(data.managerId);
-    setEntries(rankTeamsWithTies(data.entries));
     setCode(data.code);
+    setEntryCount(data.entries);
     setMaxPerUser(data.entriesPerUser);
     setCloseDate(data.lockDate);
-    setLeagueOpen(new Date(data.lockDate) > new Date());
+    setLeagueOpen(!AFTER_START);
     setCodeModal(false);
     await getTopEntries();
     await getMyEntries();
@@ -100,7 +102,7 @@ export const SnapBackLeague = () => {
   const getTopEntries = async () => {
     const response = await fetch(`/v1/league/snapback/top`);
     const data = await response.json();
-    setEntries(data);
+    setEntries(rankTeamsWithTies(data));
   };
 
   const getMyEntries = async () => {
@@ -371,7 +373,7 @@ export const SnapBackLeague = () => {
                     className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                     aria-hidden="true"
                   />
-                  200+ entries
+                  {entryCount} entries
                 </div>
                 <div className="mt-2 flex items-center text-sm text-gray-500">
                   <CalendarIcon
@@ -454,6 +456,7 @@ export const SnapBackLeague = () => {
             <LeagueInformation
               entriesPerUser={maxPerUser}
               closeDate={closeDate}
+              entryCount={entryCount}
             />
             {manager === user.username && (
               <GrantEntries onGrant={grantEntries} />
@@ -495,7 +498,7 @@ const NoEntriesCard = ({ setEnterModal, getBrackets }) => {
 /**
  * Displays the league information in a side panel.
  */
-const LeagueInformation = ({ entriesPerUser, closeDate }) => {
+const LeagueInformation = ({ entriesPerUser, closeDate, entryCount }) => {
   return (
     <div className="m-6 overflow-hidden rounded-lg bg-white shadow">
       <div className="px-4 py-5 sm:px-6">
@@ -526,7 +529,7 @@ const LeagueInformation = ({ entriesPerUser, closeDate }) => {
               className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-600"
               aria-hidden="true"
             />
-            200+ brackets entered
+            {entryCount} brackets entered
           </div>
         </div>
         <div className="relative mt-6">

@@ -205,7 +205,7 @@ export const BracketNotActive = ({ before }) => {
         <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
           {before
             ? "The bracket creation window will open on March 13th. Check back then to make your picks! Until then, you can still select stats to use in your future brackets."
-            : "The bracket creation window has closed. Check back next year to make your picks! You can still view your existing brackets, join leagues, and modify stats."}
+            : "The bracket creation window has closed. Check back next year to make your picks! You can still view your existing brackets, view leagues, and modify stats."}
         </p>
       </div>
     </div>
