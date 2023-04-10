@@ -10,8 +10,8 @@ import { useSelector } from "react-redux";
 
 export const Leagues = () => {
   const { user } = useSelector((state) => state.user);
-  // const [publicLeagues, setPublicLeagues] = useState([]);
-  const [yourLeagues, setYourLeagues] = useState([]);
+  const [publicLeagues, setPublicLeagues] = useState([]);
+  // const [yourLeagues, setYourLeagues] = useState([]);
   const [loading, setLoading] = useState(true);
   const sponsoredLeagues = [
     {
@@ -25,14 +25,14 @@ export const Leagues = () => {
   useEffect(() => {
     const getLeagues = async () => {
       if (user.username) {
-        // await fetch("/v1/leagues/public")
-        //   .then(async (res) => await res.json())
-        //   .then((data) => setPublicLeagues(data))
-        //   .catch((err) => console.log(err));
-        await fetch("/v1/leagues/my")
+        await fetch("/v1/leagues/public")
           .then(async (res) => await res.json())
-          .then((data) => setYourLeagues(data))
+          .then((data) => setPublicLeagues(data))
           .catch((err) => console.log(err));
+        // await fetch("/v1/leagues/my")
+        //   .then(async (res) => await res.json())
+        //   .then((data) => setYourLeagues(data))
+        //   .catch((err) => console.log(err));
       }
       setLoading(false);
     };
@@ -66,12 +66,12 @@ export const Leagues = () => {
         leagues={sponsoredLeagues}
         title="Sponsored Leagues"
       />
-      <LeagueList leagues={yourLeagues} title="Your Leagues" paginate={false} />
-      {/*<LeagueList*/}
-      {/*  leagues={publicLeagues}*/}
-      {/*  title="Public Leagues"*/}
-      {/*  paginate={false}*/}
-      {/*/>*/}
+      {/*<LeagueList leagues={yourLeagues} title="Your Leagues" paginate={false} />*/}
+      <LeagueList
+        leagues={publicLeagues}
+        title="Public Leagues"
+        paginate={false}
+      />
     </LoadingWrapper>
   ) : (
     <NotLoggedInCard />

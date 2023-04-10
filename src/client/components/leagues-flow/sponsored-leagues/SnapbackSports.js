@@ -32,7 +32,6 @@ import {
   rankTeamsWithTies,
 } from "../ViewLeague";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
-import { AFTER_START } from "../../App";
 
 export const SnapBackLeague = () => {
   /* Page state */
@@ -92,7 +91,7 @@ export const SnapBackLeague = () => {
     setEntryCount(data.entries);
     setMaxPerUser(data.entriesPerUser);
     setCloseDate(data.lockDate);
-    setLeagueOpen(!AFTER_START);
+    setLeagueOpen(false);
     setCodeModal(false);
     await getTopEntries();
     await getMyEntries();
