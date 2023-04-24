@@ -15,13 +15,8 @@ import { About } from "./About";
 import { useDispatch } from "react-redux";
 import { ViewBracket } from "./ViewBracket";
 import { AcceptOauthCallback } from "./AcceptOauthCallback";
-import { ViewLeague } from "./leagues-flow/ViewLeague";
 import { checkSession, fetchImages } from "./shared";
-import { Leagues } from "./Leagues";
-import { JoinLeague } from "./leagues-flow/JoinLeague";
 import { PrivacyPolicy } from "./PrivacyPolicy";
-import { CreateLeague } from "./leagues-flow/CreateLeague";
-import { SnapBackLeague } from "./leagues-flow/sponsored-leagues/SnapbackSports";
 import { SnapbackLanding } from "./leagues-flow/sponsored-leagues/SnapbackLanding";
 
 /* Google Analytics */
@@ -36,7 +31,7 @@ export default function App() {
   const [navigation, setNavigation] = useState([
     { name: "Home", href: "/home", current: false },
     { name: "Create Bracket", href: "/create", current: false },
-    { name: "Leagues", href: "/leagues", current: false },
+    // { name: "Leagues", href: "/leagues", current: false },
     { name: "About", href: "/about", current: false },
   ]);
 
@@ -52,20 +47,20 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/create/:league?" element={<Create />} />
+          <Route path="/create" element={<Create />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signout" element={<Logout />} />
           <Route path="/register" element={<Register />} />
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
-          <Route path="/leagues" element={<Leagues />} />
-          <Route path="/leagues/:id/:urlcode?" element={<ViewLeague />} />
-          <Route
-            path="/leagues/snapback/:urlcode?"
-            element={<SnapBackLeague />}
-          />
-          <Route path="/join/:id/:code?" element={<JoinLeague />} />
-          <Route path="/newleague" element={<CreateLeague />} />
+          {/*<Route path="/leagues" element={<Leagues />} />*/}
+          {/*<Route path="/leagues/:id/:urlcode?" element={<ViewLeague />} />*/}
+          {/*<Route*/}
+          {/*  path="/leagues/snapback/:urlcode?"*/}
+          {/*  element={<SnapBackLeague />}*/}
+          {/*/>*/}
+          {/*<Route path="/join/:id/:code?" element={<JoinLeague />} />*/}
+          {/*<Route path="/newleague" element={<CreateLeague />} />*/}
           <Route path="/bracket/:user/:id" element={<ViewBracket />} />
           <Route
             path="/auth/callback/google"
