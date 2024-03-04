@@ -13,6 +13,10 @@ phases:
     commands:
       - npx tailwindcss -i ./public/assets/index.css -o ./public/output.css
       - webpack --config webpack.prod.js
+  post-build:
+    commands:
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+      - echo "Build completed on `date`"
 
 artifacts:
   files:
