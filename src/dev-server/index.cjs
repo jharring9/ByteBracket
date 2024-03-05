@@ -13,7 +13,7 @@ const setupServer = async () => {
   app.use(
     "/v1",
     createProxyMiddleware({
-      target: "http://localhost:80",
+      target: "http://44.211.129.83:80",
       on: {
         proxyReq: fixRequestBody,
       },
