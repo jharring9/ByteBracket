@@ -14,7 +14,6 @@ import { Account } from "./Account";
 import { About } from "./About";
 import { useDispatch } from "react-redux";
 import { ViewBracket } from "./ViewBracket";
-import { AcceptOauthCallback } from "./AcceptOauthCallback";
 import { ViewLeague } from "./leagues-flow/ViewLeague";
 import { checkSession, fetchImages } from "./shared";
 import { Leagues } from "./Leagues";
@@ -67,14 +66,6 @@ export default function App() {
           <Route path="/join/:id/:code?" element={<JoinLeague />} />
           <Route path="/newleague" element={<CreateLeague />} />
           <Route path="/bracket/:user/:id" element={<ViewBracket />} />
-          <Route
-            path="/auth/callback/google"
-            element={<AcceptOauthCallback provider="google" />}
-          />
-          <Route
-            path="/auth/callback/facebook"
-            element={<AcceptOauthCallback provider="facebook" />}
-          />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/snapback" element={<SnapbackLanding />} />
           <Route path="*" element={<NotFound />} />
