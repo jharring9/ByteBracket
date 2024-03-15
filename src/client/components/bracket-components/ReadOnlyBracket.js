@@ -233,23 +233,23 @@ export const RenderSeedComponent = ({
             </div>
           </div>
         </ChampionshipSeed>
-        <div className="absolute bottom-52 flex items-center justify-center">
-          <div className="z-10 flex h-32 w-32 flex-col items-center justify-center rounded-full bg-yellow-300">
-            <img
-              src="https://bytebracket-webassets.s3.amazonaws.com/SnapbackSports-Logos-02.png"
-              alt="Snapback Sports Logo"
-              className="mx-auto h-24"
-            />
-          </div>
-          <div className="-ml-6 flex h-32 w-32 flex-col items-center justify-center rounded-full bg-indigo-700">
-            <h1
-              className="mt-6 text-8xl text-white"
-              style={{ fontFamily: "loveloBold" }}
-            >
-              B
-            </h1>
-          </div>
-        </div>
+        {/*<div className="absolute bottom-52 flex items-center justify-center">*/}
+        {/*  <div className="z-10 flex h-32 w-32 flex-col items-center justify-center rounded-full bg-yellow-300">*/}
+        {/*    <img*/}
+        {/*      src="https://bytebracket-webassets.s3.amazonaws.com/SnapbackSports-Logos-02.png"*/}
+        {/*      alt="Snapback Sports Logo"*/}
+        {/*      className="mx-auto h-24"*/}
+        {/*    />*/}
+        {/*  </div>*/}
+        {/*  <div className="-ml-6 flex h-32 w-32 flex-col items-center justify-center rounded-full bg-indigo-700">*/}
+        {/*    <h1*/}
+        {/*      className="mt-6 text-8xl text-white"*/}
+        {/*      style={{ fontFamily: "loveloBold" }}*/}
+        {/*    >*/}
+        {/*      B*/}
+        {/*    </h1>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         {onShare && (
           <div className="absolute bottom-20 flex items-center justify-center">
             <div className="mb-4 flex w-full justify-center">
