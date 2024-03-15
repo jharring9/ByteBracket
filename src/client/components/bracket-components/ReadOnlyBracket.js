@@ -201,7 +201,7 @@ export const RenderSeedComponent = ({
         {bracketName && bracketCreator && (
           <div className="absolute top-10 flex items-center justify-center">
             <div className="mx-auto hidden max-w-xl space-y-4 xl:block">
-              <h1 className="text-center text-center text-3xl font-bold text-gray-900">
+              <h1 className="text-center text-3xl font-bold text-gray-900">
                 {bracketName}
               </h1>
               <p className="text-center text-gray-600">
