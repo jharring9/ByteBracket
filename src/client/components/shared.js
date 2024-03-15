@@ -343,29 +343,6 @@ export const ProgressBar = ({ dispatch }) => {
   );
 };
 
-export const DisableStat = ({
-  value,
-  disabledValue,
-  setValue,
-  setDisabledValue,
-}) => (
-  <button
-    type="button"
-    onClick={() => {
-      setDisabledValue(value);
-      return setValue(disabledValue);
-    }}
-    className={classNames(
-      disabledValue !== 0
-        ? "border-gray-500 bg-gray-200 text-gray-500 hover:bg-gray-500 hover:text-white"
-        : "border-red-700 text-red-700 hover:bg-red-700 hover:text-white",
-      "mr-2 inline-flex items-center rounded-lg border p-0.5 text-center text-sm font-medium"
-    )}
-  >
-    <XMarkIcon className="h-5 w-5" />
-  </button>
-);
-
 export const CreateCard = ({ children, onBack, onNext, loading }) => (
   <div className="relative mx-auto">
     <div className="mx-auto mt-2 max-w-screen-xl px-4 pb-6 sm:px-6 lg:mt-4 lg:px-8">
