@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.prod.js",
-    "start": "webpack --config webpack.dev.js && nodemon src/dev-server/index.cjs",
+    "start": "npm run tailwind && webpack --config webpack.dev.js && nodemon src/dev-server/index.cjs",
     "tailwind": "npx tailwindcss -i ./public/assets/index.css -o ./public/output.css"
   },
   "eslintConfig": {

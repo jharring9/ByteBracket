@@ -8,15 +8,14 @@ Installs all the dependencies for the project.
 
 ## Build Scripts
 
-
-### `npm run tailwind`
-
-Builds and minifies the tailwind css file.
-
 ### `npm run start`
 
-*For development only.* builds the app and runs a development server on port 8080.
+_For development only._ Builds the app and runs a development server on port 8080. Creates a proxy to the production backend server to test against real data.
 
 ### `npm run build`
 
-*For production only.* bundles the webapp and outputs it to the `build` folder.
+_For production only._ Bundles the webapp and outputs it to the `build` folder.
+
+### `npm run tailwind`
+
+Builds and minifies the tailwind css file. Not required for local development, as it is included in the `npm run start` command.
