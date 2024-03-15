@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReadOnlyBracket } from "./bracket-components/ReadOnlyBracket";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { setField } from "../store/lambdaSlice";
 import { BackButton, fetchImages, ShareButton } from "./shared";
 import { Dialog, Transition } from "@headlessui/react";
 import { ClipboardDocumentIcon, LinkIcon } from "@heroicons/react/20/solid";
+import { Helmet } from "react-helmet";
 
 export const ViewBracket = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export const ViewBracket = () => {
   const [shareModal, setShareModal] = useState(false);
   const [name, setName] = useState("");
   const { user, id } = useParams();
+  const { logos, field } = useSelector((state) => state.lambda);
 
   useEffect(() => {
     const fetchField = async () => {
@@ -63,56 +65,59 @@ export const ViewBracket = () => {
     fetchBracket();
   }, [user, id]);
 
-  useEffect(() => {
-    document.title = "View Bracket - ByteBracket";
-  }, []);
-
   return (
-    <Transition
-      show={loaded}
-      enter="transition ease-out duration-[2000ms]"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-      className="relative mx-auto"
-    >
-      <ShareModal
-        isOpen={shareModal}
-        setOpen={setShareModal}
-        bracketId={id}
-        userId={user}
-      />
-      <div className="mt-2 mb-4 flex w-screen justify-center xl:hidden">
-        <div className="space-y-4">
-          <h1 className="text-center text-center text-3xl font-bold text-gray-900">
-            {name}
-          </h1>
-          <p className="text-center text-gray-600">Created by {user}</p>
-        </div>
-      </div>
-      <div className="mb-4 flex w-screen justify-center xl:hidden">
-        <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
-          <BackButton onClick={() => navigate(-1)} />
-        </div>
-        <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
-          <ShareButton onClick={() => setShareModal(true)} />
-        </div>
-      </div>
-      <div className="mx-auto mt-4 w-screen px-4 pb-10 sm:px-6 lg:px-8">
-        <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
-          <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg">
-            <ReadOnlyBracket
-              regions={bracket}
-              champion={champion}
-              master={masterBracket}
-              masterChampion={masterChampion}
-              bracketName={name}
-              bracketCreator={user}
-              onShare={() => setShareModal(true)}
-            />
+    <>
+      <Helmet>
+        <title>View Bracket - ByteBracket</title>
+        <meta property="og:title" content="My March Madness Bracket" />
+        <meta property="og:image" content={logos[field[champion]?.name]} />
+      </Helmet>
+      <Transition
+        show={loaded}
+        enter="transition ease-out duration-[2000ms]"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        className="relative mx-auto"
+      >
+        <ShareModal
+          isOpen={shareModal}
+          setOpen={setShareModal}
+          bracketId={id}
+          userId={user}
+        />
+        <div className="mt-2 mb-4 flex w-screen justify-center xl:hidden">
+          <div className="space-y-4">
+            <h1 className="text-center text-3xl font-bold text-gray-900">
+              {name}
+            </h1>
+            <p className="text-center text-gray-600">Created by {user}</p>
           </div>
         </div>
-      </div>
-    </Transition>
+        <div className="mb-4 flex w-screen justify-center xl:hidden">
+          <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
+            <BackButton onClick={() => navigate(-1)} />
+          </div>
+          <div className="mt-4 flex justify-center lg:mt-2 lg:justify-start">
+            <ShareButton onClick={() => setShareModal(true)} />
+          </div>
+        </div>
+        <div className="mx-auto mt-4 w-screen px-4 pb-10 sm:px-6 lg:px-8">
+          <div className="rounded-md border border-gray-600 shadow-xl sm:overflow-hidden md:rounded-lg">
+            <div className="rounded-md bg-white px-4 py-5 sm:p-6 md:rounded-lg">
+              <ReadOnlyBracket
+                regions={bracket}
+                champion={champion}
+                master={masterBracket}
+                masterChampion={masterChampion}
+                bracketName={name}
+                bracketCreator={user}
+                onShare={() => setShareModal(true)}
+              />
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </>
   );
 };
 
