@@ -8,15 +8,13 @@ import {
 } from "../shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setCreateStage } from "../../store/createStageSlice";
-import { setBracket, setRegion, setWinner } from "../../store/bracketSlice";
-import { SingleSided, winPercent } from "../bracket-components/DynamicBracket";
+import { setRegion } from "../../store/bracketSlice";
+import { SingleSided } from "../bracket-components/DynamicBracket";
 import { Transition } from "@headlessui/react";
-import ReactGA from "react-ga4";
 import { BEFORE_OPEN, AFTER_START } from "../App";
 
 export const MakePicks = () => {
   const dispatch = useDispatch();
-  const field = useSelector((state) => state.lambda.field);
   const { bracket, region, champion } = useSelector((state) => state.bracket);
   const [error, setError] = useState(null);
 
@@ -93,48 +91,6 @@ export const MakePicks = () => {
     handleBack();
   };
 
-  /**
-   * Randomly pick winners for all matchups in the current region,
-   * weighted by team's percentile.
-   */
-  const autoComplete = () => {
-    /* Autopick all favorites in the current region */
-    const copy = JSON.parse(JSON.stringify(bracket));
-    for (let i = 0; i < copy[region].rounds.length - 1; i++) {
-      for (let j = 0; j < copy[region].rounds[i].seeds.length; j++) {
-        const matchup = copy[region].rounds[i].seeds[j];
-        const p1 = field[matchup[0]].percentile;
-        const p2 = field[matchup[1]].percentile;
-        const teamOneOdds = winPercent(p1, p2);
-        copy[region].rounds[i + 1].seeds[Math.floor(j / 2)][j % 2] =
-          teamOneOdds > Math.random() * 100 ? matchup[0] : matchup[1];
-      }
-    }
-    dispatch(setBracket(copy));
-
-    /* Autopick the regional champion */
-    const finalTeam1 =
-      copy[region].rounds[copy[region].rounds.length - 1].seeds[0][0];
-    const finalTeam2 =
-      copy[region].rounds[copy[region].rounds.length - 1].seeds[0][1];
-    dispatch(
-      setWinner({
-        round: copy[region].rounds.length - 1,
-        matchup: 0,
-        position: 0,
-        seed:
-          winPercent(
-            field[finalTeam1].percentile,
-            field[finalTeam2].percentile
-          ) >
-          Math.random() * 100
-            ? finalTeam1
-            : finalTeam2,
-      })
-    );
-    ReactGA.event({ action: "autopick", category: "bracket" });
-  };
-
   return BEFORE_OPEN || AFTER_START ? (
     <BracketNotActive before={BEFORE_OPEN} />
   ) : (
@@ -160,7 +116,7 @@ export const MakePicks = () => {
               />
             </Transition>
             <div className="mx-auto max-w-xl space-y-4">
-              <h1 className="text-center text-center text-3xl font-bold text-gray-900">
+              <h1 className="text-center text-3xl font-bold text-gray-900">
                 Make Your Picks: {bracket[region].name}
               </h1>
               <p className="text-center text-gray-600">
@@ -172,12 +128,6 @@ export const MakePicks = () => {
                   Swipe left and right to adjust the bracket view.
                 </span>
               </p>
-              <button
-                className="m-2 mx-auto h-10 w-full rounded-lg border border-black bg-emerald-400 px-5 font-medium text-black text-white shadow-xl transition-colors duration-300 hover:bg-black hover:text-white"
-                onClick={autoComplete}
-              >
-                Simulate Region
-              </button>
             </div>
             <SingleSided rounds={bracket[region].rounds} />
             <div className="justify-center lg:flex">
@@ -204,7 +154,7 @@ export const BracketNotActive = ({ before }) => {
         </p>
         <p className="mx-auto mt-5 max-w-xl text-xl text-gray-500">
           {before
-            ? "The bracket creation window will open on March 13th. Check back then to make your picks! Until then, you can still select stats to use in your future brackets."
+            ? "The bracket creation window will open after Selection Sunday. Check back then to make your picks! Until then, you can still select stats to use in your future brackets."
             : "The bracket creation window has closed. Check back next year to make your picks! You can still view your existing brackets, view leagues, and modify stats."}
         </p>
       </div>
