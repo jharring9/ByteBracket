@@ -10,29 +10,21 @@ import { useSelector } from "react-redux";
 
 export const Leagues = () => {
   const { user } = useSelector((state) => state.user);
-  const [publicLeagues, setPublicLeagues] = useState([]);
-  // const [yourLeagues, setYourLeagues] = useState([]);
+  // const [publicLeagues, setPublicLeagues] = useState([]);
+  const [yourLeagues, setYourLeagues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const sponsoredLeagues = [
-    {
-      id: "snapback",
-      lockDate: "2023-03-16T05:00:00-0600",
-      name: "SnapBack Sports Bracket Challenge",
-      prizes: 2500,
-    },
-  ];
 
   useEffect(() => {
     const getLeagues = async () => {
       if (user.username) {
-        await fetch("/v1/leagues/public")
-          .then(async (res) => await res.json())
-          .then((data) => setPublicLeagues(data))
-          .catch((err) => console.log(err));
-        // await fetch("/v1/leagues/my")
+        // await fetch("/v1/leagues/public")
         //   .then(async (res) => await res.json())
-        //   .then((data) => setYourLeagues(data))
+        //   .then((data) => setPublicLeagues(data))
         //   .catch((err) => console.log(err));
+        await fetch("/v1/leagues/my")
+          .then(async (res) => await res.json())
+          .then((data) => setYourLeagues(data))
+          .catch((err) => console.log(err));
       }
       setLoading(false);
     };
@@ -62,16 +54,12 @@ export const Leagues = () => {
           </div>
         </div>
       </header>
-      <SponsoredLeaguesList
-        leagues={sponsoredLeagues}
-        title="Sponsored Leagues"
-      />
-      {/*<LeagueList leagues={yourLeagues} title="Your Leagues" paginate={false} />*/}
-      <LeagueList
-        leagues={publicLeagues}
-        title="Public Leagues"
-        paginate={false}
-      />
+      <LeagueList leagues={yourLeagues} title="Your Leagues" paginate={false} />
+      {/*<LeagueList*/}
+      {/*  leagues={publicLeagues}*/}
+      {/*  title="Public Leagues"*/}
+      {/*  paginate={false}*/}
+      {/*/>*/}
     </LoadingWrapper>
   ) : (
     <NotLoggedInCard />
@@ -131,7 +119,7 @@ export const LeagueList = ({ title, leagues, paginate }) => {
                     <span className="text-md truncate font-bold">
                       No leagues found.
                     </span>
-                    <span>Create one by clicking the button above.</span>
+                    <span>Create one to compete against your friends.</span>
                   </span>
                 </span>
               </div>

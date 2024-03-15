@@ -184,7 +184,7 @@ export const Logo = () => (
 );
 
 export const ErrorAlert = ({ header, message }) => (
-  <div className=" mx-auto mb-6 max-w-7xl rounded-md bg-red-100 p-4 px-4 px-6">
+  <div className=" mx-auto mb-6 max-w-7xl rounded-md bg-red-100 p-4 px-6">
     <div className="flex">
       <div className="flex-shrink-0">
         <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
@@ -263,7 +263,7 @@ export const ProgressBar = ({ dispatch }) => {
   return (
     <div
       aria-label="Progress"
-      className="mx-auto mt-4 flex w-full max-w-7xl justify-evenly space-x-2 p-3 px-4 px-6 "
+      className="mx-auto mt-4 flex w-full max-w-7xl justify-evenly space-x-2 p-3 px-6 "
     >
       <ol
         role="list"
@@ -342,29 +342,6 @@ export const ProgressBar = ({ dispatch }) => {
     </div>
   );
 };
-
-export const DisableStat = ({
-  value,
-  disabledValue,
-  setValue,
-  setDisabledValue,
-}) => (
-  <button
-    type="button"
-    onClick={() => {
-      setDisabledValue(value);
-      return setValue(disabledValue);
-    }}
-    className={classNames(
-      disabledValue !== 0
-        ? "border-gray-500 bg-gray-200 text-gray-500 hover:bg-gray-500 hover:text-white"
-        : "border-red-700 text-red-700 hover:bg-red-700 hover:text-white",
-      "mr-2 inline-flex items-center rounded-lg border p-0.5 text-center text-sm font-medium"
-    )}
-  >
-    <XMarkIcon className="h-5 w-5" />
-  </button>
-);
 
 export const CreateCard = ({ children, onBack, onNext, loading }) => (
   <div className="relative mx-auto">
@@ -645,28 +622,6 @@ export const ValidatedInput = ({
   );
 };
 
-export const oauth = async (provider) => {
-  await fetch(`/v1/oauth/${provider}`)
-    .then(async (res) => await res.text())
-    .then((address) => {
-      openSignInWindow(address);
-    });
-};
-
-let windowObjectReference = null;
-let previousUrl = null;
-
-const openSignInWindow = (url) => {
-  if (windowObjectReference === null || windowObjectReference.closed) {
-    windowObjectReference = window.open(url);
-  } else if (previousUrl !== url) {
-    windowObjectReference = window.open(url);
-    windowObjectReference.focus();
-  } else {
-    windowObjectReference.focus();
-  }
-  previousUrl = url;
-};
 
 export const LoadingWrapper = ({ children, isLoading }) => {
   return isLoading ? (

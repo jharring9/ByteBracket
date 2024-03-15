@@ -14,21 +14,18 @@ import { Account } from "./Account";
 import { About } from "./About";
 import { useDispatch } from "react-redux";
 import { ViewBracket } from "./ViewBracket";
-import { AcceptOauthCallback } from "./AcceptOauthCallback";
 import { ViewLeague } from "./leagues-flow/ViewLeague";
 import { checkSession, fetchImages } from "./shared";
 import { Leagues } from "./Leagues";
 import { JoinLeague } from "./leagues-flow/JoinLeague";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { CreateLeague } from "./leagues-flow/CreateLeague";
-import { SnapBackLeague } from "./leagues-flow/sponsored-leagues/SnapbackSports";
-import { SnapbackLanding } from "./leagues-flow/sponsored-leagues/SnapbackLanding";
 
 /* Google Analytics */
 ReactGA.initialize("G-GR6LZND73X");
 
 /* Bracket Creation */
-export const BEFORE_OPEN = false;
+export const BEFORE_OPEN = true;
 export const AFTER_START = false;
 
 export default function App() {
@@ -60,23 +57,10 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/leagues" element={<Leagues />} />
           <Route path="/leagues/:id/:urlcode?" element={<ViewLeague />} />
-          <Route
-            path="/leagues/snapback/:urlcode?"
-            element={<SnapBackLeague />}
-          />
           <Route path="/join/:id/:code?" element={<JoinLeague />} />
           <Route path="/newleague" element={<CreateLeague />} />
           <Route path="/bracket/:user/:id" element={<ViewBracket />} />
-          <Route
-            path="/auth/callback/google"
-            element={<AcceptOauthCallback provider="google" />}
-          />
-          <Route
-            path="/auth/callback/facebook"
-            element={<AcceptOauthCallback provider="facebook" />}
-          />
           <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/snapback" element={<SnapbackLanding />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer navigation={navigation} />

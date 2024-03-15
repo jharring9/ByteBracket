@@ -123,10 +123,10 @@ export const ManageLeague = ({
                   onChange={(e) => setCloseDate(e.target.value)}
                   className="block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 shadow-sm focus:border-indigo-700 focus:ring-indigo-700"
                 >
-                  <option value="2023-03-13T05:00:00-1700">March 13</option>
-                  <option value="2023-03-14T05:00:00-1700">March 14</option>
-                  <option value="2023-03-15T05:00:00-1700">March 15</option>
-                  <option value="2023-03-16T05:00:00-1700">March 16</option>
+                  <option value="2024-03-18T05:00:00-1700">March 18</option>
+                  <option value="2024-03-19T05:00:00-1700">March 19</option>
+                  <option value="2024-03-20T05:00:00-1700">March 20</option>
+                  <option value="2024-03-21T05:00:00-1700">March 21</option>
                 </select>
               </div>
             </div>
