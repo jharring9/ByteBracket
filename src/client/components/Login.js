@@ -1,14 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  checkSession,
-  ErrorAlert,
-  Facebook,
-  Google,
-  oauth,
-  ValidatedInput,
-  validateInput,
-} from "./shared";
+import { ErrorAlert, ValidatedInput, validateInput } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
 import ReactGA from "react-ga4";
@@ -72,11 +64,6 @@ export const Login = () => {
     } else {
       setError(data.error);
     }
-  };
-
-  const handleOauth = (provider) => {
-    oauth(provider);
-    loginInterval.current = setInterval(() => checkSession(dispatch), 1000);
   };
 
   return (
@@ -166,37 +153,37 @@ export const Login = () => {
             </div>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
+          {/*<div className="mt-6">*/}
+          {/*  <div className="relative">*/}
+          {/*    <div className="absolute inset-0 flex items-center">*/}
+          {/*      <div className="w-full border-t border-gray-300" />*/}
+          {/*    </div>*/}
+          {/*    <div className="relative flex justify-center text-sm">*/}
+          {/*      <span className="bg-white px-2 text-gray-500">*/}
+          {/*        Or continue with*/}
+          {/*      </span>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
 
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <div>
-                <div
-                  onClick={() => handleOauth("facebook")}
-                  className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
-                >
-                  <Facebook />
-                </div>
-              </div>
-              <div>
-                <div
-                  onClick={() => handleOauth("google")}
-                  className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"
-                >
-                  <Google />
-                </div>
-              </div>
-            </div>
-          </div>
+          {/*  <div className="mt-6 grid grid-cols-2 gap-3">*/}
+          {/*    <div>*/}
+          {/*      <div*/}
+          {/*        onClick={() => handleOauth("facebook")}*/}
+          {/*        className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"*/}
+          {/*      >*/}
+          {/*        <Facebook />*/}
+          {/*      </div>*/}
+          {/*    </div>*/}
+          {/*    <div>*/}
+          {/*      <div*/}
+          {/*        onClick={() => handleOauth("google")}*/}
+          {/*        className="inline-flex w-full cursor-pointer justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50"*/}
+          {/*      >*/}
+          {/*        <Google />*/}
+          {/*      </div>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
       </div>
     </div>

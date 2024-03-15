@@ -184,7 +184,7 @@ export const Logo = () => (
 );
 
 export const ErrorAlert = ({ header, message }) => (
-  <div className=" mx-auto mb-6 max-w-7xl rounded-md bg-red-100 p-4 px-4 px-6">
+  <div className=" mx-auto mb-6 max-w-7xl rounded-md bg-red-100 p-4 px-6">
     <div className="flex">
       <div className="flex-shrink-0">
         <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
@@ -263,7 +263,7 @@ export const ProgressBar = ({ dispatch }) => {
   return (
     <div
       aria-label="Progress"
-      className="mx-auto mt-4 flex w-full max-w-7xl justify-evenly space-x-2 p-3 px-4 px-6 "
+      className="mx-auto mt-4 flex w-full max-w-7xl justify-evenly space-x-2 p-3 px-6 "
     >
       <ol
         role="list"
@@ -622,28 +622,6 @@ export const ValidatedInput = ({
   );
 };
 
-export const oauth = async (provider) => {
-  await fetch(`/v1/oauth/${provider}`)
-    .then(async (res) => await res.text())
-    .then((address) => {
-      openSignInWindow(address);
-    });
-};
-
-let windowObjectReference = null;
-let previousUrl = null;
-
-const openSignInWindow = (url) => {
-  if (windowObjectReference === null || windowObjectReference.closed) {
-    windowObjectReference = window.open(url);
-  } else if (previousUrl !== url) {
-    windowObjectReference = window.open(url);
-    windowObjectReference.focus();
-  } else {
-    windowObjectReference.focus();
-  }
-  previousUrl = url;
-};
 
 export const LoadingWrapper = ({ children, isLoading }) => {
   return isLoading ? (
