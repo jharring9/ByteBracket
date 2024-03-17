@@ -1,12 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
+import { Helmet } from "react-helmet";
 
 export const PrivacyPolicy = () => {
-  useEffect(() => {
-    document.title = "Privacy Policy - ByteBracket";
-  }, []);
-  
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
+      <Helmet title="Privacy Policy - ByteBracket" />
       <div className="mt-4 max-w-7xl">
         <h1 className="text-center text-3xl font-bold">Privacy Policy</h1>
         <p className="text-center text-sm">Updated February 21, 2023</p>

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReadOnlyBracket } from "./bracket-components/ReadOnlyBracket";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setField } from "../store/lambdaSlice";
 import { BackButton, fetchImages, ShareButton } from "./shared";
 import { Dialog, Transition } from "@headlessui/react";
@@ -67,9 +67,7 @@ export const ViewBracket = () => {
 
   return (
     <>
-      <Helmet>
-        <title>View Bracket - ByteBracket</title>
-        <meta property="og:title" content="My March Madness Bracket" />
+      <Helmet title="View Bracket - ByteBracket">
         <meta property="og:image" content={logos[field[champion]?.name]} />
       </Helmet>
       <Transition
