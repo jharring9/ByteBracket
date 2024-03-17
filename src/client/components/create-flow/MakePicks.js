@@ -120,9 +120,9 @@ export const MakePicks = () => {
                 Make Your Picks: {bracket[region].name}
               </h1>
               <p className="text-center text-gray-600">
-                Select a winner for each matchup. Alternatively, you may choose
-                to simulate the matchups in this region using your head-to-head
-                algorithm.
+                Select a winner for each matchup. Based on the statistics you
+                selected, an implied win probability will be displayed for each
+                team.
                 <span className="xl:hidden">
                   {" "}
                   Swipe left and right to adjust the bracket view.

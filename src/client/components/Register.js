@@ -121,6 +121,7 @@ export const Register = () => {
                 value={username}
                 setValue={setUsername}
                 errorMsg={usernameError}
+                autocomplete="username"
               />
             </div>
             <div>
