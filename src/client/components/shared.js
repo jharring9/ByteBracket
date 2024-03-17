@@ -574,6 +574,7 @@ export const ValidatedInput = ({
   errorMsg,
   popoverInfo,
   disabled,
+  ...props
 }) => {
   return (
     <>
@@ -603,6 +604,7 @@ export const ValidatedInput = ({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
+          {...props}
         />
         {errorMsg && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
@@ -621,7 +623,6 @@ export const ValidatedInput = ({
     </>
   );
 };
-
 
 export const LoadingWrapper = ({ children, isLoading }) => {
   return isLoading ? (

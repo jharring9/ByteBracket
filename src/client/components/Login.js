@@ -105,6 +105,7 @@ export const Login = () => {
                 value={username}
                 setValue={setUsername}
                 errorMsg={usernameError}
+                autocomplete="username"
               />
             </div>
             <div>
@@ -114,6 +115,7 @@ export const Login = () => {
                 value={password}
                 setValue={setPassword}
                 errorMsg={passwordError}
+                autocomplete="password"
               />
             </div>
 
