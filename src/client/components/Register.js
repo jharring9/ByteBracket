@@ -4,6 +4,7 @@ import { ErrorAlert, ValidatedInput, validateInput } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
 import ReactGA from "react-ga4";
+import { Helmet } from "react-helmet";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -29,10 +30,6 @@ export const Register = () => {
       navigate(returnUrl ? `/${returnUrl}` : "/account");
     }
   }, [user]);
-
-  useEffect(() => {
-    document.title = "Register - ByteBracket";
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -84,6 +81,7 @@ export const Register = () => {
 
   return (
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <Helmet title="Register - ByteBracket" />
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h1
           className="text-center text-7xl text-indigo-700"

@@ -7,6 +7,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 
 export const Leagues = () => {
   const { user } = useSelector((state) => state.user);
@@ -31,38 +32,43 @@ export const Leagues = () => {
     getLeagues();
   }, [user]);
 
-  useEffect(() => {
-    document.title = "Leagues - ByteBracket";
-  }, []);
-
-  return user.username ? (
-    <LoadingWrapper isLoading={loading}>
-      <header className="bg-white py-8 shadow">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:flex lg:items-center lg:justify-between lg:px-8">
-          <div className="min-w-0 flex-1">
-            <h1 className="my-2 text-3xl font-bold leading-7 text-gray-900 sm:truncate sm:text-4xl sm:tracking-tight">
-              Leagues
-            </h1>
-          </div>
-          <div className="mt-5 flex lg:mt-0 lg:ml-4">
-            <Link
-              to="/newleague"
-              className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-700 px-2 py-2 text-sm font-medium text-white hover:bg-indigo-600 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            >
-              Create a league
-            </Link>
-          </div>
-        </div>
-      </header>
-      <LeagueList leagues={yourLeagues} title="Your Leagues" paginate={false} />
-      {/*<LeagueList*/}
-      {/*  leagues={publicLeagues}*/}
-      {/*  title="Public Leagues"*/}
-      {/*  paginate={false}*/}
-      {/*/>*/}
-    </LoadingWrapper>
-  ) : (
-    <NotLoggedInCard />
+  return (
+    <>
+      <Helmet title="Leagues - ByteBracket" />
+      {user.username ? (
+        <LoadingWrapper isLoading={loading}>
+          <header className="bg-white py-8 shadow">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:flex lg:items-center lg:justify-between lg:px-8">
+              <div className="min-w-0 flex-1">
+                <h1 className="my-2 text-3xl font-bold leading-7 text-gray-900 sm:truncate sm:text-4xl sm:tracking-tight">
+                  Leagues
+                </h1>
+              </div>
+              <div className="mt-5 flex lg:mt-0 lg:ml-4">
+                <Link
+                  to="/newleague"
+                  className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-700 px-2 py-2 text-sm font-medium text-white hover:bg-indigo-600 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                >
+                  Create a league
+                </Link>
+              </div>
+            </div>
+          </header>
+          <LeagueList
+            leagues={yourLeagues}
+            title="Your Leagues"
+            paginate={false}
+          />
+          {/*<LeagueList*/}
+          {/*  leagues={publicLeagues}*/}
+          {/*  title="Public Leagues"*/}
+          {/*  paginate={false}*/}
+          {/*/>*/}
+        </LoadingWrapper>
+      ) : (
+        <NotLoggedInCard />
+      )}
+    </>
   );
 };
 

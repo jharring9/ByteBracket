@@ -7,6 +7,7 @@ import { fetchImages, ProgressBar } from "./shared";
 import { useDispatch, useSelector } from "react-redux";
 import { Review } from "./create-flow/Review";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export const Create = () => {
   const dispatch = useDispatch();
@@ -18,17 +19,19 @@ export const Create = () => {
    */
   useEffect(() => {
     fetchImages(dispatch);
-    document.title = "Create Bracket - ByteBracket";
   }, []);
 
   return (
-    <div className="relative overflow-hidden">
-      <ProgressBar dispatch={dispatch} />
-      {stage === 1 && <SelectStats />}
-      {stage === 2 && <Top25 />}
-      {stage === 3 && <MakePicks />}
-      {stage === 4 && <Review />}
-      {stage === 5 && <Finalize league={league} />}
-    </div>
+    <>
+      <Helmet title="Create Bracket - ByteBracket" />
+      <div className="relative overflow-hidden">
+        <ProgressBar dispatch={dispatch} />
+        {stage === 1 && <SelectStats />}
+        {stage === 2 && <Top25 />}
+        {stage === 3 && <MakePicks />}
+        {stage === 4 && <Review />}
+        {stage === 5 && <Finalize league={league} />}
+      </div>
+    </>
   );
 };
