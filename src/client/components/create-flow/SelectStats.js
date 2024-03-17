@@ -25,12 +25,12 @@ export const SelectStats = () => {
     { title: "SOS", value: stats.sos, color: "#FDDA0D" },
     { title: "PPG", value: stats.ppg, color: "#add45c" },
     { title: "OPPG", value: stats.oppg, color: "#56c785" },
-    { title: "Big Wins", value: stats.Quad1, color: "#00baad" },
+    { title: "AST", value: stats.ast, color: "#00baad" },
     { title: "3P%", value: stats.tpm, color: "#2b7b9b" },
     { title: "FTM", value: stats.ft, color: "#3e3d6b" },
     { title: "TO", value: stats.to, color: "#c70039" },
     { title: "TOF", value: stats.stlblk, color: "#ff5833" },
-    { title: "KenPom Eff", value: stats.kenpom, color: "#ff8c19" },
+    { title: "REB", value: stats.reb, color: "#ff8c19" },
   ];
 
   /**
@@ -44,12 +44,12 @@ export const SelectStats = () => {
         SOS: stats.sos,
         PPG: stats.ppg,
         OPPG: stats.oppg,
-        Quad1: stats.Quad1,
+        AST: stats.ast,
         "3PM": stats.tpm,
         FTM: stats.ft,
         TO: stats.to,
         "STL/BLK": stats.stlblk,
-        kenpom: stats.kenpom,
+        REB: stats.reb,
       }),
       method: "POST",
       credentials: "include",
@@ -134,10 +134,10 @@ export const SelectStats = () => {
                 setValue={(val) => dispatch(setStats({ ...stats, oppg: val }))}
               />
               <StatSelection
-                name="Big Wins"
-                details="The total number of significant (Quad 1) wins that a team has."
-                value={stats.Quad1}
-                setValue={(val) => dispatch(setStats({ ...stats, Quad1: val }))}
+                name="Assists"
+                details="A team's assists per game. This statistic is a good indicator of how well a team moves the ball and works together."
+                value={stats.ast}
+                setValue={(val) => dispatch(setStats({ ...stats, ast: val }))}
               />
             </div>
             <div className="md:order-2 lg:order-3">
@@ -161,18 +161,18 @@ export const SelectStats = () => {
               />
               <StatSelection
                 name="Turnovers Forced"
-                details="The cumulative number of the combined steals and blocks of a team over the season."
+                details="The cumulative number of the combined steals and blocks per game."
                 value={stats.stlblk}
                 setValue={(val) =>
                   dispatch(setStats({ ...stats, stlblk: val }))
                 }
               />
               <StatSelection
-                name="Advanced: KenPom Efficiency"
-                details="Ken Pomeroy adjusted efficiency margin, a combination of how efficient a team's offense and defense is."
-                value={stats.kenpom}
+                name="Rebounds"
+                details="Rebounds per game. This statistic is a good indicator of how well a team controls the boards."
+                value={stats.reb}
                 setValue={(val) =>
-                  dispatch(setStats({ ...stats, kenpom: val }))
+                  dispatch(setStats({ ...stats, reb: val }))
                 }
               />
             </div>
