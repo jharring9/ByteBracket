@@ -8,12 +8,12 @@ export const statsSlice = createSlice({
       sos: 5,
       ppg: 5,
       oppg: 5,
-      Quad1: 5,
+      ast: 5,
       ft: 5,
       tpm: 5,
       stlblk: 5,
       to: 5,
-      kenpom: 5
+      reb: 5
     },
   },
   reducers: {
@@ -23,12 +23,12 @@ export const statsSlice = createSlice({
         sos: 5,
         ppg: 5,
         oppg: 5,
-        Quad1: 5,
+        ast: 5,
         ft: 5,
         tpm: 5,
         stlblk: 5,
         to: 5,
-        kenpom: 5
+        reb: 5
       };
     },
     setStats: (state, action) => {
