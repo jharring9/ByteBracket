@@ -26,7 +26,7 @@ ReactGA.initialize("G-GR6LZND73X");
 
 /* Bracket Creation */
 export const BEFORE_OPEN = false;
-export const AFTER_START = false;
+export const AFTER_START = true;
 
 export default function App() {
   const dispatch = useDispatch();
