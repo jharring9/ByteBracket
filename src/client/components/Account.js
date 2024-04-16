@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  UserGroupIcon,
+  // UserGroupIcon,
   QueueListIcon,
   KeyIcon,
   UserCircleIcon,
@@ -11,7 +11,7 @@ import { Brackets } from "./account-flow/Brackets";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ChangePassword } from "./account-flow/ChangePassword";
-import { Leagues } from "./account-flow/Leagues";
+// import { Leagues } from "./account-flow/Leagues";
 import { Helmet } from "react-helmet";
 
 let sidebar = [];
@@ -24,9 +24,9 @@ export const Account = () => {
     if (!user.username) navigate("/login");
     sidebar = [
       { name: "My Brackets", href: 1, icon: QueueListIcon, current: true },
-      { name: "My Leagues", href: 2, icon: UserGroupIcon, current: false },
-      { name: "Profile", href: 3, icon: UserCircleIcon, current: false },
-      { name: "Password", href: 4, icon: KeyIcon, current: false },
+      // { name: "My Leagues", href: 2, icon: UserGroupIcon, current: false },
+      { name: "Profile", href: 2, icon: UserCircleIcon, current: false },
+      { name: "Password", href: 3, icon: KeyIcon, current: false },
     ];
   }, []);
 
@@ -103,9 +103,9 @@ export const Account = () => {
                 </nav>
               </aside>
               {stage === 1 && <Brackets user={user} />}
-              {stage === 2 && <Leagues />}
-              {stage === 3 && <Profile user={user} />}
-              {stage === 4 && <ChangePassword user={user} />}
+              {/*{stage === 2 && <Leagues />}*/}
+              {stage === 2 && <Profile user={user} />}
+              {stage === 3 && <ChangePassword user={user} />}
             </div>
           </div>
         </div>
