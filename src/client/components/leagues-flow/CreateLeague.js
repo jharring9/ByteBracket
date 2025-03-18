@@ -137,10 +137,9 @@ export const CreateLeague = () => {
                       onChange={(e) => setCloseDate(e.target.value)}
                       className="block w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900 shadow-sm focus:border-indigo-700 focus:ring-indigo-700"
                     >
-                      <option value="2024-03-18T05:00:00-1700">March 18</option>
-                      <option value="2024-03-19T05:00:00-1700">March 19</option>
-                      <option value="2024-03-20T05:00:00-1700">March 20</option>
-                      <option value="2024-03-21T05:00:00-1700">March 21</option>
+                      <option value="2025-03-18T12:30:00-0400">March 18</option>
+                      <option value="2025-03-19T12:30:00-0400">March 19</option>
+                      <option value="2025-03-20T12:00:00-0400">March 20</option>
                     </select>
                   </div>
                 </div>
